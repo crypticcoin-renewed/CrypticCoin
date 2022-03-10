@@ -1,15 +1,14 @@
-Crypticcoin 4.6.0-1
-<img align="right" width="120" height="80" src="doc/imgs/logo.png">
+Crypticcoin 1.0.0
 ===========
 
 What is Crypticcoin?
 --------------
 
-[Crypticcoin](https://z.cash/) is an implementation of the "Zerocash" protocol.
-Based on Bitcoin's code, Crypticcoin intends to offer a far higher standard of privacy
+[Crypticcoin](https://crypticcoin.io/) is an implementation of the "Zerocash" protocol.
+Based on Zcash's code, Crypticcoin intends to offer a far higher standard of privacy
 through a sophisticated zero-knowledge proving scheme that preserves
 confidentiality of transaction metadata. More technical details are available
-in our [Protocol Specification](https://zips.z.cash/protocol/protocol.pdf).
+in the Zcash [Protocol Specification](https://zips.z.cash/protocol/protocol.pdf).
 
 This software is the Crypticcoin client. It downloads and stores the entire history
 of Crypticcoin transactions; depending on the speed of your computer and network
@@ -23,7 +22,7 @@ blockchain has reached a significant size.
 #### :lock: Security Warnings
 
 See important security warnings on the
-[Security Information page](https://z.cash/support/security/).
+[Zcash Security Information page](https://z.cash/support/security/).
 
 **Crypticcoin is experimental and a work in progress.** Use it at your own risk.
 
@@ -36,14 +35,14 @@ height.
 
 ## Getting Started
 
-Please see our [user guide](https://crypticcoin.readthedocs.io/en/latest/rtd_pages/rtd_docs/user_guide.html) for joining the main Crypticcoin network.
+Please see our [user guide](https://crypticcoin-docs.readthedocs.io/en/latest/rtd_pages/rtd_docs/user_guide.html) for joining the main Crypticcoin network.
 
 ### Need Help?
 
-* :blue_book: See the documentation at the [ReadTheDocs](https://crypticcoin.readthedocs.io)
+* :blue_book: See the documentation at the [ReadTheDocs](https://crypticcoin-docs.readthedocs.io/)
   for help and more information.
-* :incoming_envelope: Ask for help on the [Crypticcoin](https://forum.z.cash/) forum.
-* :speech_balloon: Join our community on [Discord](https://discordapp.com/invite/PhJY6Pm)
+* :incoming_envelope: Ask for help on the [Crypticcoin](https://crypticcoin.io/) site.
+* :speech_balloon: Join our community on [Telegram](https://t.me/+RgZS8bRDPaU0Mzdh)
 
 Participation in the Crypticcoin project is subject to a
 [Code of Conduct](code_of_conduct.md).
@@ -57,7 +56,7 @@ Build Crypticcoin along with most dependencies from source by running the follow
 ```
 
 Currently, Crypticcoin is only officially supported on Debian and Ubuntu. See the
-[Debian / Ubuntu build](https://crypticcoin.readthedocs.io/en/latest/rtd_pages/Debian-Ubuntu-build.html)
+[Debian / Ubuntu build](https://crypticcoin-docs.readthedocs.io/en/latest/rtd_pages/Debian-Ubuntu-build.html)
 for detailed instructions.
 
 License
