@@ -150,18 +150,18 @@ void static RandomTransaction(CMutableTransaction &tx, bool fSingle, uint32_t co
         tx.valueBalanceSapling = insecure_rand() % 100000000;
         for (int spend = 0; spend < shielded_spends; spend++) {
             SpendDescription sdesc;
-            zcash_test_harness_random_jubjub_point(sdesc.cv.begin());
-            zcash_test_harness_random_jubjub_base(sdesc.anchor.begin());
+            crypticcoin_test_harness_random_jubjub_point(sdesc.cv.begin());
+            crypticcoin_test_harness_random_jubjub_base(sdesc.anchor.begin());
             sdesc.nullifier = GetRandHash();
-            zcash_test_harness_random_jubjub_point(sdesc.rk.begin());
+            crypticcoin_test_harness_random_jubjub_point(sdesc.rk.begin());
             GetRandBytes(sdesc.zkproof.begin(), sdesc.zkproof.size());
             tx.vShieldedSpend.push_back(sdesc);
         }
         for (int out = 0; out < shielded_outs; out++) {
             OutputDescription odesc;
-            zcash_test_harness_random_jubjub_point(odesc.cv.begin());
-            zcash_test_harness_random_jubjub_base(odesc.cmu.begin());
-            zcash_test_harness_random_jubjub_point(odesc.ephemeralKey.begin());
+            crypticcoin_test_harness_random_jubjub_point(odesc.cv.begin());
+            crypticcoin_test_harness_random_jubjub_base(odesc.cmu.begin());
+            crypticcoin_test_harness_random_jubjub_point(odesc.ephemeralKey.begin());
             GetRandBytes(odesc.encCiphertext.begin(), odesc.encCiphertext.size());
             GetRandBytes(odesc.outCiphertext.begin(), odesc.outCiphertext.size());
             GetRandBytes(odesc.zkproof.begin(), odesc.zkproof.size());
@@ -186,7 +186,7 @@ void static RandomTransaction(CMutableTransaction &tx, bool fSingle, uint32_t co
             GetRandBytes(jsdesc.ciphertexts[0].begin(), jsdesc.ciphertexts[0].size());
             GetRandBytes(jsdesc.ciphertexts[1].begin(), jsdesc.ciphertexts[1].size());
             {
-                libzcash::GrothProof zkproof;
+                libcrypticcoin::GrothProof zkproof;
                 GetRandBytes(zkproof.begin(), zkproof.size());
                 jsdesc.proof = zkproof;
             }

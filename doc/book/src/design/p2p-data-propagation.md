@@ -1,7 +1,7 @@
 # P2P data propagation
 
 This page contains notes about how block and transaction data is tracked and propagated by
-`zcashd`. Most of this behaviour is inherited from Bitcoin Core, but some differences have
+`crypticcoind`. Most of this behaviour is inherited from Bitcoin Core, but some differences have
 developed.
 
 Some of this content is duplicated from in-code comments, but assembling this summary in
@@ -26,7 +26,7 @@ of the same txid (which might have valid authorizing data).
 ## `mapOrphanTransactions`
 
 Upstream uses this map to store transactions that are rejected by `AcceptToMemoryPool`
-because the node doesn't have their transparent inputs. `zcashd` inherits this behaviour
+because the node doesn't have their transparent inputs. `crypticcoind` inherits this behaviour
 but limits it to purely-transparent transactions (that is, if a transaction contains any
 shielded components, the node rejects it as invalid and adds it to `recentRejects`).
 

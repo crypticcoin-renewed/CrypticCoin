@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 2020 The Zcash developers
+# Copyright (c) 2020 The Crypticcoin developers
 
 export LC_ALL=C
 

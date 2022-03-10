@@ -1,9 +1,9 @@
-// Copyright (c) 2021 The Zcash developers
+// Copyright (c) 2021 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_RUST_INCLUDE_RUST_ORCHARD_INCREMENTAL_MERKLE_TREE_H
-#define ZCASH_RUST_INCLUDE_RUST_ORCHARD_INCREMENTAL_MERKLE_TREE_H
+#ifndef CRYPTICCOIN_RUST_INCLUDE_RUST_ORCHARD_INCREMENTAL_MERKLE_TREE_H
+#define CRYPTICCOIN_RUST_INCLUDE_RUST_ORCHARD_INCREMENTAL_MERKLE_TREE_H
 
 #include "rust/streams.h"
 #include "rust/orchard.h"
@@ -84,4 +84,4 @@ void orchard_merkle_tree_empty_root(
 }
 #endif
 
-#endif // ZCASH_RUST_INCLUDE_RUST_ORCHARD_INCREMENTAL_MERKLE_TREE_H
+#endif // CRYPTICCOIN_RUST_INCLUDE_RUST_ORCHARD_INCREMENTAL_MERKLE_TREE_H

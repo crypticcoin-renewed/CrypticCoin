@@ -1,10 +1,10 @@
-// Copyright (c) 2016 The Zcash developers
+// Copyright (c) 2016 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
 
-#ifndef ZCASH_ASYNCRPCOPERATION_H
-#define ZCASH_ASYNCRPCOPERATION_H
+#ifndef CRYPTICCOIN_ASYNCRPCOPERATION_H
+#define CRYPTICCOIN_ASYNCRPCOPERATION_H
 
 #include <string>
 #include <atomic>
@@ -149,5 +149,5 @@ private:
     int64_t creation_time_;
 };
 
-#endif // ZCASH_ASYNCRPCOPERATION_H
+#endif // CRYPTICCOIN_ASYNCRPCOPERATION_H
 

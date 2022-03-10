@@ -1,4 +1,4 @@
-# Copyright (c) 2016-2019 The Zcash developers
+# Copyright (c) 2016-2019 The Crypticcoin developers
 # Copyright (c) 2013-2019 The Bitcoin Core developers
 # Copyright (c) 2013-2019 Bitcoin Developers
 # Distributed under the MIT software license, see the accompanying
@@ -27,13 +27,13 @@ LIBBITCOIN_CRYPTO=crypto/libbitcoin_crypto.a
 LIBRUSTZCASH=$(top_builddir)/target/$(RUST_TARGET)/release/librustzcash.a
 LIBSECP256K1=secp256k1/libsecp256k1.la
 LIBUNIVALUE=univalue/libunivalue.la
-LIBZCASH=libzcash.a
+LIBCRYPTICCOIN=libcrypticcoin.a
 
 if ENABLE_ZMQ
 LIBBITCOIN_ZMQ=libbitcoin_zmq.a
 endif
 if BUILD_BITCOIN_LIBS
-LIBZCASH_SCRIPT=libzcash_script.la
+LIBCRYPTICCOIN_SCRIPT=libcrypticcoin_script.la
 endif
 if ENABLE_WALLET
 LIBBITCOIN_WALLET=libbitcoin_wallet.a
@@ -93,9 +93,9 @@ EXTRA_LIBRARIES += \
   $(LIBBITCOIN_CLI) \
   $(LIBBITCOIN_WALLET) \
   $(LIBBITCOIN_ZMQ) \
-  $(LIBZCASH)
+  $(LIBCRYPTICCOIN)
 
-lib_LTLIBRARIES = $(LIBZCASH_SCRIPT)
+lib_LTLIBRARIES = $(LIBCRYPTICCOIN_SCRIPT)
 
 bin_PROGRAMS =
 noinst_PROGRAMS =
@@ -103,31 +103,31 @@ TESTS =
 BENCHMARKS =
 
 if BUILD_BITCOIND
-  bin_PROGRAMS += zcashd
+  bin_PROGRAMS += crypticcoind
 endif
 
 if BUILD_BITCOIN_UTILS
-  bin_PROGRAMS += zcash-cli zcash-tx
+  bin_PROGRAMS += crypticcoin-cli crypticcoin-tx
 endif
 
-LIBZCASH_H = \
-  zcash/IncrementalMerkleTree.hpp \
-  zcash/NoteEncryption.hpp \
-  zcash/Address.hpp \
-  zcash/address/transparent.h \
-  zcash/address/mnemonic.h \
-  zcash/address/orchard.h \
-  zcash/address/sapling.hpp \
-  zcash/address/sprout.hpp \
-  zcash/address/unified.h \
-  zcash/address/zip32.h \
-  zcash/History.hpp \
-  zcash/JoinSplit.hpp \
-  zcash/Note.hpp \
-  zcash/prf.h \
-  zcash/Proof.hpp \
-  zcash/util.h \
-  zcash/Zcash.h
+LIBCRYPTICCOIN_H = \
+  crypticcoin/IncrementalMerkleTree.hpp \
+  crypticcoin/NoteEncryption.hpp \
+  crypticcoin/Address.hpp \
+  crypticcoin/address/transparent.h \
+  crypticcoin/address/mnemonic.h \
+  crypticcoin/address/orchard.h \
+  crypticcoin/address/sapling.hpp \
+  crypticcoin/address/sprout.hpp \
+  crypticcoin/address/unified.h \
+  crypticcoin/address/zip32.h \
+  crypticcoin/History.hpp \
+  crypticcoin/JoinSplit.hpp \
+  crypticcoin/Note.hpp \
+  crypticcoin/prf.h \
+  crypticcoin/Proof.hpp \
+  crypticcoin/util.h \
+  crypticcoin/Crypticcoin.h
 
 .PHONY: FORCE cargo-build check-symbols check-security
 # bitcoin core #
@@ -265,7 +265,7 @@ obj/build.h: FORCE
 	  $(abs_top_srcdir)
 libbitcoin_util_a-clientversion.$(OBJEXT): obj/build.h
 
-# server: zcashd
+# server: crypticcoind
 libbitcoin_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
 libbitcoin_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libbitcoin_server_a_SOURCES = \
@@ -310,7 +310,7 @@ libbitcoin_server_a_SOURCES = \
   txmempool.cpp \
   validationinterface.cpp \
   $(BITCOIN_CORE_H) \
-  $(LIBZCASH_H)
+  $(LIBCRYPTICCOIN_H)
 
 if ENABLE_ZMQ
 libbitcoin_zmq_a_CPPFLAGS = $(BITCOIN_INCLUDES) $(ZMQ_CFLAGS)
@@ -321,7 +321,7 @@ libbitcoin_zmq_a_SOURCES = \
   zmq/zmqpublishnotifier.cpp
 endif
 
-# wallet: zcashd, but only linked when wallet enabled
+# wallet: crypticcoind, but only linked when wallet enabled
 libbitcoin_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 libbitcoin_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libbitcoin_wallet_a_SOURCES = \
@@ -342,7 +342,7 @@ libbitcoin_wallet_a_SOURCES = \
   wallet/wallet.cpp \
   wallet/walletdb.cpp \
   $(BITCOIN_CORE_H) \
-  $(LIBZCASH_H)
+  $(LIBCRYPTICCOIN_H)
 
 # crypto primitives library
 crypto_libbitcoin_crypto_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_CONFIG_INCLUDES)
@@ -381,7 +381,7 @@ crypto_libbitcoin_crypto_a_SOURCES += \
   ${EQUIHASH_TROMP_SOURCES}
 endif
 
-# common: shared between zcashd and non-server tools
+# common: shared between crypticcoind and non-server tools
 libbitcoin_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 libbitcoin_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libbitcoin_common_a_SOURCES = \
@@ -418,7 +418,7 @@ libbitcoin_common_a_SOURCES = \
   utiltest.cpp \
   warnings.cpp \
   $(BITCOIN_CORE_H) \
-  $(LIBZCASH_H)
+  $(LIBCRYPTICCOIN_H)
 
 # util: shared between all executables.
 # This library *must* be included to make sure that the glibc
@@ -444,34 +444,34 @@ libbitcoin_util_a_SOURCES = \
   utilstrencodings.cpp \
   utiltime.cpp \
   $(BITCOIN_CORE_H) \
-  $(LIBZCASH_H)
+  $(LIBCRYPTICCOIN_H)
 
 if GLIBC_BACK_COMPAT
 libbitcoin_util_a_SOURCES += compat/glibc_compat.cpp
 endif
 
-# cli: zcash-cli
+# cli: crypticcoin-cli
 libbitcoin_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 libbitcoin_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libbitcoin_cli_a_SOURCES = \
   rpc/client.cpp \
   $(BITCOIN_CORE_H) \
-  $(LIBZCASH_H)
+  $(LIBCRYPTICCOIN_H)
 
 nodist_libbitcoin_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
 # bitcoind binary #
-zcashd_SOURCES = bitcoind.cpp
-zcashd_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-zcashd_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-zcashd_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+crypticcoind_SOURCES = bitcoind.cpp
+crypticcoind_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+crypticcoind_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+crypticcoind_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-zcashd_SOURCES += bitcoind-res.rc
+crypticcoind_SOURCES += bitcoind-res.rc
 endif
 
-zcashd_LDADD = \
+crypticcoind_LDADD = \
   $(LIBBITCOIN_SERVER) \
   $(LIBBITCOIN_WALLET) \
   $(LIBBITCOIN_COMMON) \
@@ -479,95 +479,95 @@ zcashd_LDADD = \
   $(LIBBITCOIN_UTIL) \
   $(LIBBITCOIN_ZMQ) \
   $(LIBBITCOIN_CRYPTO) \
-  $(LIBZCASH) \
+  $(LIBCRYPTICCOIN) \
   $(LIBRUSTZCASH) \
   $(LIBLEVELDB) \
   $(LIBLEVELDB_SSE42) \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-zcashd_LDADD += \
+crypticcoind_LDADD += \
   $(BOOST_LIBS) \
   $(BDB_LIBS) \
   $(EVENT_PTHREADS_LIBS) \
   $(EVENT_LIBS) \
   $(ZMQ_LIBS) \
   $(LIBBITCOIN_CRYPTO) \
-  $(LIBZCASH_LIBS)
+  $(LIBCRYPTICCOIN_LIBS)
 
 # bitcoin-cli binary #
-zcash_cli_SOURCES = bitcoin-cli.cpp
-zcash_cli_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CFLAGS)
-zcash_cli_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-zcash_cli_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+crypticcoin_cli_SOURCES = bitcoin-cli.cpp
+crypticcoin_cli_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CFLAGS)
+crypticcoin_cli_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+crypticcoin_cli_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-zcash_cli_SOURCES += bitcoin-cli-res.rc
+crypticcoin_cli_SOURCES += bitcoin-cli-res.rc
 endif
 
-zcash_cli_LDADD = \
+crypticcoin_cli_LDADD = \
   $(LIBBITCOIN_CLI) \
   $(LIBUNIVALUE) \
   $(LIBBITCOIN_UTIL) \
   $(BOOST_LIBS) \
   $(EVENT_LIBS) \
-  $(LIBZCASH) \
+  $(LIBCRYPTICCOIN) \
   $(LIBRUSTZCASH) \
   $(LIBBITCOIN_CRYPTO) \
   $(LIBSECP256K1) \
-  $(LIBZCASH_LIBS)
+  $(LIBCRYPTICCOIN_LIBS)
 #
 
-# zcash-tx binary #
-zcash_tx_SOURCES = bitcoin-tx.cpp
-zcash_tx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-zcash_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-zcash_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+# crypticcoin-tx binary #
+crypticcoin_tx_SOURCES = bitcoin-tx.cpp
+crypticcoin_tx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+crypticcoin_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+crypticcoin_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-zcash_tx_SOURCES += bitcoin-tx-res.rc
+crypticcoin_tx_SOURCES += bitcoin-tx-res.rc
 endif
 
-# FIXME: Is libzcash needed for zcash_tx?
-zcash_tx_LDADD = \
+# FIXME: Is libcrypticcoin needed for crypticcoin_tx?
+crypticcoin_tx_LDADD = \
   $(LIBUNIVALUE) \
   $(LIBBITCOIN_COMMON) \
   $(LIBBITCOIN_UTIL) \
   $(LIBSECP256K1) \
-  $(LIBZCASH) \
+  $(LIBCRYPTICCOIN) \
   $(LIBRUSTZCASH) \
   $(LIBBITCOIN_CRYPTO) \
-  $(LIBZCASH_LIBS)
+  $(LIBCRYPTICCOIN_LIBS)
 
-zcash_tx_LDADD += $(BOOST_LIBS)
+crypticcoin_tx_LDADD += $(BOOST_LIBS)
 #
 
-# zcash protocol primitives #
-libzcash_a_SOURCES = \
-  zcash/IncrementalMerkleTree.cpp \
-  zcash/NoteEncryption.cpp \
-  zcash/Address.cpp \
-  zcash/address/transparent.cpp \
-  zcash/address/mnemonic.cpp \
-  zcash/address/orchard.cpp \
-  zcash/address/sapling.cpp \
-  zcash/address/sprout.cpp \
-  zcash/address/unified.cpp \
-  zcash/address/zip32.cpp \
-  zcash/History.cpp \
-  zcash/JoinSplit.cpp \
-  zcash/Note.cpp \
-  zcash/prf.cpp \
-  zcash/util.cpp
+# crypticcoin protocol primitives #
+libcrypticcoin_a_SOURCES = \
+  crypticcoin/IncrementalMerkleTree.cpp \
+  crypticcoin/NoteEncryption.cpp \
+  crypticcoin/Address.cpp \
+  crypticcoin/address/transparent.cpp \
+  crypticcoin/address/mnemonic.cpp \
+  crypticcoin/address/orchard.cpp \
+  crypticcoin/address/sapling.cpp \
+  crypticcoin/address/sprout.cpp \
+  crypticcoin/address/unified.cpp \
+  crypticcoin/address/zip32.cpp \
+  crypticcoin/History.cpp \
+  crypticcoin/JoinSplit.cpp \
+  crypticcoin/Note.cpp \
+  crypticcoin/prf.cpp \
+  crypticcoin/util.cpp
 
-libzcash_a_CPPFLAGS = $(AM_CPPFLAGS) $(PIC_FLAGS) $(BITCOIN_INCLUDES)
-libzcash_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libzcash_a_LDFLAGS = $(AM_LDFLAGS)
+libcrypticcoin_a_CPPFLAGS = $(AM_CPPFLAGS) $(PIC_FLAGS) $(BITCOIN_INCLUDES)
+libcrypticcoin_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libcrypticcoin_a_LDFLAGS = $(AM_LDFLAGS)
 
-# zcash_script library #
+# crypticcoin_script library #
 if BUILD_BITCOIN_LIBS
-include_HEADERS = script/zcash_script.h
-libzcash_script_la_SOURCES = \
+include_HEADERS = script/crypticcoin_script.h
+libcrypticcoin_script_la_SOURCES = \
   crypto/hmac_sha512.cpp \
   crypto/ripemd160.cpp \
   crypto/sha1.cpp \
@@ -577,20 +577,20 @@ libzcash_script_la_SOURCES = \
   primitives/transaction.cpp \
   primitives/tx_version_info.cpp \
   pubkey.cpp \
-  script/zcash_script.cpp \
+  script/crypticcoin_script.cpp \
   script/interpreter.cpp \
   script/script.cpp \
   uint256.cpp \
   utilstrencodings.cpp
 
 if GLIBC_BACK_COMPAT
-  libzcash_script_la_SOURCES += compat/glibc_compat.cpp
+  libcrypticcoin_script_la_SOURCES += compat/glibc_compat.cpp
 endif
 
-libzcash_script_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
-libzcash_script_la_LIBADD = $(LIBSECP256K1)
-libzcash_script_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/rust/include -I$(srcdir)/secp256k1/include -DBUILD_BITCOIN_INTERNAL
-libzcash_script_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libcrypticcoin_script_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
+libcrypticcoin_script_la_LIBADD = $(LIBSECP256K1)
+libcrypticcoin_script_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/rust/include -I$(srcdir)/secp256k1/include -DBUILD_BITCOIN_INTERNAL
+libcrypticcoin_script_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 
 endif
 #

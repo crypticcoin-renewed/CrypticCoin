@@ -27,9 +27,9 @@
 #include "primitives/transaction.h"
 #include "zcbenchmarks.h"
 #include "script/interpreter.h"
-#include "zcash/Zcash.h"
-#include "zcash/Address.hpp"
-#include "zcash/address/zip32.h"
+#include "crypticcoin/Crypticcoin.h"
+#include "crypticcoin/Address.hpp"
+#include "crypticcoin/address/zip32.h"
 
 #include "utiltime.h"
 #include "asyncrpcoperation.h"
@@ -55,7 +55,7 @@
 
 using namespace std;
 
-using namespace libzcash;
+using namespace libcrypticcoin;
 
 const std::string ADDR_TYPE_SPROUT = "sprout";
 const std::string ADDR_TYPE_SAPLING = "sapling";
@@ -93,7 +93,7 @@ void EnsureWalletIsBackedUp(const CChainParams& params)
         throw JSONRPCError(
                 RPC_WALLET_BACKUP_REQUIRED,
                 "Error: Please acknowledge that you have backed up the wallet's emergency recovery phrase "
-                "by using zcashd-wallet-tool first."
+                "by using crypticcoind-wallet-tool first."
                 );
 }
 
@@ -159,13 +159,13 @@ UniValue getnewaddress(const UniValue& params, bool fHelp)
         throw runtime_error(
             "getnewaddress ( \"\" )\n"
             "\nDEPRECATED\n"
-            "\nReturns a new Zcash address for receiving payments.\n"
+            "\nReturns a new Crypticcoin address for receiving payments.\n"
 
             "\nArguments:\n"
             "1. (dummy)       (string, optional) DEPRECATED. If provided, it MUST be set to the empty string \"\". Passing any other string will result in an error.\n"
 
             "\nResult:\n"
-            "\"zcashaddress\"    (string) The new Zcash address\n"
+            "\"crypticcoinaddress\"    (string) The new Crypticcoin address\n"
 
             "\nExamples:\n"
             + HelpExampleCli("getnewaddress", "")
@@ -204,7 +204,7 @@ UniValue getrawchangeaddress(const UniValue& params, bool fHelp)
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "getrawchangeaddress\n"
-            "\nReturns a new Zcash address, for receiving change.\n"
+            "\nReturns a new Crypticcoin address, for receiving change.\n"
             "This is for use with raw transactions, NOT normal use.\n"
             "\nResult:\n"
             "\"address\"    (string) The address\n"
@@ -245,7 +245,7 @@ static void SendMoney(const CTxDestination &address, CAmount nValue, bool fSubtr
     if (nValue > curBalance)
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Insufficient funds");
 
-    // Parse Zcash address
+    // Parse Crypticcoin address
     CScript scriptPubKey = GetScriptForDestination(address);
 
     // Create and send the transaction
@@ -272,11 +272,11 @@ UniValue sendtoaddress(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() < 2 || params.size() > 5)
         throw runtime_error(
-            "sendtoaddress \"zcashaddress\" amount ( \"comment\" \"comment-to\" subtractfeefromamount )\n"
+            "sendtoaddress \"crypticcoinaddress\" amount ( \"comment\" \"comment-to\" subtractfeefromamount )\n"
             "\nSend an amount to a given address. The amount is a real and is rounded to the nearest 0.00000001\n"
             + HelpRequiringPassphrase() +
             "\nArguments:\n"
-            "1. \"zcashaddress\"  (string, required) The Zcash address to send to.\n"
+            "1. \"crypticcoinaddress\"  (string, required) The Crypticcoin address to send to.\n"
             "2. \"amount\"      (numeric, required) The amount in " + CURRENCY_UNIT + " to send. eg 0.1\n"
             "3. \"comment\"     (string, optional) A comment used to store what the transaction is for. \n"
             "                             This is not part of the transaction, just kept in your wallet.\n"
@@ -284,7 +284,7 @@ UniValue sendtoaddress(const UniValue& params, bool fHelp)
             "                             to which you're sending the transaction. This is not part of the \n"
             "                             transaction, just kept in your wallet.\n"
             "5. subtractfeefromamount  (boolean, optional, default=false) The fee will be deducted from the amount being sent.\n"
-            "                             The recipient will receive less Zcash than you enter in the amount field.\n"
+            "                             The recipient will receive less Crypticcoin than you enter in the amount field.\n"
             "\nResult:\n"
             "\"transactionid\"  (string) The transaction id.\n"
             "\nExamples:\n"
@@ -408,11 +408,11 @@ UniValue listaddresses(const UniValue& params, bool fHelp)
     }
 
     /// sprout addresses
-    std::set<libzcash::SproutPaymentAddress> sproutAddresses;
+    std::set<libcrypticcoin::SproutPaymentAddress> sproutAddresses;
     pwalletMain->GetSproutPaymentAddresses(sproutAddresses);
 
     /// sapling addresses
-    std::set<libzcash::SaplingPaymentAddress> saplingAddresses;
+    std::set<libcrypticcoin::SaplingPaymentAddress> saplingAddresses;
     pwalletMain->GetSaplingPaymentAddresses(saplingAddresses);
 
     // legacy_random source
@@ -621,7 +621,7 @@ UniValue listaddressgroupings(const UniValue& params, bool fHelp)
             "[\n"
             "  [\n"
             "    [\n"
-            "      \"zcashaddress\",     (string) The zcash address\n"
+            "      \"crypticcoinaddress\",     (string) The crypticcoin address\n"
             "      amount,                 (numeric) The amount in " + CURRENCY_UNIT + "\n"
             "    ]\n"
             "    ,...\n"
@@ -724,10 +724,10 @@ UniValue getreceivedbyaddress(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() < 1 || params.size() > 3)
         throw runtime_error(
-            "getreceivedbyaddress \"zcashaddress\" ( minconf ) ( inZat )\n"
-            "\nReturns the total amount received by the given Zcash address in transactions with at least minconf confirmations.\n"
+            "getreceivedbyaddress \"crypticcoinaddress\" ( minconf ) ( inZat )\n"
+            "\nReturns the total amount received by the given Crypticcoin address in transactions with at least minconf confirmations.\n"
             "\nArguments:\n"
-            "1. \"zcashaddress\"  (string, required) The Zcash address for transactions.\n"
+            "1. \"crypticcoinaddress\"  (string, required) The Crypticcoin address for transactions.\n"
             "2. minconf         (numeric, optional, default=1) Only include transactions confirmed at least this many times.\n"
             "3. inZat           (bool, optional, default=false) Get the result amount in " + MINOR_CURRENCY_UNIT + " (as an integer).\n"
             "\nResult:\n"
@@ -864,14 +864,14 @@ UniValue sendmany(const UniValue& params, bool fHelp)
             "1. \"dummy\"               (string, required) Must be set to \"\" for backwards compatibility.\n"
             "2. \"amounts\"             (string, required) A json object with addresses and amounts\n"
             "    {\n"
-            "      \"address\":amount   (numeric) The Zcash address is the key, the numeric amount in " + CURRENCY_UNIT + " is the value\n"
+            "      \"address\":amount   (numeric) The Crypticcoin address is the key, the numeric amount in " + CURRENCY_UNIT + " is the value\n"
             "      ,...\n"
             "    }\n"
             "3. minconf                 (numeric, optional, default=1) Only use the balance confirmed at least this many times.\n"
             "4. \"comment\"             (string, optional) A comment\n"
             "5. subtractfeefromamount   (string, optional) A json array with addresses.\n"
             "                           The fee will be equally deducted from the amount of each selected address.\n"
-            "                           Those recipients will receive less Zcash than you enter in their corresponding amount field.\n"
+            "                           Those recipients will receive less Crypticcoin than you enter in their corresponding amount field.\n"
             "                           If no addresses are specified here, the sender pays the fee.\n"
             "    [\n"
             "      \"address\"            (string) Subtract fee from this address\n"
@@ -976,19 +976,19 @@ UniValue addmultisigaddress(const UniValue& params, bool fHelp)
     {
         string msg = "addmultisigaddress nrequired [\"key\",...] ( \"\" )\n"
             "\nAdd a nrequired-to-sign multisignature address to the wallet.\n"
-            "Each key is a Zcash address or hex-encoded public key.\n"
+            "Each key is a Crypticcoin address or hex-encoded public key.\n"
 
             "\nArguments:\n"
             "1. nrequired        (numeric, required) The number of required signatures out of the n keys or addresses.\n"
-            "2. \"keysobject\"   (string, required) A json array of Zcash addresses or hex-encoded public keys\n"
+            "2. \"keysobject\"   (string, required) A json array of Crypticcoin addresses or hex-encoded public keys\n"
             "     [\n"
-            "       \"address\"  (string) Zcash address or hex-encoded public key\n"
+            "       \"address\"  (string) Crypticcoin address or hex-encoded public key\n"
             "       ...,\n"
             "     ]\n"
             "3. (dummy)        (string, optional) DEPRECATED. If provided, MUST be set to the empty string \"\"."
 
             "\nResult:\n"
-            "\"zcashaddress\"  (string) A Zcash address associated with the keys.\n"
+            "\"crypticcoinaddress\"  (string) A Crypticcoin address associated with the keys.\n"
 
             "\nExamples:\n"
             "\nAdd a multisig address from 2 addresses\n"
@@ -1263,7 +1263,7 @@ UniValue listtransactions(const UniValue& params, bool fHelp)
             "\nResult:\n"
             "[\n"
             "  {\n"
-            "    \"address\":\"zcashaddress\",    (string) The Zcash address of the transaction. Not present for \n"
+            "    \"address\":\"crypticcoinaddress\",    (string) The Crypticcoin address of the transaction. Not present for \n"
             "                                                move transactions (category = move).\n"
             "    \"category\":\"send|receive\",   (string) The transaction category. 'send' and 'receive' transactions are \n"
             "                                              associated with an address, transaction id and block details\n"
@@ -1377,7 +1377,7 @@ UniValue listsinceblock(const UniValue& params, bool fHelp)
             "\nResult:\n"
             "{\n"
             "  \"transactions\": [\n"
-            "    \"address\":\"zcashaddress\",    (string) The Zcash address of the transaction. Not present for move transactions (category = move).\n"
+            "    \"address\":\"crypticcoinaddress\",    (string) The Crypticcoin address of the transaction. Not present for move transactions (category = move).\n"
             "    \"category\":\"send|receive\",     (string) The transaction category. 'send' has negative amounts, 'receive' has positive amounts.\n"
             "    \"status\" : \"mined|waiting|expiringsoon|expired\",    (string) The transaction status, can be 'mined', 'waiting', 'expiringsoon' \n"
             "                                                                    or 'expired'. Available for 'send' and 'receive' category of transactions.\n"
@@ -1480,7 +1480,7 @@ UniValue gettransaction(const UniValue& params, bool fHelp)
             "  \"timereceived\" : ttt,    (numeric) The time received in seconds since epoch (1 Jan 1970 GMT)\n"
             "  \"details\" : [\n"
             "    {\n"
-            "      \"address\" : \"zcashaddress\",   (string) The Zcash address involved in the transaction\n"
+            "      \"address\" : \"crypticcoinaddress\",   (string) The Crypticcoin address involved in the transaction\n"
             "      \"category\" : \"send|receive\",    (string) The category, either 'send' or 'receive'\n"
             "      \"amount\" : x.xxx                  (numeric) The amount in " + CURRENCY_UNIT + "\n"
             "      \"amountZat\" : x                   (numeric) The amount in " + MINOR_CURRENCY_UNIT + "\n"
@@ -1644,7 +1644,7 @@ UniValue walletpassphrase(const UniValue& params, bool fHelp)
         throw runtime_error(
             "walletpassphrase \"passphrase\" timeout\n"
             "\nStores the wallet decryption key in memory for 'timeout' seconds.\n"
-            "This is needed prior to performing transactions related to private keys such as sending Zcash\n"
+            "This is needed prior to performing transactions related to private keys such as sending Crypticcoin\n"
             "\nArguments:\n"
             "1. \"passphrase\"     (string, required) The wallet passphrase\n"
             "2. timeout            (numeric, required) The time to keep the decryption key in seconds.\n"
@@ -1751,7 +1751,7 @@ UniValue walletconfirmbackup(const UniValue& params, bool fHelp)
         throw runtime_error(
             "walletconfirmbackup \"emergency recovery phrase\"\n"
             "\nNotify the wallet that the user has backed up the emergency recovery phrase,\n"
-            "which can be obtained by making a call to z_exportwallet. The zcashd embedded wallet\n"
+            "which can be obtained by making a call to z_exportwallet. The crypticcoind embedded wallet\n"
             "requires confirmation that the emergency recovery phrase has been backed up before it\n"
             "will permit new spending keys or addresses to be generated.\n"
             "\nArguments:\n"
@@ -1842,10 +1842,10 @@ UniValue encryptwallet(const UniValue& params, bool fHelp)
             "\nExamples:\n"
             "\nEncrypt you wallet\n"
             + HelpExampleCli("encryptwallet", "\"my pass phrase\"") +
-            "\nNow set the passphrase to use the wallet, such as for signing or sending Zcash\n"
+            "\nNow set the passphrase to use the wallet, such as for signing or sending Crypticcoin\n"
             + HelpExampleCli("walletpassphrase", "\"my pass phrase\"") +
             "\nNow we can so something like sign\n"
-            + HelpExampleCli("signmessage", "\"zcashaddress\" \"test message\"") +
+            + HelpExampleCli("signmessage", "\"crypticcoinaddress\" \"test message\"") +
             "\nNow lock the wallet again by removing the passphrase\n"
             + HelpExampleCli("walletlock", "") +
             "\nAs a JSON RPC call\n"
@@ -1880,7 +1880,7 @@ UniValue encryptwallet(const UniValue& params, bool fHelp)
     // slack space in .dat files; that is bad if the old data is
     // unencrypted private keys. So:
     StartShutdown();
-    return "wallet encrypted; Zcash server stopping, restart to run with encrypted wallet. The keypool has been flushed, you need to make a new backup.";
+    return "wallet encrypted; Crypticcoin server stopping, restart to run with encrypted wallet. The keypool has been flushed, you need to make a new backup.";
 }
 
 UniValue lockunspent(const UniValue& params, bool fHelp)
@@ -1893,7 +1893,7 @@ UniValue lockunspent(const UniValue& params, bool fHelp)
             "lockunspent unlock [{\"txid\":\"txid\",\"vout\":n},...]\n"
             "\nUpdates list of temporarily unspendable outputs.\n"
             "Temporarily lock (unlock=false) or unlock (unlock=true) specified transaction outputs.\n"
-            "A locked transaction output will not be chosen by automatic coin selection, when spending Zcash.\n"
+            "A locked transaction output will not be chosen by automatic coin selection, when spending Crypticcoin.\n"
             "Locks are stored in memory only. Nodes start with zero locked outputs, and the locked output list\n"
             "is always cleared (by virtue of process exit) when a node stops or fails.\n"
             "Also see the listunspent call\n"
@@ -2043,7 +2043,7 @@ UniValue settxfee(const UniValue& params, bool fHelp)
     return true;
 }
 
-CAmount getBalanceZaddr(std::optional<libzcash::PaymentAddress> address, int minDepth = 1, int maxDepth = INT_MAX, bool ignoreUnspendable=true);
+CAmount getBalanceZaddr(std::optional<libcrypticcoin::PaymentAddress> address, int minDepth = 1, int maxDepth = INT_MAX, bool ignoreUnspendable=true);
 
 UniValue getwalletinfo(const UniValue& params, bool fHelp)
 {
@@ -2145,9 +2145,9 @@ UniValue listunspent(const UniValue& params, bool fHelp)
             "\nArguments:\n"
             "1. minconf          (numeric, optional, default=1) The minimum confirmations to filter\n"
             "2. maxconf          (numeric, optional, default=9999999) The maximum confirmations to filter\n"
-            "3. \"addresses\"    (string) A json array of Zcash addresses to filter\n"
+            "3. \"addresses\"    (string) A json array of Crypticcoin addresses to filter\n"
             "    [\n"
-            "      \"address\"   (string) Zcash address\n"
+            "      \"address\"   (string) Crypticcoin address\n"
             "      ,...\n"
             "    ]\n"
             "\nResult\n"
@@ -2156,7 +2156,7 @@ UniValue listunspent(const UniValue& params, bool fHelp)
             "    \"txid\" : \"txid\",          (string) the transaction id \n"
             "    \"vout\" : n,               (numeric) the vout value\n"
             "    \"generated\" : true|false  (boolean) true if txout is a coinbase transaction output\n"
-            "    \"address\" : \"address\",    (string) the Zcash address\n"
+            "    \"address\" : \"address\",    (string) the Crypticcoin address\n"
             "    \"scriptPubKey\" : \"key\",   (string) the script key\n"
             "    \"amount\" : x.xxx,         (numeric) the transaction amount in " + CURRENCY_UNIT + "\n"
             "    \"amountZat\" : xxxx        (numeric) the transaction amount in " + MINOR_CURRENCY_UNIT + "\n"
@@ -2191,7 +2191,7 @@ UniValue listunspent(const UniValue& params, bool fHelp)
             auto destStr = inputs[idx].get_str();
             CTxDestination dest = keyIO.DecodeDestination(destStr);
             if (!IsValidDestination(dest)) {
-                throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid Zcash transparent address: ") + destStr);
+                throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid Crypticcoin transparent address: ") + destStr);
             }
             if (!destinations.insert(dest).second) {
                 throw JSONRPCError(RPC_INVALID_PARAMETER, std::string("Invalid parameter, duplicated address: ") + destStr);
@@ -2315,8 +2315,8 @@ UniValue z_listunspent(const UniValue& params, bool fHelp)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     std::optional<AddrSet> noteFilter = std::nullopt;
-    std::set<std::pair<libzcash::SproutPaymentAddress, uint256>> sproutNullifiers;
-    std::set<std::pair<libzcash::SaplingPaymentAddress, uint256>> saplingNullifiers;
+    std::set<std::pair<libcrypticcoin::SproutPaymentAddress, uint256>> sproutNullifiers;
+    std::set<std::pair<libcrypticcoin::SaplingPaymentAddress, uint256>> saplingNullifiers;
 
     KeyIO keyIO(Params());
     // User has supplied zaddrs to filter on
@@ -2327,7 +2327,7 @@ UniValue z_listunspent(const UniValue& params, bool fHelp)
         }
 
         // Sources
-        std::vector<libzcash::PaymentAddress> sourceAddrs;
+        std::vector<libcrypticcoin::PaymentAddress> sourceAddrs;
         for (const UniValue& o : addresses.getValues()) {
             if (!o.isStr()) {
                 throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, expected string");
@@ -2335,7 +2335,7 @@ UniValue z_listunspent(const UniValue& params, bool fHelp)
 
             auto zaddr = keyIO.DecodePaymentAddress(o.get_str());
             if (!zaddr.has_value()) {
-                throw JSONRPCError(RPC_INVALID_PARAMETER, string("Invalid parameter, not a valid Zcash address: ") + o.get_str());
+                throw JSONRPCError(RPC_INVALID_PARAMETER, string("Invalid parameter, not a valid Crypticcoin address: ") + o.get_str());
             }
 
             sourceAddrs.push_back(zaddr.value());
@@ -2352,12 +2352,12 @@ UniValue z_listunspent(const UniValue& params, bool fHelp)
         }
     } else {
         // User did not provide zaddrs, so use default i.e. all addresses
-        std::set<libzcash::SproutPaymentAddress> sproutzaddrs = {};
+        std::set<libcrypticcoin::SproutPaymentAddress> sproutzaddrs = {};
         pwalletMain->GetSproutPaymentAddresses(sproutzaddrs);
         sproutNullifiers = pwalletMain->GetSproutNullifiers(sproutzaddrs);
 
         // Sapling support
-        std::set<libzcash::SaplingPaymentAddress> saplingzaddrs = {};
+        std::set<libcrypticcoin::SaplingPaymentAddress> saplingzaddrs = {};
         pwalletMain->GetSaplingPaymentAddresses(saplingzaddrs);
         saplingNullifiers = pwalletMain->GetSaplingNullifiers(saplingzaddrs);
     }
@@ -2398,9 +2398,9 @@ UniValue z_listunspent(const UniValue& params, bool fHelp)
         obj.pushKV("address", keyIO.EncodePaymentAddress([&]() {
             auto ua = pwalletMain->FindUnifiedAddressByReceiver(entry.address);
             if (ua.has_value()) {
-                return libzcash::PaymentAddress{ua.value()};
+                return libcrypticcoin::PaymentAddress{ua.value()};
             } else {
-                return libzcash::PaymentAddress{entry.address};
+                return libcrypticcoin::PaymentAddress{entry.address};
             }
         }()));
         obj.pushKV("amount", ValueFromAmount(CAmount(entry.note.value()))); // note.value() is equivalent to plaintext.value()
@@ -2492,8 +2492,8 @@ UniValue zc_sample_joinsplit(const UniValue& params, bool fHelp)
 
     Ed25519VerificationKey joinSplitPubKey;
     uint256 anchor = SproutMerkleTree().root();
-    std::array<libzcash::JSInput, ZC_NUM_JS_INPUTS> inputs({JSInput(), JSInput()});
-    std::array<libzcash::JSOutput, ZC_NUM_JS_OUTPUTS> outputs({JSOutput(), JSOutput()});
+    std::array<libcrypticcoin::JSInput, ZC_NUM_JS_INPUTS> inputs({JSInput(), JSInput()});
+    std::array<libcrypticcoin::JSOutput, ZC_NUM_JS_OUTPUTS> outputs({JSOutput(), JSOutput()});
     auto samplejoinsplit = JSDescriptionInfo(joinSplitPubKey,
                                   anchor,
                                   inputs,
@@ -2669,10 +2669,10 @@ UniValue zc_raw_receive(const UniValue& params, bool fHelp)
     if (!spendingkey.has_value()) {
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid spending key");
     }
-    if (std::get_if<libzcash::SproutSpendingKey>(&spendingkey.value()) == nullptr) {
+    if (std::get_if<libcrypticcoin::SproutSpendingKey>(&spendingkey.value()) == nullptr) {
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Only works with Sprout spending keys");
     }
-    SproutSpendingKey k = std::get<libzcash::SproutSpendingKey>(spendingkey.value());
+    SproutSpendingKey k = std::get<libcrypticcoin::SproutSpendingKey>(spendingkey.value());
 
     uint256 epk;
     unsigned char nonce;
@@ -2795,10 +2795,10 @@ UniValue zc_raw_joinsplit(const UniValue& params, bool fHelp)
         if (!spendingkey.has_value()) {
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid spending key");
         }
-        if (std::get_if<libzcash::SproutSpendingKey>(&spendingkey.value()) == nullptr) {
+        if (std::get_if<libcrypticcoin::SproutSpendingKey>(&spendingkey.value()) == nullptr) {
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Only works with Sprout spending keys");
         }
-        SproutSpendingKey k = std::get<libzcash::SproutSpendingKey>(spendingkey.value());
+        SproutSpendingKey k = std::get<libcrypticcoin::SproutSpendingKey>(spendingkey.value());
 
         keys.push_back(k);
 
@@ -2844,13 +2844,13 @@ UniValue zc_raw_joinsplit(const UniValue& params, bool fHelp)
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid recipient address.");
         }
 
-        libzcash::PaymentAddress addrTo(addrToDecoded.value());
-        if (!std::holds_alternative<libzcash::SproutPaymentAddress>(addrTo)) {
+        libcrypticcoin::PaymentAddress addrTo(addrToDecoded.value());
+        if (!std::holds_alternative<libcrypticcoin::SproutPaymentAddress>(addrTo)) {
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Only works with Sprout payment addresses");
         }
         CAmount nAmount = AmountFromValue(outputs[name_]);
 
-        vjsout.push_back(JSOutput(std::get<libzcash::SproutPaymentAddress>(addrTo), nAmount));
+        vjsout.push_back(JSOutput(std::get<libcrypticcoin::SproutPaymentAddress>(addrTo), nAmount));
     }
 
     while (vjsout.size() < ZC_NUM_JS_OUTPUTS) {
@@ -2871,8 +2871,8 @@ UniValue zc_raw_joinsplit(const UniValue& params, bool fHelp)
     mtx.nVersionGroupId = SAPLING_VERSION_GROUP_ID;
     mtx.joinSplitPubKey = joinSplitPubKey;
 
-    std::array<libzcash::JSInput, ZC_NUM_JS_INPUTS> jsInputs({vjsin[0], vjsin[1]});
-    std::array<libzcash::JSOutput, ZC_NUM_JS_OUTPUTS> jsIutputs({vjsout[0], vjsout[1]});
+    std::array<libcrypticcoin::JSInput, ZC_NUM_JS_INPUTS> jsInputs({vjsin[0], vjsin[1]});
+    std::array<libcrypticcoin::JSOutput, ZC_NUM_JS_OUTPUTS> jsIutputs({vjsout[0], vjsout[1]});
     auto jsdesc = JSDescriptionInfo(joinSplitPubKey,
                          anchor,
                          jsInputs,
@@ -2989,7 +2989,7 @@ UniValue z_getnewaddress(const UniValue& params, bool fHelp)
             "1. \"type\"         (string, optional, default=\"" + defaultType + "\") The type of address. One of [\""
             + ADDR_TYPE_SPROUT + "\", \"" + ADDR_TYPE_SAPLING + "\"].\n"
             "\nResult:\n"
-            "\"zcashaddress\"    (string) The new shielded address.\n"
+            "\"crypticcoinaddress\"    (string) The new shielded address.\n"
             "\nExamples:\n"
             + HelpExampleCli("z_getnewaddress", "")
             + HelpExampleCli("z_getnewaddress", ADDR_TYPE_SAPLING)
@@ -3105,12 +3105,12 @@ UniValue z_getaddressforaccount(const UniValue& params, bool fHelp)
     LOCK(pwalletMain->cs_wallet);
 
     int64_t accountInt = params[0].get_int64();
-    if (accountInt < 0 || accountInt >= ZCASH_LEGACY_ACCOUNT) {
+    if (accountInt < 0 || accountInt >= CRYPTICCOIN_LEGACY_ACCOUNT) {
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid account number, must be 0 <= account <= (2^31)-2.");
     }
-    libzcash::AccountId account = accountInt;
+    libcrypticcoin::AccountId account = accountInt;
 
-    std::set<libzcash::ReceiverType> receivers;
+    std::set<libcrypticcoin::ReceiverType> receivers;
     if (params.size() >= 2) {
         const auto& pools = params[1].get_array();
         for (unsigned int i = 0; i < pools.size(); i++) {
@@ -3129,7 +3129,7 @@ UniValue z_getaddressforaccount(const UniValue& params, bool fHelp)
         receivers = {ReceiverType::P2PKH, ReceiverType::Sapling};
     }
 
-    std::optional<libzcash::diversifier_index_t> j = std::nullopt;
+    std::optional<libcrypticcoin::diversifier_index_t> j = std::nullopt;
     if (params.size() >= 3) {
         if (params[2].getType() != UniValue::VNUM) {
             throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid diversifier index, must be an unsigned integer.");
@@ -3144,7 +3144,7 @@ UniValue z_getaddressforaccount(const UniValue& params, bool fHelp)
         }
         // Extend the byte array to the correct length for diversifier_index_t.
         parsed_diversifier_index.resize(ZC_DIVERSIFIER_SIZE);
-        j = libzcash::diversifier_index_t(parsed_diversifier_index);
+        j = libcrypticcoin::diversifier_index_t(parsed_diversifier_index);
     }
 
     EnsureWalletIsUnlocked();
@@ -3157,7 +3157,7 @@ UniValue z_getaddressforaccount(const UniValue& params, bool fHelp)
     result.pushKV("account", (uint64_t)account);
 
     std::visit(match {
-        [&](std::pair<libzcash::UnifiedAddress, libzcash::diversifier_index_t> addr) {
+        [&](std::pair<libcrypticcoin::UnifiedAddress, libcrypticcoin::diversifier_index_t> addr) {
             result.pushKV("unifiedaddress", KeyIO(Params()).EncodePaymentAddress(addr.first));
             UniValue j;
             j.setNumStr(ArbitraryIntStr(std::vector(addr.second.begin(), addr.second.end())));
@@ -3264,7 +3264,7 @@ UniValue z_listaddresses(const UniValue& params, bool fHelp)
     KeyIO keyIO(Params());
     UniValue ret(UniValue::VARR);
     {
-        std::set<libzcash::SproutPaymentAddress> addresses;
+        std::set<libcrypticcoin::SproutPaymentAddress> addresses;
         pwalletMain->GetSproutPaymentAddresses(addresses);
         for (auto addr : addresses) {
             if (fIncludeWatchonly || pwalletMain->HaveSproutSpendingKey(addr)) {
@@ -3273,7 +3273,7 @@ UniValue z_listaddresses(const UniValue& params, bool fHelp)
         }
     }
     {
-        std::set<libzcash::SaplingPaymentAddress> addresses;
+        std::set<libcrypticcoin::SaplingPaymentAddress> addresses;
         pwalletMain->GetSaplingPaymentAddresses(addresses);
         for (auto addr : addresses) {
             // Don't show Sapling receivers that are part of an account in the wallet.
@@ -3323,15 +3323,15 @@ UniValue z_listunifiedreceivers(const UniValue& params, bool fHelp)
     if (!decoded.has_value()) {
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid address");
     }
-    if (!std::holds_alternative<libzcash::UnifiedAddress>(decoded.value())) {
+    if (!std::holds_alternative<libcrypticcoin::UnifiedAddress>(decoded.value())) {
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Address is not a unified address");
     }
-    auto ua = std::get<libzcash::UnifiedAddress>(decoded.value());
+    auto ua = std::get<libcrypticcoin::UnifiedAddress>(decoded.value());
 
     UniValue result(UniValue::VOBJ);
     for (const auto& receiver : ua) {
         std::visit(match {
-            [&](const libzcash::SaplingPaymentAddress& addr) {
+            [&](const libcrypticcoin::SaplingPaymentAddress& addr) {
                 result.pushKV("sapling", keyIO.EncodePaymentAddress(addr));
             },
             [&](const CScriptID& addr) {
@@ -3379,7 +3379,7 @@ CAmount getBalanceTaddr(const std::optional<CTxDestination>& taddr, int minDepth
     return balance;
 }
 
-CAmount getBalanceZaddr(std::optional<libzcash::PaymentAddress> address, int minDepth, int maxDepth, bool ignoreUnspendable) {
+CAmount getBalanceZaddr(std::optional<libcrypticcoin::PaymentAddress> address, int minDepth, int maxDepth, bool ignoreUnspendable) {
     CAmount balance = 0;
     std::vector<SproutNoteEntry> sproutEntries;
     std::vector<SaplingNoteEntry> saplingEntries;
@@ -3480,14 +3480,14 @@ UniValue z_listreceivedbyaddress(const UniValue& params, bool fHelp)
         [&](const CScriptID& addr) {
             return pwalletMain->FindUnifiedAddressByReceiver(addr).has_value();
         },
-        [&](const libzcash::SaplingPaymentAddress& addr) {
+        [&](const libcrypticcoin::SaplingPaymentAddress& addr) {
             return pwalletMain->FindUnifiedAddressByReceiver(addr).has_value();
         },
-        [&](const libzcash::SproutPaymentAddress& addr) {
+        [&](const libcrypticcoin::SproutPaymentAddress& addr) {
             // A unified address can't contain a Sprout receiver.
             return false;
         },
-        [&](const libzcash::UnifiedAddress& addr) {
+        [&](const libcrypticcoin::UnifiedAddress& addr) {
             // We allow unified addresses themselves, which cannot recurse.
             return false;
         }
@@ -3537,9 +3537,9 @@ UniValue z_listreceivedbyaddress(const UniValue& params, bool fHelp)
         }
     };
 
-    auto push_sapling_result = [&](const libzcash::SaplingPaymentAddress& addr) -> void {
+    auto push_sapling_result = [&](const libcrypticcoin::SaplingPaymentAddress& addr) -> void {
         bool hasSpendingKey = pwalletMain->HaveSaplingSpendingKeyForAddress(addr);
-        std::set<std::pair<libzcash::SaplingPaymentAddress, uint256>> nullifierSet;
+        std::set<std::pair<libcrypticcoin::SaplingPaymentAddress, uint256>> nullifierSet;
         if (hasSpendingKey) {
             nullifierSet = pwalletMain->GetSaplingNullifiers({addr});
         }
@@ -3568,9 +3568,9 @@ UniValue z_listreceivedbyaddress(const UniValue& params, bool fHelp)
     std::visit(match {
         [&](const CKeyID& addr) { push_transparent_result(addr); },
         [&](const CScriptID& addr) { push_transparent_result(addr); },
-        [&](const libzcash::SproutPaymentAddress& addr) {
+        [&](const libcrypticcoin::SproutPaymentAddress& addr) {
             bool hasSpendingKey = pwalletMain->HaveSproutSpendingKey(addr);
-            std::set<std::pair<libzcash::SproutPaymentAddress, uint256>> nullifierSet;
+            std::set<std::pair<libcrypticcoin::SproutPaymentAddress, uint256>> nullifierSet;
             if (hasSpendingKey) {
                 nullifierSet = pwalletMain->GetSproutNullifiers({addr});
             }
@@ -3597,13 +3597,13 @@ UniValue z_listreceivedbyaddress(const UniValue& params, bool fHelp)
                 result.push_back(obj);
             }
         },
-        [&](const libzcash::SaplingPaymentAddress& addr) {
+        [&](const libcrypticcoin::SaplingPaymentAddress& addr) {
             push_sapling_result(addr);
         },
-        [&](const libzcash::UnifiedAddress& addr) {
+        [&](const libcrypticcoin::UnifiedAddress& addr) {
             for (const auto& receiver : addr) {
                 std::visit(match {
-                    [&](const libzcash::SaplingPaymentAddress& addr) {
+                    [&](const libcrypticcoin::SaplingPaymentAddress& addr) {
                         push_sapling_result(addr);
                     },
                     [&](const CScriptID& addr) {
@@ -3681,13 +3681,13 @@ UniValue z_getbalance(const UniValue& params, bool fHelp)
         [&](const CScriptID& addr) {
             nBalance = getBalanceTaddr(addr, nMinDepth, false);
         },
-        [&](const libzcash::SproutPaymentAddress& addr) {
+        [&](const libcrypticcoin::SproutPaymentAddress& addr) {
             nBalance = getBalanceZaddr(addr, nMinDepth, INT_MAX, false);
         },
-        [&](const libzcash::SaplingPaymentAddress& addr) {
+        [&](const libcrypticcoin::SaplingPaymentAddress& addr) {
             nBalance = getBalanceZaddr(addr, nMinDepth, INT_MAX, false);
         },
-        [&](const libzcash::UnifiedAddress& addr) {
+        [&](const libcrypticcoin::UnifiedAddress& addr) {
              throw JSONRPCError(
                      RPC_INVALID_ADDRESS_OR_KEY,
                      "Unified addresses are not yet supported for z_getbalance.");
@@ -3770,7 +3770,7 @@ UniValue z_getbalanceforviewingkey(const UniValue& params, bool fHelp)
     // in the case that a Sprout viewing key is provided. Sapling and unified
     // FVKs make it possible to correctly determine balance without having the
     // spending key, so we permit that here.
-    bool requireSpendingKey = std::holds_alternative<libzcash::SproutViewingKey>(fvk);
+    bool requireSpendingKey = std::holds_alternative<libcrypticcoin::SproutViewingKey>(fvk);
     auto selector = pwalletMain->ZTXOSelectorForViewingKey(fvk, requireSpendingKey);
     if (!selector.has_value()) {
         throw JSONRPCError(
@@ -3855,10 +3855,10 @@ UniValue z_getbalanceforaccount(const UniValue& params, bool fHelp)
     }
 
     int64_t accountInt = params[0].get_int64();
-    if (accountInt < 0 || accountInt >= ZCASH_LEGACY_ACCOUNT) {
+    if (accountInt < 0 || accountInt >= CRYPTICCOIN_LEGACY_ACCOUNT) {
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid account number, must be 0 <= account <= (2^31)-2.");
     }
-    libzcash::AccountId account = accountInt;
+    libcrypticcoin::AccountId account = accountInt;
 
     int minconf = 1;
     if (params.size() > 1) {
@@ -3995,7 +3995,7 @@ UniValue z_viewtransaction(const UniValue& params, bool fHelp)
             "      \"jsOutputPrev\" : n,             (numeric, sprout) the index of the output within the JSDescription\n"
             "      \"outputPrev\" : n,               (numeric, sapling) the index of the output within the vShieldedOutput\n"
             "      \"actionPrev\" : n,               (numeric, orchard) the index of the action within the orchard bundle\n"
-            "      \"address\" : \"zcashaddress\",     (string) The Zcash address involved in the transaction\n"
+            "      \"address\" : \"crypticcoinaddress\",     (string) The Crypticcoin address involved in the transaction\n"
             "      \"value\" : x.xxx                 (numeric) The amount in " + CURRENCY_UNIT + "\n"
             "      \"valueZat\" : xxxx               (numeric) The amount in zatoshis\n"
             "    }\n"
@@ -4008,7 +4008,7 @@ UniValue z_viewtransaction(const UniValue& params, bool fHelp)
             "      \"jsOutput\" : n,                 (numeric, sprout) the index of the output within the JSDescription\n"
             "      \"output\" : n,                   (numeric, sapling) the index of the output within the vShieldedOutput\n"
             "      \"actionoutput\" : n,             (numeric, orchard) the index of the action within the orchard bundle\n"
-            "      \"address\" : \"zcashaddress\",     (string) The Zcash address involved in the transaction\n"
+            "      \"address\" : \"crypticcoinaddress\",     (string) The Crypticcoin address involved in the transaction\n"
             "      \"outgoing\" : true|false         (boolean, sapling) True if the output is not for an address in the wallet\n"
             "      \"value\" : x.xxx                 (numeric) The amount in " + CURRENCY_UNIT + "\n"
             "      \"valueZat\" : xxxx               (numeric) The amount in zatoshis\n"
@@ -4145,7 +4145,7 @@ UniValue z_viewtransaction(const UniValue& params, bool fHelp)
         auto pa = decrypted.second;
 
         // Store the OutgoingViewingKey for recovering outputs
-        libzcash::SaplingExtendedFullViewingKey extfvk;
+        libcrypticcoin::SaplingExtendedFullViewingKey extfvk;
         assert(pwalletMain->GetSaplingFullViewingKey(wtxPrev.mapSaplingNoteData.at(op).ivk, extfvk));
         ovks.insert(extfvk.fvk.ovk);
 
@@ -4154,9 +4154,9 @@ UniValue z_viewtransaction(const UniValue& params, bool fHelp)
         std::string address = keyIO.EncodePaymentAddress([&]() {
             auto ua = pwalletMain->FindUnifiedAddressByReceiver(pa);
             if (ua.has_value()) {
-                return libzcash::PaymentAddress{ua.value()};
+                return libcrypticcoin::PaymentAddress{ua.value()};
             } else {
-                return libzcash::PaymentAddress{pa};
+                return libcrypticcoin::PaymentAddress{pa};
             }
         }());
 
@@ -4208,9 +4208,9 @@ UniValue z_viewtransaction(const UniValue& params, bool fHelp)
         std::string address = keyIO.EncodePaymentAddress([&]() {
             auto ua = pwalletMain->FindUnifiedAddressByReceiver(pa);
             if (ua.has_value()) {
-                return libzcash::PaymentAddress{ua.value()};
+                return libcrypticcoin::PaymentAddress{ua.value()};
             } else {
-                return libzcash::PaymentAddress{pa};
+                return libcrypticcoin::PaymentAddress{pa};
             }
         }());
 
@@ -4371,15 +4371,15 @@ size_t EstimateTxSize(
             [&](const CScriptID&) {
                 taddrRecipientCount += 1;
             },
-            [&](const libzcash::SaplingPaymentAddress& addr) {
+            [&](const libcrypticcoin::SaplingPaymentAddress& addr) {
                 mtx.vShieldedOutput.push_back(OutputDescription());
             },
-            [&](const libzcash::SproutPaymentAddress& addr) {
+            [&](const libcrypticcoin::SproutPaymentAddress& addr) {
                 JSDescription jsdesc;
                 jsdesc.proof = GrothProof();
                 mtx.vJoinSplit.push_back(jsdesc);
             },
-            [&](const libzcash::OrchardRawAddress& addr) {
+            [&](const libcrypticcoin::OrchardRawAddress& addr) {
                 if (fromSprout) {
                     throw JSONRPCError(
                         RPC_INVALID_PARAMETER,
@@ -4491,15 +4491,15 @@ UniValue z_sendmany(const UniValue& params, bool fHelp)
 
             auto selectorAccount = pwalletMain->FindAccountForSelector(ztxoSelectorOpt.value());
             std::visit(match {
-                [&](const libzcash::UnifiedAddress& ua) {
-                    if (!selectorAccount.has_value() || selectorAccount.value() == ZCASH_LEGACY_ACCOUNT) {
+                [&](const libcrypticcoin::UnifiedAddress& ua) {
+                    if (!selectorAccount.has_value() || selectorAccount.value() == CRYPTICCOIN_LEGACY_ACCOUNT) {
                         throw JSONRPCError(
                                 RPC_INVALID_ADDRESS_OR_KEY,
                                 "Invalid from address, UA does not correspond to a known account.");
                     }
                 },
                 [&](const auto& other) {
-                    if (selectorAccount.has_value() && selectorAccount.value() != ZCASH_LEGACY_ACCOUNT) {
+                    if (selectorAccount.has_value() && selectorAccount.value() != CRYPTICCOIN_LEGACY_ACCOUNT) {
                         throw JSONRPCError(
                                 RPC_INVALID_ADDRESS_OR_KEY,
                                 "Invalid from address: is a bare receiver from a Unified Address in this wallet. Provide the UA as returned by z_getaddressforaccount instead.");
@@ -4539,7 +4539,7 @@ UniValue z_sendmany(const UniValue& params, bool fHelp)
 
         std::optional<RecipientAddress> addr = std::visit(SelectRecipientAddress(), decoded.value());
         if (!addr.has_value()) {
-            bool toSprout = std::holds_alternative<libzcash::SproutPaymentAddress>(decoded.value());
+            bool toSprout = std::holds_alternative<libcrypticcoin::SproutPaymentAddress>(decoded.value());
             if (toSprout) {
                 throw JSONRPCError(
                     RPC_INVALID_PARAMETER,
@@ -4559,7 +4559,7 @@ UniValue z_sendmany(const UniValue& params, bool fHelp)
         std::optional<std::string> memo;
         if (!memoValue.isNull()) {
             memo = memoValue.get_str();
-            if (!std::visit(libzcash::HasShieldedRecipient(), addr.value())) {
+            if (!std::visit(libcrypticcoin::HasShieldedRecipient(), addr.value())) {
                 throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, memos cannot be sent to transparent addresses.");
             } else if (!IsHex(memo.value())) {
                 throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, expected memo data in hexadecimal format.");
@@ -4576,9 +4576,9 @@ UniValue z_sendmany(const UniValue& params, bool fHelp)
             throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, amount must be positive");
         }
 
-        std::optional<libzcash::UnifiedAddress> ua = std::nullopt;
-        if (std::holds_alternative<libzcash::UnifiedAddress>(decoded.value())) {
-            ua = std::get<libzcash::UnifiedAddress>(decoded.value());
+        std::optional<libcrypticcoin::UnifiedAddress> ua = std::nullopt;
+        if (std::holds_alternative<libcrypticcoin::UnifiedAddress>(decoded.value())) {
+            ua = std::get<libcrypticcoin::UnifiedAddress>(decoded.value());
         }
 
         recipients.push_back(SendManyRecipient(ua, addr.value(), nAmount, memo));
@@ -4869,15 +4869,15 @@ UniValue z_shieldcoinbase(const UniValue& params, bool fHelp)
             [&](const CScriptID&) {
                 throw JSONRPCError(RPC_VERIFY_REJECTED, "Cannot shield coinbase output to a p2sh address.");
             },
-            [&](const libzcash::SaplingPaymentAddress& addr) {
+            [&](const libcrypticcoin::SaplingPaymentAddress& addr) {
                 // OK
             },
-            [&](const libzcash::SproutPaymentAddress& addr) {
+            [&](const libcrypticcoin::SproutPaymentAddress& addr) {
                 if (canopyActive) {
                     throw JSONRPCError(RPC_VERIFY_REJECTED, "Sprout shielding is not supported after Canopy activation");
                 }
             },
-            [&](const libzcash::UnifiedAddress& ua) {
+            [&](const libcrypticcoin::UnifiedAddress& ua) {
                 // OK
             }
         }, destaddress.value());
@@ -5092,7 +5092,7 @@ UniValue z_mergetoaddress(const UniValue& params, bool fHelp)
     bool useAnySprout = false;
     bool useAnySapling = false;
     std::set<CTxDestination> taddrs;
-    std::vector<libzcash::PaymentAddress> zaddrs;
+    std::vector<libcrypticcoin::PaymentAddress> zaddrs;
 
     UniValue addresses = params[0].get_array();
     if (addresses.size()==0)
@@ -5131,14 +5131,14 @@ UniValue z_mergetoaddress(const UniValue& params, bool fHelp)
                         taddrs.insert(taddr);
                         isFromNonSprout = true;
                     },
-                    [&](const libzcash::SaplingPaymentAddress& zaddr) {
+                    [&](const libcrypticcoin::SaplingPaymentAddress& zaddr) {
                         zaddrs.push_back(zaddr);
                         isFromNonSprout = true;
                     },
-                    [&](const libzcash::SproutPaymentAddress& zaddr) {
+                    [&](const libcrypticcoin::SproutPaymentAddress& zaddr) {
                         zaddrs.push_back(zaddr);
                     },
-                    [&](libzcash::UnifiedAddress) {
+                    [&](libcrypticcoin::UnifiedAddress) {
                         throw JSONRPCError(
                                 RPC_INVALID_PARAMETER,
                                 "Unified addresses are not supported in z_mergetoaddress");
@@ -5180,17 +5180,17 @@ UniValue z_mergetoaddress(const UniValue& params, bool fHelp)
             [&](CScriptID addr) {
                 isToTaddr = true;
             },
-            [&](libzcash::SaplingPaymentAddress addr) {
+            [&](libcrypticcoin::SaplingPaymentAddress addr) {
                 isToSaplingZaddr = true;
                 // If Sapling is not active, do not allow sending to a sapling addresses.
                 if (!saplingActive) {
                     throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, Sapling has not activated");
                 }
             },
-            [&](libzcash::SproutPaymentAddress addr) {
+            [&](libcrypticcoin::SproutPaymentAddress addr) {
                 isToSproutZaddr = true;
             },
-            [&](libzcash::UnifiedAddress) {
+            [&](libcrypticcoin::UnifiedAddress) {
                 throw JSONRPCError(
                         RPC_INVALID_PARAMETER,
                         "Invalid parameter, unified addresses are not yet supported.");
@@ -5392,7 +5392,7 @@ UniValue z_mergetoaddress(const UniValue& params, bool fHelp)
                     maxedOutNotesFlag = true;
                 } else {
                     estimatedTxSize += increase;
-                    libzcash::SaplingExtendedSpendingKey extsk;
+                    libcrypticcoin::SaplingExtendedSpendingKey extsk;
                     if (!pwalletMain->GetSaplingExtendedSpendingKey(entry.address, extsk)) {
                         throw JSONRPCError(RPC_INVALID_PARAMETER, "Could not find spending key for payment address.");
                     }

@@ -47,7 +47,7 @@ enum
     SCRIPT_VERIFY_STRICTENC = (1U << 1),
 
     // Passing a non-strict-DER signature to a checksig operation causes script failure (softfork safe, BIP62 rule 1)
-    // In Zcash this is required, and validation of non-strict-DER signatures is not implemented.
+    // In Crypticcoin this is required, and validation of non-strict-DER signatures is not implemented.
     //SCRIPT_VERIFY_DERSIG    = (1U << 2),
 
     // Passing a non-strict-DER signature or one with S > order/2 to a checksig operation causes script failure
@@ -96,7 +96,7 @@ struct PrecomputedTransactionData
 {
     uint256 hashPrevouts, hashSequence, hashOutputs, hashJoinSplits, hashShieldedSpends, hashShieldedOutputs;
     /** Precomputed transaction parts. */
-    std::unique_ptr<PrecomputedTxParts, decltype(&zcash_transaction_precomputed_free)> preTx;
+    std::unique_ptr<PrecomputedTxParts, decltype(&crypticcoin_transaction_precomputed_free)> preTx;
 
     PrecomputedTransactionData(const CTransaction& tx);
 };

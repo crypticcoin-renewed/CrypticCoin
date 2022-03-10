@@ -103,7 +103,7 @@ TEST(Miner, GetMinerAddress) {
         MinerAddress minerAddress;
         GetMinerAddress(minerAddress);
         EXPECT_TRUE(IsValidMinerAddress(minerAddress));
-        EXPECT_TRUE(std::get_if<libzcash::SaplingPaymentAddress>(&minerAddress) != nullptr);
+        EXPECT_TRUE(std::get_if<libcrypticcoin::SaplingPaymentAddress>(&minerAddress) != nullptr);
     }
 
     // Valid Sapling address with leading whitespace

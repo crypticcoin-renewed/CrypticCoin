@@ -1,9 +1,9 @@
-// Copyright (c) 2020 The Zcash developers
+// Copyright (c) 2020 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_RUST_INCLUDE_RUST_TRANSACTION_H
-#define ZCASH_RUST_INCLUDE_RUST_TRANSACTION_H
+#ifndef CRYPTICCOIN_RUST_INCLUDE_RUST_TRANSACTION_H
+#define CRYPTICCOIN_RUST_INCLUDE_RUST_TRANSACTION_H
 
 #include <stddef.h>
 #include <stdint.h>
@@ -24,7 +24,7 @@ typedef struct PrecomputedTxParts PrecomputedTxParts;
 /// digest will not be calculated.
 ///
 /// Returns `false` if the transaction is invalid.
-bool zcash_transaction_digests(
+bool crypticcoin_transaction_digests(
     const unsigned char* txBytes,
     size_t txBytes_len,
     unsigned char* txid_ret,
@@ -33,16 +33,16 @@ bool zcash_transaction_digests(
 /// Precomputes data for calculating signature digests from the given
 /// transaction.
 ///
-/// Please free this with `zcash_transaction_precomputed_free` when you are
+/// Please free this with `crypticcoin_transaction_precomputed_free` when you are
 /// done.
 ///
 /// Returns `nullptr` if the transaction is invalid, or a v1-v4 transaction format.
-PrecomputedTxParts* zcash_transaction_precomputed_init(
+PrecomputedTxParts* crypticcoin_transaction_precomputed_init(
     const unsigned char* txBytes,
     size_t txBytes_len);
 
-/// Frees a precomputed transaction from `zcash_transaction_precomputed_init`.
-void zcash_transaction_precomputed_free(PrecomputedTxParts* preTx);
+/// Frees a precomputed transaction from `crypticcoin_transaction_precomputed_init`.
+void crypticcoin_transaction_precomputed_free(PrecomputedTxParts* preTx);
 
 /// Calculates a signature digest for the given transparent input.
 ///
@@ -50,7 +50,7 @@ void zcash_transaction_precomputed_free(PrecomputedTxParts* preTx);
 ///
 /// Returns `false` if any of the parameters are invalid; in this case,
 /// `sighash_ret` will be unaltered.
-bool zcash_transaction_transparent_signature_digest(
+bool crypticcoin_transaction_transparent_signature_digest(
     const PrecomputedTxParts* preTx,
     uint32_t sighashType,
     size_t index,
@@ -63,4 +63,4 @@ bool zcash_transaction_transparent_signature_digest(
 }
 #endif
 
-#endif // ZCASH_RUST_INCLUDE_RUST_TRANSACTION_H
+#endif // CRYPTICCOIN_RUST_INCLUDE_RUST_TRANSACTION_H

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-# Copyright (c) 2020 The Zcash developers
+# Copyright (c) 2020 The Crypticcoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
 
-from test_framework.flyclient import (ZcashMMRNode, append, delete, make_root_commitment)
+from test_framework.flyclient import (CrypticcoinMMRNode, append, delete, make_root_commitment)
 from test_framework.mininode import (CBlockHeader)
 from test_framework.test_framework import BitcoinTestFramework
 from test_framework.util import (
@@ -62,7 +62,7 @@ class Zip221Test(BitcoinTestFramework):
         else:
             v2_data = None
 
-        return ZcashMMRNode.from_block(
+        return CrypticcoinMMRNode.from_block(
             block_header, height, sapling_root, 0, epoch, v2_data)
 
     def new_tree(self, height):

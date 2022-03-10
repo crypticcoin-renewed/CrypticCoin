@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 2020 The Zcash developers
+# Copyright (c) 2020 The Crypticcoin developers
 
 export LC_ALL=C
 
@@ -26,7 +26,7 @@ rm -f qa/pull-tester/tests-config.sh
 
 rm -f src/fuzz.cpp
 
-rm -rf test_bitcoin.coverage/ zcash-gtest.coverage/ total.coverage/
+rm -rf test_bitcoin.coverage/ crypticcoin-gtest.coverage/ total.coverage/
 
 rm -rf cache
 rm -rf target
@@ -78,10 +78,10 @@ clean_dirs .libs
 clean_dirs __pycache__
 
 clean_exe src/bench/bench_bitcoin
-clean_exe src/zcash-cli
-clean_exe src/zcashd
-clean_exe src/zcash-gtest
-clean_exe src/zcash-tx
+clean_exe src/crypticcoin-cli
+clean_exe src/crypticcoind
+clean_exe src/crypticcoin-gtest
+clean_exe src/crypticcoin-tx
 clean_exe src/test/test_bitcoin
 
 clean_exe src/leveldb/db_bench

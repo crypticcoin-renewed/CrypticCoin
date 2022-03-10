@@ -6,7 +6,7 @@
 #include "consensus/validation.h"
 #include "transaction_builder.h"
 #include "utiltest.h"
-#include "zcash/JoinSplit.hpp"
+#include "crypticcoin/JoinSplit.hpp"
 
 #include <librustzcash.h>
 #include <rust/ed25519.h>
@@ -92,7 +92,7 @@ CMutableTransaction GetValidTransaction(uint32_t consensusBranchId=SPROUT_BRANCH
     mtx.vJoinSplit[1].nullifiers.at(1) = uint256S("0000000000000000000000000000000000000000000000000000000000000003");
 
     if (mtx.nVersion >= SAPLING_TX_VERSION) {
-        libzcash::GrothProof emptyProof;
+        libcrypticcoin::GrothProof emptyProof;
         mtx.vJoinSplit[0].proof = emptyProof;
         mtx.vJoinSplit[1].proof = emptyProof;
     }
@@ -208,8 +208,8 @@ TEST(ChecktransactionTests, BadTxnsOversize) {
         mtx.nVersion = SAPLING_TX_VERSION;
 
         // Change the proof types (which requires re-signing the JoinSplit data)
-        mtx.vJoinSplit[0].proof = libzcash::GrothProof();
-        mtx.vJoinSplit[1].proof = libzcash::GrothProof();
+        mtx.vJoinSplit[0].proof = libcrypticcoin::GrothProof();
+        mtx.vJoinSplit[1].proof = libcrypticcoin::GrothProof();
         CreateJoinSplitSignature(mtx, NetworkUpgradeInfo[Consensus::UPGRADE_SAPLING].nBranchId);
 
         CTransaction tx(mtx);
@@ -233,8 +233,8 @@ TEST(ChecktransactionTests, OversizeSaplingTxns) {
     mtx.nVersion = SAPLING_TX_VERSION;
 
     // Change the proof types (which requires re-signing the JoinSplit data)
-    mtx.vJoinSplit[0].proof = libzcash::GrothProof();
-    mtx.vJoinSplit[1].proof = libzcash::GrothProof();
+    mtx.vJoinSplit[0].proof = libcrypticcoin::GrothProof();
+    mtx.vJoinSplit[1].proof = libcrypticcoin::GrothProof();
     CreateJoinSplitSignature(mtx, NetworkUpgradeInfo[Consensus::UPGRADE_SAPLING].nBranchId);
 
     // Transaction just under the limit
@@ -826,13 +826,13 @@ TEST(ChecktransactionTests, SaplingSproutInputSumsTooLarge) {
         // create JSDescription
         uint256 rt;
         Ed25519VerificationKey joinSplitPubKey;
-        std::array<libzcash::JSInput, ZC_NUM_JS_INPUTS> inputs = {
-            libzcash::JSInput(),
-            libzcash::JSInput()
+        std::array<libcrypticcoin::JSInput, ZC_NUM_JS_INPUTS> inputs = {
+            libcrypticcoin::JSInput(),
+            libcrypticcoin::JSInput()
         };
-        std::array<libzcash::JSOutput, ZC_NUM_JS_OUTPUTS> outputs = {
-            libzcash::JSOutput(),
-            libzcash::JSOutput()
+        std::array<libcrypticcoin::JSOutput, ZC_NUM_JS_OUTPUTS> outputs = {
+            libcrypticcoin::JSOutput(),
+            libcrypticcoin::JSOutput()
         };
         std::array<size_t, ZC_NUM_JS_INPUTS> inputMap;
         std::array<size_t, ZC_NUM_JS_OUTPUTS> outputMap;
@@ -1145,8 +1145,8 @@ TEST(ChecktransactionTests, HeartwoodAcceptsShieldedCoinbase) {
     auto chainparams = Params();
 
     uint256 ovk;
-    auto note = libzcash::SaplingNote(
-        libzcash::SaplingSpendingKey::random().default_address(), CAmount(123456), libzcash::Zip212Enabled::BeforeZip212);
+    auto note = libcrypticcoin::SaplingNote(
+        libcrypticcoin::SaplingSpendingKey::random().default_address(), CAmount(123456), libcrypticcoin::Zip212Enabled::BeforeZip212);
     auto output = OutputDescriptionInfo(ovk, note, {{0xF6}});
 
     auto ctx = librustzcash_sapling_proving_ctx_init();
@@ -1228,8 +1228,8 @@ TEST(ChecktransactionTests, HeartwoodEnforcesSaplingRulesOnShieldedCoinbase) {
     auto chainparams = Params();
 
     uint256 ovk;
-    auto note = libzcash::SaplingNote(
-        libzcash::SaplingSpendingKey::random().default_address(), CAmount(123456), libzcash::Zip212Enabled::BeforeZip212);
+    auto note = libcrypticcoin::SaplingNote(
+        libcrypticcoin::SaplingSpendingKey::random().default_address(), CAmount(123456), libcrypticcoin::Zip212Enabled::BeforeZip212);
     auto output = OutputDescriptionInfo(ovk, note, {{0xF6}});
 
     CMutableTransaction mtx = GetValidTransaction();
@@ -1309,7 +1309,7 @@ TEST(ChecktransactionTests, CanopyRejectsNonzeroVPubOld) {
     mtx.vJoinSplit.resize(1);
     mtx.vJoinSplit[0].vpub_old = 1;
     mtx.vJoinSplit[0].vpub_new = 0;
-    mtx.vJoinSplit[0].proof = libzcash::GrothProof();
+    mtx.vJoinSplit[0].proof = libcrypticcoin::GrothProof();
     CreateJoinSplitSignature(mtx, NetworkUpgradeInfo[Consensus::UPGRADE_SAPLING].nBranchId);
 
     CTransaction tx(mtx);
@@ -1338,7 +1338,7 @@ TEST(ChecktransactionTests, CanopyAcceptsZeroVPubOld) {
     mtx.vJoinSplit.resize(1);
     mtx.vJoinSplit[0].vpub_old = 0;
     mtx.vJoinSplit[0].vpub_new = 1;
-    mtx.vJoinSplit[0].proof = libzcash::GrothProof();
+    mtx.vJoinSplit[0].proof = libcrypticcoin::GrothProof();
     CreateJoinSplitSignature(mtx, NetworkUpgradeInfo[Consensus::UPGRADE_CANOPY].nBranchId);
 
     CTransaction tx(mtx);

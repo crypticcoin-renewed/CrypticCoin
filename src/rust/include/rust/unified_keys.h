@@ -1,9 +1,9 @@
-// Copyright (c) 2021 The Zcash developers
+// Copyright (c) 2021 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_RUST_INCLUDE_RUST_UNIFIED_KEYS_H
-#define ZCASH_RUST_INCLUDE_RUST_UNIFIED_KEYS_H
+#ifndef CRYPTICCOIN_RUST_INCLUDE_RUST_UNIFIED_KEYS_H
+#define CRYPTICCOIN_RUST_INCLUDE_RUST_UNIFIED_KEYS_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -123,5 +123,5 @@ bool transparent_key_ovks(
 }
 #endif
 
-#endif // ZCASH_RUST_INCLUDE_RUST_UNIFIED_KEYS_H
+#endif // CRYPTICCOIN_RUST_INCLUDE_RUST_UNIFIED_KEYS_H
 

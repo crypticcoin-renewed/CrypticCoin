@@ -1,4 +1,4 @@
-// Copyright (c) 2017 The Zcash developers
+// Copyright (c) 2017 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -27,7 +27,7 @@
 #include "script/interpreter.h"
 #include "utiltime.h"
 #include "util/match.h"
-#include "zcash/IncrementalMerkleTree.hpp"
+#include "crypticcoin/IncrementalMerkleTree.hpp"
 #include "miner.h"
 #include "wallet/paymentdisclosuredb.h"
 
@@ -41,7 +41,7 @@
 
 #include <rust/ed25519.h>
 
-using namespace libzcash;
+using namespace libcrypticcoin;
 
 static int find_output(UniValue obj, int n) {
     UniValue outputMapValue = find_value(obj, "outputmap");
@@ -87,13 +87,13 @@ AsyncRPCOperation_shieldcoinbase::AsyncRPCOperation_shieldcoinbase(
         [&](CScriptID addr) {
             throw JSONRPCError(RPC_VERIFY_REJECTED, "Cannot shield coinbase output to a p2sh address.");
         },
-        [&](libzcash::SaplingPaymentAddress addr) {
+        [&](libcrypticcoin::SaplingPaymentAddress addr) {
             tozaddr_ = addr;
         },
-        [&](libzcash::SproutPaymentAddress addr) {
+        [&](libcrypticcoin::SproutPaymentAddress addr) {
             tozaddr_ = addr;
         },
-        [&](libzcash::UnifiedAddress addr) {
+        [&](libcrypticcoin::UnifiedAddress addr) {
             tozaddr_ = addr;
         }
     }, toAddress);
@@ -213,7 +213,7 @@ bool AsyncRPCOperation_shieldcoinbase::main_impl() {
     return std::visit(ShieldToAddress(this, sendAmount), tozaddr_);
 }
 
-void ShieldToAddress::shieldToAddress(const libzcash::RecipientAddress& recipient, AsyncRPCOperation_shieldcoinbase *m_op) {
+void ShieldToAddress::shieldToAddress(const libcrypticcoin::RecipientAddress& recipient, AsyncRPCOperation_shieldcoinbase *m_op) {
     m_op->builder_.SetFee(m_op->fee_);
 
     // Sending from a t-address, which we don't have an ovk for. Instead,
@@ -244,7 +244,7 @@ bool ShieldToAddress::operator()(const CScriptID &addr) const {
     return false;
 }
 
-bool ShieldToAddress::operator()(const libzcash::SproutPaymentAddress &zaddr) const {
+bool ShieldToAddress::operator()(const libcrypticcoin::SproutPaymentAddress &zaddr) const {
     // update the transaction with these inputs
     CMutableTransaction rawTx(m_op->tx_);
     for (ShieldCoinbaseUTXO & t : m_op->inputs_) {
@@ -273,7 +273,7 @@ bool ShieldToAddress::operator()(const libzcash::SproutPaymentAddress &zaddr) co
     return true;
 }
 
-bool ShieldToAddress::operator()(const libzcash::SaplingPaymentAddress &zaddr) const {
+bool ShieldToAddress::operator()(const libcrypticcoin::SaplingPaymentAddress &zaddr) const {
     ShieldToAddress::shieldToAddress(zaddr, m_op);
 
     std::vector<RecipientMapping> recipientMappings;
@@ -283,7 +283,7 @@ bool ShieldToAddress::operator()(const libzcash::SaplingPaymentAddress &zaddr) c
     return true;
 }
 
-bool ShieldToAddress::operator()(const libzcash::UnifiedAddress &uaddr) const {
+bool ShieldToAddress::operator()(const libcrypticcoin::UnifiedAddress &uaddr) const {
     // TODO check if an Orchard address is present, send to it if so.
     const auto receiver{uaddr.GetSaplingReceiver()};
     if (receiver.has_value()) {
@@ -337,9 +337,9 @@ UniValue AsyncRPCOperation_shieldcoinbase::perform_joinsplit(ShieldCoinbaseJSInf
             );
 
     // Generate the proof, this can take over a minute.
-    std::array<libzcash::JSInput, ZC_NUM_JS_INPUTS> inputs
+    std::array<libcrypticcoin::JSInput, ZC_NUM_JS_INPUTS> inputs
             {info.vjsin[0], info.vjsin[1]};
-    std::array<libzcash::JSOutput, ZC_NUM_JS_OUTPUTS> outputs
+    std::array<libcrypticcoin::JSOutput, ZC_NUM_JS_OUTPUTS> outputs
             {info.vjsout[0], info.vjsout[1]};
     std::array<size_t, ZC_NUM_JS_INPUTS> inputMap;
     std::array<size_t, ZC_NUM_JS_OUTPUTS> outputMap;
@@ -437,7 +437,7 @@ UniValue AsyncRPCOperation_shieldcoinbase::perform_joinsplit(ShieldCoinbaseJSInf
         // placeholder for txid will be filled in later when tx has been finalized and signed.
         PaymentDisclosureKey pdKey = {placeholder, js_index, mapped_index};
         JSOutput output = outputs[mapped_index];
-        libzcash::SproutPaymentAddress zaddr = output.addr;  // randomized output
+        libcrypticcoin::SproutPaymentAddress zaddr = output.addr;  // randomized output
         PaymentDisclosureInfo pdInfo = {PAYMENT_DISCLOSURE_VERSION_EXPERIMENTAL, esk, joinSplitPrivKey_, zaddr};
         paymentDisclosureData_.push_back(PaymentDisclosureKeyInfo(pdKey, pdInfo));
 

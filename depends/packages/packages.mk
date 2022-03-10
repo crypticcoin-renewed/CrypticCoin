@@ -1,5 +1,5 @@
-zcash_packages := libsodium utfcpp
-packages := boost libevent zeromq $(zcash_packages) googletest
+crypticcoin_packages := libsodium utfcpp
+packages := boost libevent zeromq $(crypticcoin_packages) googletest
 native_packages := native_clang native_ccache native_rust 
 
 ifneq (,$(wildcard /etc/arch-release))

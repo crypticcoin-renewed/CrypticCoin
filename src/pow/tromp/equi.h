@@ -1,8 +1,8 @@
 // Equihash solver
-// Copyright (c) 2016-2016 John Tromp, The Zcash developers
+// Copyright (c) 2016-2016 John Tromp, The Crypticcoin developers
 
-#ifndef ZCASH_POW_TROMP_EQUI_H
-#define ZCASH_POW_TROMP_EQUI_H
+#ifndef CRYPTICCOIN_POW_TROMP_EQUI_H
+#define CRYPTICCOIN_POW_TROMP_EQUI_H
 
 #ifdef __APPLE__
 #include "pow/tromp/osx_barrier.h"
@@ -102,4 +102,4 @@ int verify(u32 indices[PROOFSIZE], const BLAKE2bState *ctx) {
   return verifyrec(ctx, indices, hash, WK);
 }
 
-#endif // ZCASH_POW_TROMP_EQUI_H
+#endif // CRYPTICCOIN_POW_TROMP_EQUI_H

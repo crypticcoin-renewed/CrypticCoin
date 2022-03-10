@@ -2,7 +2,7 @@
 
 #include "main.h"
 #include "utiltest.h"
-#include "zcash/History.hpp"
+#include "crypticcoin/History.hpp"
 
 // Fake an empty view
 class FakeCoinsViewDB : public CCoinsView {
@@ -64,7 +64,7 @@ public:
 };
 
 HistoryNode getLeafN(uint64_t block_num) {
-    HistoryNode node = libzcash::NewV1Leaf(
+    HistoryNode node = libcrypticcoin::NewV1Leaf(
         uint256(),
         block_num*10,
         block_num*13,

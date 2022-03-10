@@ -18,9 +18,9 @@
 #include <array>
 #include <variant>
 
-#include "zcash/NoteEncryption.hpp"
-#include "zcash/Zcash.h"
-#include "zcash/Proof.hpp"
+#include "crypticcoin/NoteEncryption.hpp"
+#include "crypticcoin/Crypticcoin.h"
+#include "crypticcoin/Proof.hpp"
 
 #include <rust/ed25519/types.h>
 #include <primitives/orchard.h>
@@ -126,7 +126,7 @@ public:
     typedef std::array<unsigned char, 64> spend_auth_sig_t;
 
     uint256 anchor;                //!< A Merkle root of the Sapling note commitment tree at some block height in the past.
-    libzcash::GrothProof zkproof;  //!< A zero-knowledge proof using the spend circuit.
+    libcrypticcoin::GrothProof zkproof;  //!< A zero-knowledge proof using the spend circuit.
     spend_auth_sig_t spendAuthSig; //!< A signature authorizing this spend.
 
     SpendDescription() { }
@@ -136,7 +136,7 @@ public:
         uint256 anchor,
         uint256 nullifier,
         uint256 rk,
-        libzcash::GrothProof zkproof,
+        libcrypticcoin::GrothProof zkproof,
         spend_auth_sig_t spendAuthSig)
         : SpendDescriptionV5(cv, nullifier, rk), anchor(anchor), zkproof(zkproof), spendAuthSig(spendAuthSig) { }
 
@@ -179,8 +179,8 @@ public:
     uint256 cv;                     //!< A value commitment to the value of the output note.
     uint256 cmu;                     //!< The u-coordinate of the note commitment for the output note.
     uint256 ephemeralKey;           //!< A Jubjub public key.
-    libzcash::SaplingEncCiphertext encCiphertext; //!< A ciphertext component for the encrypted output note.
-    libzcash::SaplingOutCiphertext outCiphertext; //!< A ciphertext component for the encrypted output note.
+    libcrypticcoin::SaplingEncCiphertext encCiphertext; //!< A ciphertext component for the encrypted output note.
+    libcrypticcoin::SaplingOutCiphertext outCiphertext; //!< A ciphertext component for the encrypted output note.
 
     OutputDescriptionV5() { }
 
@@ -188,8 +188,8 @@ public:
         uint256 cv,
         uint256 cmu,
         uint256 ephemeralKey,
-        libzcash::SaplingEncCiphertext encCiphertext,
-        libzcash::SaplingOutCiphertext outCiphertext)
+        libcrypticcoin::SaplingEncCiphertext encCiphertext,
+        libcrypticcoin::SaplingOutCiphertext outCiphertext)
         : cv(cv), cmu(cmu), ephemeralKey(ephemeralKey), encCiphertext(encCiphertext), outCiphertext(outCiphertext) { }
 
     ADD_SERIALIZE_METHODS;
@@ -210,7 +210,7 @@ public:
 class OutputDescription : public OutputDescriptionV5
 {
 public:
-    libzcash::GrothProof zkproof;   //!< A zero-knowledge proof using the output circuit.
+    libcrypticcoin::GrothProof zkproof;   //!< A zero-knowledge proof using the output circuit.
 
     OutputDescription() { }
 
@@ -218,9 +218,9 @@ public:
         uint256 cv,
         uint256 cmu,
         uint256 ephemeralKey,
-        libzcash::SaplingEncCiphertext encCiphertext,
-        libzcash::SaplingOutCiphertext outCiphertext,
-        libzcash::GrothProof zkproof)
+        libcrypticcoin::SaplingEncCiphertext encCiphertext,
+        libcrypticcoin::SaplingOutCiphertext outCiphertext,
+        libcrypticcoin::GrothProof zkproof)
         : OutputDescriptionV5(cv, cmu, ephemeralKey, encCiphertext, outCiphertext), zkproof(zkproof) { }
 
     ADD_SERIALIZE_METHODS;
@@ -260,9 +260,9 @@ private:
     std::vector<SpendDescriptionV5> vSpendsSapling;
     std::vector<OutputDescriptionV5> vOutputsSapling;
     uint256 anchorSapling;
-    std::vector<libzcash::GrothProof> vSpendProofsSapling;
+    std::vector<libcrypticcoin::GrothProof> vSpendProofsSapling;
     std::vector<SpendDescription::spend_auth_sig_t> vSpendAuthSigSapling;
-    std::vector<libzcash::GrothProof> vOutputProofsSapling;
+    std::vector<libcrypticcoin::GrothProof> vOutputProofsSapling;
 
 public:
     CAmount valueBalanceSapling;
@@ -293,7 +293,7 @@ public:
         }
         if (ser_action.ForRead()) {
             for (auto &spend : vSpendsSapling) {
-                libzcash::GrothProof zkproof;
+                libcrypticcoin::GrothProof zkproof;
                 READWRITE(zkproof);
                 vSpendProofsSapling.push_back(zkproof);
             }
@@ -303,7 +303,7 @@ public:
                 vSpendAuthSigSapling.push_back(spendAuthSig);
             }
             for (auto &output : vOutputsSapling) {
-                libzcash::GrothProof zkproof;
+                libcrypticcoin::GrothProof zkproof;
                 READWRITE(zkproof);
                 vOutputProofsSapling.push_back(zkproof);
             }
@@ -336,7 +336,7 @@ class SproutProofSerializer
 public:
     SproutProofSerializer(Stream& s, bool useGroth) : s(s), useGroth(useGroth) {}
 
-    void operator()(const libzcash::PHGRProof& proof) const
+    void operator()(const libcrypticcoin::PHGRProof& proof) const
     {
         if (useGroth) {
             throw std::ios_base::failure("Invalid Sprout proof for transaction format (expected GrothProof, found PHGRProof)");
@@ -344,7 +344,7 @@ public:
         ::Serialize(s, proof);
     }
 
-    void operator()(const libzcash::GrothProof& proof) const
+    void operator()(const libcrypticcoin::GrothProof& proof) const
     {
         if (!useGroth) {
             throw std::ios_base::failure("Invalid Sprout proof for transaction format (expected PHGRProof, found GrothProof)");
@@ -364,11 +364,11 @@ template<typename Stream, typename T>
 inline void SerReadWriteSproutProof(Stream& s, T& proof, bool useGroth, CSerActionUnserialize ser_action)
 {
     if (useGroth) {
-        libzcash::GrothProof grothProof;
+        libcrypticcoin::GrothProof grothProof;
         ::Unserialize(s, grothProof);
         proof = grothProof;
     } else {
-        libzcash::PHGRProof pghrProof;
+        libcrypticcoin::PHGRProof pghrProof;
         ::Unserialize(s, pghrProof);
         proof = pghrProof;
     }
@@ -420,7 +420,7 @@ public:
 
     // JoinSplit proof
     // This is a zk-SNARK which ensures that this JoinSplit is valid.
-    libzcash::SproutProof proof;
+    libcrypticcoin::SproutProof proof;
 
     JSDescription(): vpub_old(0), vpub_new(0) { }
 

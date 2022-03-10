@@ -1,10 +1,10 @@
-#ifndef ZCASH_WALLET_ASYNCRPCOPERATION_SAPLINGMIGRATION_H
-#define ZCASH_WALLET_ASYNCRPCOPERATION_SAPLINGMIGRATION_H
+#ifndef CRYPTICCOIN_WALLET_ASYNCRPCOPERATION_SAPLINGMIGRATION_H
+#define CRYPTICCOIN_WALLET_ASYNCRPCOPERATION_SAPLINGMIGRATION_H
 
 #include "amount.h"
 #include "asyncrpcoperation.h"
 #include "univalue.h"
-#include "zcash/Address.hpp"
+#include "crypticcoin/Address.hpp"
 
 class AsyncRPCOperation_saplingmigration : public AsyncRPCOperation
 {
@@ -18,7 +18,7 @@ public:
     AsyncRPCOperation_saplingmigration& operator=(AsyncRPCOperation_saplingmigration const&) = delete; // Copy assign
     AsyncRPCOperation_saplingmigration& operator=(AsyncRPCOperation_saplingmigration&&) = delete;      // Move assign
 
-    static libzcash::SaplingPaymentAddress getMigrationDestAddress(const HDSeed& seed);
+    static libcrypticcoin::SaplingPaymentAddress getMigrationDestAddress(const HDSeed& seed);
 
     virtual void main();
 
@@ -36,4 +36,4 @@ private:
     CAmount chooseAmount(const CAmount& availableFunds);
 };
 
-#endif // ZCASH_WALLET_ASYNCRPCOPERATION_SAPLINGMIGRATION_H
+#endif // CRYPTICCOIN_WALLET_ASYNCRPCOPERATION_SAPLINGMIGRATION_H

@@ -190,7 +190,7 @@ void Shutdown()
     /// for example if the data directory was found to be locked.
     /// Be sure that anything that writes files or flushes caches only does this if the respective
     /// module was initialized.
-    RenameThread("zcash-shutoff");
+    RenameThread("crypticcoin-shutoff");
     mempool.AddTransactionsUpdated(1);
 
     StopHTTPRPC();
@@ -342,7 +342,7 @@ std::string HelpMessage(HelpMessageMode mode)
 #endif
     }
     strUsage += HelpMessageOpt("-datadir=<dir>", _("Specify data directory"));
-    strUsage += HelpMessageOpt("-paramsdir=<dir>", _("Specify Zcash network parameters directory"));
+    strUsage += HelpMessageOpt("-paramsdir=<dir>", _("Specify Crypticcoin network parameters directory"));
     strUsage += HelpMessageOpt("-dbcache=<n>", strprintf(_("Set database cache size in megabytes (%d to %d, default: %d)"), nMinDbCache, nMaxDbCache, nDefaultDbCache));
     strUsage += HelpMessageOpt("-debuglogfile=<file>", strprintf(_("Specify location of debug log file: this can be an absolute path or a path relative to the data directory (default: %s)"), DEFAULT_DEBUGLOGFILE));
     strUsage += HelpMessageOpt("-exportdir=<dir>", _("Specify directory to be used when exporting data"));
@@ -601,7 +601,7 @@ void CleanupBlockRevFiles()
 
 void ThreadImport(std::vector<fs::path> vImportFiles, const CChainParams& chainparams)
 {
-    RenameThread("zcash-loadblk");
+    RenameThread("crypticcoin-loadblk");
     CImportingNow imp;
 
     // -reindex
@@ -712,9 +712,9 @@ static void ZC_LoadParams(
         fs::exists(sprout_groth16)
     )) {
         uiInterface.ThreadSafeMessageBox(strprintf(
-            _("Cannot find the Zcash network parameters in the following directory:\n"
+            _("Cannot find the Crypticcoin network parameters in the following directory:\n"
               "%s\n"
-              "Please run 'zcash-fetch-params' or './zcutil/fetch-params.sh' and then restart."),
+              "Please run 'crypticcoin-fetch-params' or './zcutil/fetch-params.sh' and then restart."),
                 ZC_GetParamsDir()),
             "", CClientUIInterface::MSG_ERROR);
         StartShutdown();
@@ -863,7 +863,7 @@ void InitLogging()
         fLogTimestamps);
 
     LogPrintf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    LogPrintf("Zcash version %s (%s)\n", FormatFullVersion(), CLIENT_DATE);
+    LogPrintf("Crypticcoin version %s (%s)\n", FormatFullVersion(), CLIENT_DATE);
 }
 
 [[noreturn]] static void new_handler_terminate()
@@ -1227,7 +1227,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 
     // Sanity check
     if (!InitSanityCheck())
-        return InitError(_("Initialization sanity check failed. Zcash is shutting down."));
+        return InitError(_("Initialization sanity check failed. Crypticcoin is shutting down."));
 
     std::string strDataDir = GetDataDir().string();
 
@@ -1239,9 +1239,9 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     try {
         static boost::interprocess::file_lock lock(pathLockFile.string().c_str());
         if (!lock.try_lock())
-            return InitError(strprintf(_("Cannot obtain a lock on data directory %s. Zcash is probably already running."), strDataDir));
+            return InitError(strprintf(_("Cannot obtain a lock on data directory %s. Crypticcoin is probably already running."), strDataDir));
     } catch(const boost::interprocess::interprocess_exception& e) {
-        return InitError(strprintf(_("Cannot obtain a lock on data directory %s. Zcash is probably already running.") + " %s.", strDataDir, e.what()));
+        return InitError(strprintf(_("Cannot obtain a lock on data directory %s. Crypticcoin is probably already running.") + " %s.", strDataDir, e.what()));
     }
 
 #ifndef WIN32
@@ -1299,7 +1299,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     // Expose binary metadata to metrics, using a single time series with value 1.
     // https://www.robustperception.io/exposing-the-software-version-to-prometheus
     MetricsIncrementCounter(
-        "zcashd.build.info",
+        "crypticcoind.build.info",
         "version", CLIENT_BUILD.c_str());
 
     if ((chainparams.NetworkIDString() != "regtest") &&
@@ -1310,7 +1310,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
         threadGroup.create_thread(&ThreadShowMetricsScreen);
     }
 
-    // Initialize Zcash circuit parameters
+    // Initialize Crypticcoin circuit parameters
     ZC_LoadParams(chainparams);
 
     /* Start the RPC server already.  It will be started in "warmup" mode
@@ -1668,10 +1668,10 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 #ifdef ENABLE_MINING
  #ifndef ENABLE_WALLET
     if (GetBoolArg("-minetolocalwallet", false)) {
-        return InitError(_("Zcash was not built with wallet support. Set -minetolocalwallet=0 to use -mineraddress, or rebuild Zcash with wallet support."));
+        return InitError(_("Crypticcoin was not built with wallet support. Set -minetolocalwallet=0 to use -mineraddress, or rebuild Crypticcoin with wallet support."));
     }
     if (GetArg("-mineraddress", "").empty() && GetBoolArg("-gen", false)) {
-        return InitError(_("Zcash was not built with wallet support. Set -mineraddress, or rebuild Zcash with wallet support."));
+        return InitError(_("Crypticcoin was not built with wallet support. Set -mineraddress, or rebuild Crypticcoin with wallet support."));
     }
  #endif // !ENABLE_WALLET
 

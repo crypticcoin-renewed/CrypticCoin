@@ -1,10 +1,10 @@
-# The zcashd Book
+# The crypticcoind Book
 
-[zcashd](README.md)
+[crypticcoind](README.md)
 - [User Documentation](user.md)
   - [Metrics](user/metrics.md)
 - [Developer Documentation](dev.md)
-  - [Rust in `zcashd`](dev/rust.md)
+  - [Rust in `crypticcoind`](dev/rust.md)
 - [Design](design.md)
   - [Chain state](design/chain-state.md)
   - ["Coins" view](design/coins-view.md)

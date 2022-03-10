@@ -12,9 +12,9 @@
 
 #include <algorithm>
 
-const unsigned char ZCASH_AUTH_DATA_HASH_PERSONALIZATION[BLAKE2bPersonalBytes] =
+const unsigned char CRYPTICCOIN_AUTH_DATA_HASH_PERSONALIZATION[BLAKE2bPersonalBytes] =
     {'Z','c','a','s','h','A','u','t','h','D','a','t','H','a','s','h'};
-const unsigned char ZCASH_BLOCK_COMMITMENTS_HASH_PERSONALIZATION[BLAKE2bPersonalBytes] =
+const unsigned char CRYPTICCOIN_BLOCK_COMMITMENTS_HASH_PERSONALIZATION[BLAKE2bPersonalBytes] =
     {'Z','c','a','s','h','B','l','o','c','k','C','o','m','m','i','t'};
 
 uint256 DeriveBlockCommitmentsHash(
@@ -22,7 +22,7 @@ uint256 DeriveBlockCommitmentsHash(
     uint256 hashAuthDataRoot)
 {
     // https://zips.z.cash/zip-0244#block-header-changes
-    CBLAKE2bWriter ss(SER_GETHASH, 0, ZCASH_BLOCK_COMMITMENTS_HASH_PERSONALIZATION);
+    CBLAKE2bWriter ss(SER_GETHASH, 0, CRYPTICCOIN_BLOCK_COMMITMENTS_HASH_PERSONALIZATION);
     ss << hashChainHistoryRoot;
     ss << hashAuthDataRoot;
     ss << uint256(); // terminator
@@ -161,7 +161,7 @@ uint256 CBlock::BuildAuthDataMerkleTree() const
     int j = 0;
     for (int layerWidth = perfectSize; layerWidth > 1; layerWidth = layerWidth / 2) {
         for (int i = 0; i < layerWidth; i += 2) {
-            CBLAKE2bWriter ss(SER_GETHASH, 0, ZCASH_AUTH_DATA_HASH_PERSONALIZATION);
+            CBLAKE2bWriter ss(SER_GETHASH, 0, CRYPTICCOIN_AUTH_DATA_HASH_PERSONALIZATION);
             ss << tree[j + i];
             ss << tree[j + i + 1];
             tree.push_back(ss.GetHash());

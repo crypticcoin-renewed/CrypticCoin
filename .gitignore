@@ -2,15 +2,15 @@
 *.deb
 *.exe
 src/bitcoin
-src/zcashd
-src/zcash-cli
-src/zcash-gtest
-src/zcash-tx
+src/crypticcoind
+src/crypticcoin-cli
+src/crypticcoin-gtest
+src/crypticcoin-tx
 src/test/test_bitcoin
 zcutil/bin/
 
-*zcashTest.pk
-*zcashTest.vk
+*crypticcoinTest.pk
+*crypticcoinTest.vk
 
 # autoreconf
 Makefile.in
@@ -54,7 +54,7 @@ src/univalue/gen
 *.o
 *.o.tmp
 *.o-*
-.zcash
+.crypticcoin
 *.a
 *.lib
 *.pb.cc
@@ -96,7 +96,7 @@ build
 *.gcda
 /*.info
 test_bitcoin.coverage/
-zcash-gtest.coverage/
+crypticcoin-gtest.coverage/
 total.coverage/
 coverage_percent.txt
 afl-temp
@@ -113,7 +113,7 @@ qa/cache/*
 
 /doc/doxygen/
 
-libzcash_script.pc
+libcrypticcoin_script.pc
 
 contrib/debian/files
 contrib/debian/substvars

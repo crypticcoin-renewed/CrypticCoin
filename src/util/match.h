@@ -1,9 +1,9 @@
-// Copyright (c) 2021 The Zcash developers
+// Copyright (c) 2021 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_UTIL_MATCH_H
-#define ZCASH_UTIL_MATCH_H
+#ifndef CRYPTICCOIN_UTIL_MATCH_H
+#define CRYPTICCOIN_UTIL_MATCH_H
 
 // Helper for using `std::visit` with Rust-style match syntax.
 //
@@ -21,4 +21,4 @@ template<class... Ts> struct match : Ts... { using Ts::operator()...; };
 // explicit deduction guide (not needed as of C++20)
 template<class... Ts> match(Ts...) -> match<Ts...>;
 
-#endif // ZCASH_UTIL_MATCH_H
+#endif // CRYPTICCOIN_UTIL_MATCH_H

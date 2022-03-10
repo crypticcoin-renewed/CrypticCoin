@@ -1,5 +1,5 @@
-#ifndef ZCASH_TEST_DATA_MERKLE_ROOTS_ORCHARD_H
-#define ZCASH_TEST_DATA_MERKLE_ROOTS_ORCHARD_H
+#ifndef CRYPTICCOIN_TEST_DATA_MERKLE_ROOTS_ORCHARD_H
+#define CRYPTICCOIN_TEST_DATA_MERKLE_ROOTS_ORCHARD_H
 
 struct OrchardMerkleTestVec {
     std::vector<unsigned char> bundle;
@@ -9,7 +9,7 @@ struct OrchardMerkleTestVec {
 
 // These constants were derived by generation using the property-testing
 // infrastructure of librustzcash. Anchor values were computed
-// using https://github.com/zcash-hackworks/zcash-test-vectors/pull/39/files#diff-53efbb4ad196b84742420f65d1ef919a9dc4385bb0f2cb2b8903031a003886a3
+// using https://github.com/crypticcoin-hackworks/crypticcoin-test-vectors/pull/39/files#diff-53efbb4ad196b84742420f65d1ef919a9dc4385bb0f2cb2b8903031a003886a3
 static const std::vector<OrchardMerkleTestVec> merkle_roots_orchard =
 {{
     .bundle = {
@@ -5592,4 +5592,4 @@ static const std::vector<OrchardMerkleTestVec> merkle_roots_orchard =
     }
 }};
 
-#endif // ZCASH_TEST_DATA_MERKLE_ROOTS_ORCHARD_H
+#endif // CRYPTICCOIN_TEST_DATA_MERKLE_ROOTS_ORCHARD_H

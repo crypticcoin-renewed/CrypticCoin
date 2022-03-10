@@ -9,7 +9,7 @@
 #include "serialize.h"
 #include "streams.h"
 #include "support/allocators/secure.h"
-#include "zcash/Address.hpp"
+#include "crypticcoin/Address.hpp"
 
 class uint256;
 
@@ -207,19 +207,19 @@ public:
         return set_address;
     }
     virtual bool AddCryptedSproutSpendingKey(
-        const libzcash::SproutPaymentAddress &address,
-        const libzcash::ReceivingKey &rk,
+        const libcrypticcoin::SproutPaymentAddress &address,
+        const libcrypticcoin::ReceivingKey &rk,
         const std::vector<unsigned char> &vchCryptedSecret);
-    bool AddSproutSpendingKey(const libzcash::SproutSpendingKey &sk);
-    bool HaveSproutSpendingKey(const libzcash::SproutPaymentAddress &address) const
+    bool AddSproutSpendingKey(const libcrypticcoin::SproutSpendingKey &sk);
+    bool HaveSproutSpendingKey(const libcrypticcoin::SproutPaymentAddress &address) const
     {
         LOCK(cs_KeyStore);
         if (!fUseCrypto)
             return CBasicKeyStore::HaveSproutSpendingKey(address);
         return mapCryptedSproutSpendingKeys.count(address) > 0;
     }
-    bool GetSproutSpendingKey(const libzcash::SproutPaymentAddress &address, libzcash::SproutSpendingKey &skOut) const;
-    void GetSproutPaymentAddresses(std::set<libzcash::SproutPaymentAddress> &setAddress) const
+    bool GetSproutSpendingKey(const libcrypticcoin::SproutPaymentAddress &address, libcrypticcoin::SproutSpendingKey &skOut) const;
+    void GetSproutPaymentAddresses(std::set<libcrypticcoin::SproutPaymentAddress> &setAddress) const
     {
         LOCK(cs_KeyStore);
         if (!fUseCrypto)
@@ -237,10 +237,10 @@ public:
     }
     //! Sapling
     virtual bool AddCryptedSaplingSpendingKey(
-        const libzcash::SaplingExtendedFullViewingKey &extfvk,
+        const libcrypticcoin::SaplingExtendedFullViewingKey &extfvk,
         const std::vector<unsigned char> &vchCryptedSecret);
-    bool AddSaplingSpendingKey(const libzcash::SaplingExtendedSpendingKey &sk);
-    bool HaveSaplingSpendingKey(const libzcash::SaplingExtendedFullViewingKey &extfvk) const
+    bool AddSaplingSpendingKey(const libcrypticcoin::SaplingExtendedSpendingKey &sk);
+    bool HaveSaplingSpendingKey(const libcrypticcoin::SaplingExtendedFullViewingKey &extfvk) const
     {
         LOCK(cs_KeyStore);
         if (!fUseCrypto)
@@ -253,8 +253,8 @@ public:
         return false;
     }
     bool GetSaplingSpendingKey(
-        const libzcash::SaplingExtendedFullViewingKey &extfvk,
-        libzcash::SaplingExtendedSpendingKey &skOut) const;
+        const libcrypticcoin::SaplingExtendedFullViewingKey &extfvk,
+        libcrypticcoin::SaplingExtendedSpendingKey &skOut) const;
 
 
     /**

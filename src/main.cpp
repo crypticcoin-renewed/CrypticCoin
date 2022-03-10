@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin Core developers
-// Copyright (c) 2015-2020 The Zcash developers
+// Copyright (c) 2015-2020 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -51,7 +51,7 @@
 using namespace std;
 
 #if defined(NDEBUG)
-# error "Zcash cannot be compiled without assertions."
+# error "Crypticcoin cannot be compiled without assertions."
 #endif
 
 #include "librustzcash.h"
@@ -115,7 +115,7 @@ static void CheckBlockIndex(const Consensus::Params& consensusParams);
 /** Constant stuff for coinbase transactions we create: */
 CScript COINBASE_FLAGS;
 
-const string strMessageMagic = "Zcash Signed Message:\n";
+const string strMessageMagic = "Crypticcoin Signed Message:\n";
 
 // Internal stuff
 namespace {
@@ -883,7 +883,7 @@ bool ContextualCheckTransaction(
             int expiredDosLevel = IsExpiredTx(tx, nHeight - 1) ? dosLevelConstricting : 0;
             return state.DoS(
                     expiredDosLevel,
-                    error("ContextualCheckTransaction(): transaction is expired. Resending when caught up with the blockchain, or manually setting the zcashd txexpirydelta parameter may help."),
+                    error("ContextualCheckTransaction(): transaction is expired. Resending when caught up with the blockchain, or manually setting the crypticcoind txexpirydelta parameter may help."),
                     REJECT_INVALID, "tx-overwinter-expired");
         }
 
@@ -996,9 +996,9 @@ bool ContextualCheckTransaction(
 
                 // ZIP 207: detect shielded funding stream elements
                 if (canopyActive) {
-                    libzcash::SaplingPaymentAddress zaddr(encPlaintext->d, outPlaintext->pk_d);
+                    libcrypticcoin::SaplingPaymentAddress zaddr(encPlaintext->d, outPlaintext->pk_d);
                     for (auto it = fundingStreamElements.begin(); it != fundingStreamElements.end(); ++it) {
-                        const libzcash::SaplingPaymentAddress* streamAddr = std::get_if<libzcash::SaplingPaymentAddress>(&(it->first));
+                        const libcrypticcoin::SaplingPaymentAddress* streamAddr = std::get_if<libcrypticcoin::SaplingPaymentAddress>(&(it->first));
                         if (streamAddr && zaddr == *streamAddr && encPlaintext->value() == it->second) {
                             fundingStreamElements.erase(it);
                             break;
@@ -1083,10 +1083,10 @@ bool ContextualCheckTransaction(
 
         // Check that the consensus branch ID is unset in Sapling V4 transactions
         if (tx.nVersionGroupId == SAPLING_VERSION_GROUP_ID) {
-            // NOTE: This is an internal zcashd consistency
+            // NOTE: This is an internal crypticcoind consistency
             // check; it does not correspond to a consensus rule in the
             // protocol specification, but is instead an artifact of the
-            // internal zcashd transaction representation.
+            // internal crypticcoind transaction representation.
             if (tx.GetConsensusBranchId()) {
                 return state.DoS(
                     dosLevelPotentiallyRelaxing,
@@ -1112,10 +1112,10 @@ bool ContextualCheckTransaction(
             }
 
             if (!tx.GetConsensusBranchId().has_value()) {
-                // NOTE: This is an internal zcashd consistency
+                // NOTE: This is an internal crypticcoind consistency
                 // check; it does not correspond to a consensus rule in the
                 // protocol specification, but is instead an artifact of the
-                // internal zcashd transaction representation.
+                // internal crypticcoind transaction representation.
                 return state.DoS(
                     dosLevelPotentiallyRelaxing,
                     error("ContextualCheckTransaction(): transaction does not have consensus branch id field set"),
@@ -1168,9 +1168,9 @@ bool ContextualCheckTransaction(
         }
 
         // Check that Orchard transaction components are not present prior to
-        // NU5. NOTE: This is an internal zcashd consistency check; it does not
+        // NU5. NOTE: This is an internal crypticcoind consistency check; it does not
         // correspond to a consensus rule in the protocol specification, but is
-        // instead an artifact of the internal zcashd transaction
+        // instead an artifact of the internal crypticcoind transaction
         // representation.
         if (orchard_bundle.IsPresent()) {
             return state.DoS(
@@ -1180,9 +1180,9 @@ bool ContextualCheckTransaction(
         }
 
         // Check that the consensus branch ID is unset prior to NU5. NOTE: This
-        // is an internal zcashd consistency check; it does not correspond to a
+        // is an internal crypticcoind consistency check; it does not correspond to a
         // consensus rule in the protocol specification, but is instead an
-        // artifact of the internal zcashd transaction representation.
+        // artifact of the internal crypticcoind transaction representation.
         if (tx.GetConsensusBranchId()) {
             return state.DoS(
                 dosLevelPotentiallyRelaxing,
@@ -1911,7 +1911,7 @@ bool AcceptToMemoryPool(
         CTxMemPoolEntry entry(tx, nFees, GetTime(), dPriority, chainActive.Height(), pool.HasNoInputsOf(tx), fSpendsCoinbase, nSigOps, consensusBranchId);
         unsigned int nSize = entry.GetTxSize();
 
-        // Before zcashd 4.2.0, we had a condition here to always accept a tx if it contained
+        // Before crypticcoind 4.2.0, we had a condition here to always accept a tx if it contained
         // JoinSplits and had at least the default fee. It is no longer necessary to treat
         // that as a special case, because the fee returned by GetMinRelayFee is always at
         // most DEFAULT_FEE.
@@ -2002,9 +2002,9 @@ bool AcceptToMemoryPool(
 
             pool.EnsureSizeLimit();
 
-            MetricsGauge("zcash.mempool.size.transactions", pool.size());
-            MetricsGauge("zcash.mempool.size.bytes", pool.GetTotalTxSize());
-            MetricsGauge("zcash.mempool.usage.bytes", pool.DynamicMemoryUsage());
+            MetricsGauge("crypticcoin.mempool.size.transactions", pool.size());
+            MetricsGauge("crypticcoin.mempool.size.bytes", pool.GetTotalTxSize());
+            MetricsGauge("crypticcoin.mempool.usage.bytes", pool.DynamicMemoryUsage());
         }
     }
 
@@ -2980,7 +2980,7 @@ bool FindUndoPos(CValidationState &state, int nFile, CDiskBlockPos &pos, unsigne
 static CCheckQueue<CScriptCheck> scriptcheckqueue(128);
 
 void ThreadScriptCheck() {
-    RenameThread("zcash-scriptch");
+    RenameThread("crypticcoin-scriptch");
     scriptcheckqueue.Thread();
 }
 
@@ -3407,7 +3407,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     if (chainparams.GetConsensus().NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_HEARTWOOD)) {
         HistoryNode historyNode;
         if (chainparams.GetConsensus().NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_NU5)) {
-            historyNode = libzcash::NewV2Leaf(
+            historyNode = libcrypticcoin::NewV2Leaf(
                 block.GetHash(),
                 block.nTime,
                 block.nBits,
@@ -3419,7 +3419,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
                 total_orchard_tx
             );
         } else {
-            historyNode = libzcash::NewV1Leaf(
+            historyNode = libcrypticcoin::NewV1Leaf(
                 block.GetHash(),
                 block.nTime,
                 block.nBits,
@@ -3722,25 +3722,25 @@ struct PoolMetrics {
     do {                                         \
         if (poolMetrics.created) {               \
             MetricsStaticGauge(                  \
-                "zcash.pool.notes.created",      \
+                "crypticcoin.pool.notes.created",      \
                 poolMetrics.created.value(),     \
                 "name", poolName);               \
         }                                        \
         if (poolMetrics.spent) {                 \
             MetricsStaticGauge(                  \
-                "zcash.pool.notes.spent",        \
+                "crypticcoin.pool.notes.spent",        \
                 poolMetrics.spent.value(),       \
                 "name", poolName);               \
         }                                        \
         if (poolMetrics.unspent) {               \
             MetricsStaticGauge(                  \
-                "zcash.pool.notes.unspent",      \
+                "crypticcoin.pool.notes.unspent",      \
                 poolMetrics.unspent.value(),     \
                 "name", poolName);               \
         }                                        \
         if (poolMetrics.value) {                 \
             MetricsStaticGauge(                  \
-                "zcash.pool.value.zatoshis",     \
+                "crypticcoin.pool.value.zatoshis",     \
                 poolMetrics.value.value(),       \
                 "name", poolName);               \
         }                                        \
@@ -3777,7 +3777,7 @@ void static UpdateTip(CBlockIndex *pindexNew, const CChainParams& chainParams) {
     auto saplingPool = PoolMetrics::Sapling(pindexNew, pcoinsTip);
     auto transparentPool = PoolMetrics::Transparent(pindexNew, pcoinsTip);
 
-    MetricsGauge("zcash.chain.verified.block.height", pindexNew->nHeight);
+    MetricsGauge("crypticcoin.chain.verified.block.height", pindexNew->nHeight);
     RenderPoolMetrics("sprout", sproutPool);
     RenderPoolMetrics("sapling", saplingPool);
     RenderPoolMetrics("transparent", transparentPool);
@@ -3923,7 +3923,7 @@ bool static ConnectTip(CValidationState& state, const CChainParams& chainparams,
     int64_t nTime6 = GetTimeMicros(); nTimePostConnect += nTime6 - nTime5;
     LogPrint("bench", "  - Connect postprocess: %.2fms [%.2fs]\n", (nTime6 - nTime5) * 0.001, nTimePostConnect * 0.000001);
     // Total connection time benchmarking occurs in ActivateBestChainStep.
-    MetricsIncrementCounter("zcash.chain.verified.block.total");
+    MetricsIncrementCounter("crypticcoin.chain.verified.block.total");
     return true;
 }
 
@@ -4114,7 +4114,7 @@ static bool ActivateBestChainStep(CValidationState& state, const CChainParams& c
             } else {
                 int64_t nTime3 = GetTimeMicros(); nTimeTotal += nTime3 - nTime1;
                 LogPrint("bench", "- Connect block: %.2fms [%.2fs]\n", (nTime3 - nTime1) * 0.001, nTimeTotal * 0.000001);
-                MetricsHistogram("zcash.chain.verified.block.seconds", (nTime3 - nTime1) * 0.000001);
+                MetricsHistogram("crypticcoin.chain.verified.block.seconds", (nTime3 - nTime1) * 0.000001);
 
                 PruneBlockIndexCandidates();
                 if (!pindexOldTip || chainActive.Tip()->nChainWork > pindexOldTip->nChainWork) {
@@ -4778,8 +4778,8 @@ bool ContextualCheckBlock(
     }
 
     // Enforce BIP 34 rule that the coinbase starts with serialized block height.
-    // In Zcash this has been enforced since launch, except that the genesis
-    // block didn't include the height in the coinbase (see Zcash protocol spec
+    // In Crypticcoin this has been enforced since launch, except that the genesis
+    // block didn't include the height in the coinbase (see Crypticcoin protocol spec
     // section '6.8 Bitcoin Improvement Proposals').
     if (nHeight > 0)
     {

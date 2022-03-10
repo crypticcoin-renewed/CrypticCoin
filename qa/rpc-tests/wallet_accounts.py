@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2022 The Zcash developers
+# Copyright (c) 2022 The Crypticcoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -121,7 +121,7 @@ class WalletAccountsTest(BitcoinTestFramework):
         assert_equal(tx_details['spends'][0]['address'], ua0)
 
         # The balances of the account should reflect whether zero-conf transactions are
-        # being considered. We will show either 0 (because the spent 10-ZEC note is never
+        # being considered. We will show either 0 (because the spent 10-CRYP note is never
         # shown, as that transaction has been created and broadcast, and _might_ get mined
         # up until the transaction expires), or 9 (if we include the unmined transaction).
         self.sync_all()

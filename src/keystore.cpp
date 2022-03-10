@@ -154,7 +154,7 @@ bool CBasicKeyStore::HaveWatchOnly() const
     return (!setWatchOnly.empty());
 }
 
-bool CBasicKeyStore::AddSproutSpendingKey(const libzcash::SproutSpendingKey &sk)
+bool CBasicKeyStore::AddSproutSpendingKey(const libcrypticcoin::SproutSpendingKey &sk)
 {
     LOCK(cs_KeyStore);
     auto address = sk.address();
@@ -165,7 +165,7 @@ bool CBasicKeyStore::AddSproutSpendingKey(const libzcash::SproutSpendingKey &sk)
 
 //! Sapling
 bool CBasicKeyStore::AddSaplingSpendingKey(
-    const libzcash::SaplingExtendedSpendingKey &sk)
+    const libcrypticcoin::SaplingExtendedSpendingKey &sk)
 {
     LOCK(cs_KeyStore);
     auto extfvk = sk.ToXFVK();
@@ -180,7 +180,7 @@ bool CBasicKeyStore::AddSaplingSpendingKey(
     return true;
 }
 
-bool CBasicKeyStore::AddSproutViewingKey(const libzcash::SproutViewingKey &vk)
+bool CBasicKeyStore::AddSproutViewingKey(const libcrypticcoin::SproutViewingKey &vk)
 {
     LOCK(cs_KeyStore);
     auto address = vk.address();
@@ -190,7 +190,7 @@ bool CBasicKeyStore::AddSproutViewingKey(const libzcash::SproutViewingKey &vk)
 }
 
 bool CBasicKeyStore::AddSaplingFullViewingKey(
-    const libzcash::SaplingExtendedFullViewingKey &extfvk)
+    const libcrypticcoin::SaplingExtendedFullViewingKey &extfvk)
 {
     LOCK(cs_KeyStore);
     auto ivk = extfvk.ToIncomingViewingKey();
@@ -203,8 +203,8 @@ bool CBasicKeyStore::AddSaplingFullViewingKey(
 // If we add an address that is already in the map, the map will
 // remain unchanged as each address only has one ivk.
 bool CBasicKeyStore::AddSaplingPaymentAddress(
-    const libzcash::SaplingIncomingViewingKey &ivk,
-    const libzcash::SaplingPaymentAddress &addr)
+    const libcrypticcoin::SaplingIncomingViewingKey &ivk,
+    const libcrypticcoin::SaplingPaymentAddress &addr)
 {
     LOCK(cs_KeyStore);
 
@@ -214,34 +214,34 @@ bool CBasicKeyStore::AddSaplingPaymentAddress(
     return true;
 }
 
-bool CBasicKeyStore::RemoveSproutViewingKey(const libzcash::SproutViewingKey &vk)
+bool CBasicKeyStore::RemoveSproutViewingKey(const libcrypticcoin::SproutViewingKey &vk)
 {
     LOCK(cs_KeyStore);
     mapSproutViewingKeys.erase(vk.address());
     return true;
 }
 
-bool CBasicKeyStore::HaveSproutViewingKey(const libzcash::SproutPaymentAddress &address) const
+bool CBasicKeyStore::HaveSproutViewingKey(const libcrypticcoin::SproutPaymentAddress &address) const
 {
     LOCK(cs_KeyStore);
     return mapSproutViewingKeys.count(address) > 0;
 }
 
-bool CBasicKeyStore::HaveSaplingFullViewingKey(const libzcash::SaplingIncomingViewingKey &ivk) const
+bool CBasicKeyStore::HaveSaplingFullViewingKey(const libcrypticcoin::SaplingIncomingViewingKey &ivk) const
 {
     LOCK(cs_KeyStore);
     return mapSaplingFullViewingKeys.count(ivk) > 0;
 }
 
-bool CBasicKeyStore::HaveSaplingIncomingViewingKey(const libzcash::SaplingPaymentAddress &addr) const
+bool CBasicKeyStore::HaveSaplingIncomingViewingKey(const libcrypticcoin::SaplingPaymentAddress &addr) const
 {
     LOCK(cs_KeyStore);
     return mapSaplingIncomingViewingKeys.count(addr) > 0;
 }
 
 bool CBasicKeyStore::GetSproutViewingKey(
-    const libzcash::SproutPaymentAddress &address,
-    libzcash::SproutViewingKey &vkOut) const
+    const libcrypticcoin::SproutPaymentAddress &address,
+    libcrypticcoin::SproutViewingKey &vkOut) const
 {
     LOCK(cs_KeyStore);
     SproutViewingKeyMap::const_iterator mi = mapSproutViewingKeys.find(address);
@@ -253,8 +253,8 @@ bool CBasicKeyStore::GetSproutViewingKey(
 }
 
 bool CBasicKeyStore::GetSaplingFullViewingKey(
-    const libzcash::SaplingIncomingViewingKey &ivk,
-    libzcash::SaplingExtendedFullViewingKey &extfvkOut) const
+    const libcrypticcoin::SaplingIncomingViewingKey &ivk,
+    libcrypticcoin::SaplingExtendedFullViewingKey &extfvkOut) const
 {
     LOCK(cs_KeyStore);
     SaplingFullViewingKeyMap::const_iterator mi = mapSaplingFullViewingKeys.find(ivk);
@@ -265,8 +265,8 @@ bool CBasicKeyStore::GetSaplingFullViewingKey(
     return false;
 }
 
-bool CBasicKeyStore::GetSaplingIncomingViewingKey(const libzcash::SaplingPaymentAddress &addr,
-                                   libzcash::SaplingIncomingViewingKey &ivkOut) const
+bool CBasicKeyStore::GetSaplingIncomingViewingKey(const libcrypticcoin::SaplingPaymentAddress &addr,
+                                   libcrypticcoin::SaplingIncomingViewingKey &ivkOut) const
 {
     LOCK(cs_KeyStore);
     SaplingIncomingViewingKeyMap::const_iterator mi = mapSaplingIncomingViewingKeys.find(addr);
@@ -278,10 +278,10 @@ bool CBasicKeyStore::GetSaplingIncomingViewingKey(const libzcash::SaplingPayment
 }
 
 bool CBasicKeyStore::GetSaplingExtendedSpendingKey(
-        const libzcash::SaplingPaymentAddress &addr,
-        libzcash::SaplingExtendedSpendingKey &extskOut) const {
-    libzcash::SaplingIncomingViewingKey ivk;
-    libzcash::SaplingExtendedFullViewingKey extfvk;
+        const libcrypticcoin::SaplingPaymentAddress &addr,
+        libcrypticcoin::SaplingExtendedSpendingKey &extskOut) const {
+    libcrypticcoin::SaplingIncomingViewingKey ivk;
+    libcrypticcoin::SaplingExtendedFullViewingKey extfvk;
 
     LOCK(cs_KeyStore);
     return GetSaplingIncomingViewingKey(addr, ivk) &&
@@ -290,9 +290,9 @@ bool CBasicKeyStore::GetSaplingExtendedSpendingKey(
 }
 
 bool CBasicKeyStore::HaveSaplingSpendingKeyForAddress(
-        const libzcash::SaplingPaymentAddress &addr) const {
-    libzcash::SaplingIncomingViewingKey ivk;
-    libzcash::SaplingExtendedFullViewingKey extfvk;
+        const libcrypticcoin::SaplingPaymentAddress &addr) const {
+    libcrypticcoin::SaplingIncomingViewingKey ivk;
+    libcrypticcoin::SaplingExtendedFullViewingKey extfvk;
 
     return GetSaplingIncomingViewingKey(addr, ivk) &&
         GetSaplingFullViewingKey(ivk, extfvk) &&
@@ -304,7 +304,7 @@ bool CBasicKeyStore::HaveSaplingSpendingKeyForAddress(
 //
 
 bool CBasicKeyStore::AddUnifiedFullViewingKey(
-        const libzcash::ZcashdUnifiedFullViewingKey &ufvk)
+        const libcrypticcoin::CrypticcoindUnifiedFullViewingKey &ufvk)
 {
     LOCK(cs_KeyStore);
 
@@ -331,9 +331,9 @@ bool CBasicKeyStore::AddUnifiedFullViewingKey(
 }
 
 bool CBasicKeyStore::AddTransparentReceiverForUnifiedAddress(
-        const libzcash::UFVKId& keyId,
-        const libzcash::diversifier_index_t& diversifierIndex,
-        const libzcash::UnifiedAddress& ua)
+        const libcrypticcoin::UFVKId& keyId,
+        const libcrypticcoin::diversifier_index_t& diversifierIndex,
+        const libcrypticcoin::UnifiedAddress& ua)
 {
     LOCK(cs_KeyStore);
 
@@ -356,8 +356,8 @@ bool CBasicKeyStore::AddTransparentReceiverForUnifiedAddress(
     return true;
 }
 
-std::optional<libzcash::ZcashdUnifiedFullViewingKey> CBasicKeyStore::GetUnifiedFullViewingKey(
-        const libzcash::UFVKId& keyId) const
+std::optional<libcrypticcoin::CrypticcoindUnifiedFullViewingKey> CBasicKeyStore::GetUnifiedFullViewingKey(
+        const libcrypticcoin::UFVKId& keyId) const
 {
     auto mi = mapUnifiedFullViewingKeys.find(keyId);
     if (mi != mapUnifiedFullViewingKeys.end()) {
@@ -367,25 +367,25 @@ std::optional<libzcash::ZcashdUnifiedFullViewingKey> CBasicKeyStore::GetUnifiedF
     }
 }
 
-std::optional<std::pair<libzcash::UFVKId, std::optional<libzcash::diversifier_index_t>>>
-CBasicKeyStore::GetUFVKMetadataForReceiver(const libzcash::Receiver& receiver) const
+std::optional<std::pair<libcrypticcoin::UFVKId, std::optional<libcrypticcoin::diversifier_index_t>>>
+CBasicKeyStore::GetUFVKMetadataForReceiver(const libcrypticcoin::Receiver& receiver) const
 {
     return std::visit(FindUFVKId(*this), receiver);
 }
 
-std::optional<libzcash::UFVKId> CBasicKeyStore::GetUFVKIdForViewingKey(const libzcash::ViewingKey& vk) const
+std::optional<libcrypticcoin::UFVKId> CBasicKeyStore::GetUFVKIdForViewingKey(const libcrypticcoin::ViewingKey& vk) const
 {
-    std::optional<libzcash::UFVKId> result;
+    std::optional<libcrypticcoin::UFVKId> result;
     std::visit(match {
-        [&](const libzcash::SproutViewingKey& vk) {},
-        [&](const libzcash::SaplingExtendedFullViewingKey& extfvk) {
+        [&](const libcrypticcoin::SproutViewingKey& vk) {},
+        [&](const libcrypticcoin::SaplingExtendedFullViewingKey& extfvk) {
             const auto saplingIvk = extfvk.ToIncomingViewingKey();
             const auto ufvkId = mapSaplingKeyUnified.find(saplingIvk);
             if (ufvkId != mapSaplingKeyUnified.end()) {
                 result = ufvkId->second;
             }
         },
-        [&](const libzcash::UnifiedFullViewingKey& ufvk) {
+        [&](const libcrypticcoin::UnifiedFullViewingKey& ufvk) {
             const auto saplingDfvk = ufvk.GetSaplingKey();
             if (saplingDfvk.has_value()) {
                 const auto saplingIvk = saplingDfvk.value().ToIncomingViewingKey();
@@ -399,8 +399,8 @@ std::optional<libzcash::UFVKId> CBasicKeyStore::GetUFVKIdForViewingKey(const lib
     return result;
 }
 
-std::optional<std::pair<libzcash::UFVKId, std::optional<libzcash::diversifier_index_t>>>
-FindUFVKId::operator()(const libzcash::SaplingPaymentAddress& saplingAddr) const {
+std::optional<std::pair<libcrypticcoin::UFVKId, std::optional<libcrypticcoin::diversifier_index_t>>>
+FindUFVKId::operator()(const libcrypticcoin::SaplingPaymentAddress& saplingAddr) const {
     const auto saplingIvk = keystore.mapSaplingIncomingViewingKeys.find(saplingAddr);
     if (saplingIvk != keystore.mapSaplingIncomingViewingKeys.end()) {
         const auto ufvkId = keystore.mapSaplingKeyUnified.find(saplingIvk->second);
@@ -413,7 +413,7 @@ FindUFVKId::operator()(const libzcash::SaplingPaymentAddress& saplingAddr) const
         return std::nullopt;
     }
 }
-std::optional<std::pair<libzcash::UFVKId, std::optional<libzcash::diversifier_index_t>>>
+std::optional<std::pair<libcrypticcoin::UFVKId, std::optional<libcrypticcoin::diversifier_index_t>>>
 FindUFVKId::operator()(const CScriptID& scriptId) const {
     const auto metadata = keystore.mapP2SHUnified.find(scriptId);
     if (metadata != keystore.mapP2SHUnified.end()) {
@@ -422,7 +422,7 @@ FindUFVKId::operator()(const CScriptID& scriptId) const {
         return std::nullopt;
     }
 }
-std::optional<std::pair<libzcash::UFVKId, std::optional<libzcash::diversifier_index_t>>>
+std::optional<std::pair<libcrypticcoin::UFVKId, std::optional<libcrypticcoin::diversifier_index_t>>>
 FindUFVKId::operator()(const CKeyID& keyId) const {
     const auto metadata = keystore.mapP2PKHUnified.find(keyId);
     if (metadata != keystore.mapP2PKHUnified.end()) {
@@ -431,7 +431,7 @@ FindUFVKId::operator()(const CKeyID& keyId) const {
         return std::nullopt;
     }
 }
-std::optional<std::pair<libzcash::UFVKId, std::optional<libzcash::diversifier_index_t>>>
-FindUFVKId::operator()(const libzcash::UnknownReceiver& receiver) const {
+std::optional<std::pair<libcrypticcoin::UFVKId, std::optional<libcrypticcoin::diversifier_index_t>>>
+FindUFVKId::operator()(const libcrypticcoin::UnknownReceiver& receiver) const {
     return std::nullopt;
 }

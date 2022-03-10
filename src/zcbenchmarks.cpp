@@ -30,14 +30,14 @@
 
 #include "zcbenchmarks.h"
 
-#include "zcash/Zcash.h"
-#include "zcash/IncrementalMerkleTree.hpp"
-#include "zcash/Note.hpp"
+#include "crypticcoin/Crypticcoin.h"
+#include "crypticcoin/IncrementalMerkleTree.hpp"
+#include "crypticcoin/Note.hpp"
 #include "librustzcash.h"
 
 #include <rust/ed25519/types.h>
 
-using namespace libzcash;
+using namespace libcrypticcoin;
 // This method is based on Shutdown from init.cpp
 void pre_wallet_load()
 {
@@ -101,8 +101,8 @@ double benchmark_create_joinsplit()
 
     /* Get the anchor of an empty commitment tree. */
     uint256 anchor = SproutMerkleTree().root();
-    std::array<libzcash::JSInput, ZC_NUM_JS_INPUTS> inputs({JSInput(), JSInput()});
-    std::array<libzcash::JSOutput, ZC_NUM_JS_OUTPUTS> outputs({JSOutput(), JSOutput()});
+    std::array<libcrypticcoin::JSInput, ZC_NUM_JS_INPUTS> inputs({JSInput(), JSInput()});
+    std::array<libcrypticcoin::JSOutput, ZC_NUM_JS_OUTPUTS> outputs({JSOutput(), JSOutput()});
 
     struct timeval tv_start;
     timer_start(tv_start);
@@ -272,11 +272,11 @@ double benchmark_try_decrypt_sprout_notes(size_t nKeys)
 {
     CWallet wallet(Params());
     for (int i = 0; i < nKeys; i++) {
-        auto sk = libzcash::SproutSpendingKey::random();
+        auto sk = libcrypticcoin::SproutSpendingKey::random();
         wallet.AddSproutSpendingKey(sk);
     }
 
-    auto sk = libzcash::SproutSpendingKey::random();
+    auto sk = libcrypticcoin::SproutSpendingKey::random();
     auto tx = GetValidSproutReceive(sk, 10, true);
 
     struct timeval tv_start;
@@ -312,7 +312,7 @@ double benchmark_try_decrypt_sapling_notes(size_t nKeys)
     return timer_stop(tv_start);
 }
 
-CWalletTx CreateSproutTxWithNoteData(const libzcash::SproutSpendingKey& sk) {
+CWalletTx CreateSproutTxWithNoteData(const libcrypticcoin::SproutSpendingKey& sk) {
     auto wtx = GetValidSproutReceive(sk, 10, true);
     auto note = GetSproutNote(sk, wtx, 0, 1);
     auto nullifier = note.nullifier(sk);
@@ -335,7 +335,7 @@ double benchmark_increment_sprout_note_witnesses(size_t nTxs)
     SproutMerkleTree sproutTree;
     SaplingMerkleTree saplingTree;
 
-    auto sproutSpendingKey = libzcash::SproutSpendingKey::random();
+    auto sproutSpendingKey = libcrypticcoin::SproutSpendingKey::random();
     wallet.AddSproutSpendingKey(sproutSpendingKey);
 
     // First block
@@ -372,7 +372,7 @@ double benchmark_increment_sprout_note_witnesses(size_t nTxs)
 
 CWalletTx CreateSaplingTxWithNoteData(const Consensus::Params& consensusParams,
                                       CBasicKeyStore& keyStore,
-                                      const libzcash::SaplingExtendedSpendingKey &sk) {
+                                      const libcrypticcoin::SaplingExtendedSpendingKey &sk) {
     auto wtx = GetValidSaplingReceive(consensusParams, keyStore, sk, 10);
     auto testNote = GetTestSaplingNote(sk.ToXFVK().DefaultAddress(), 10);
     auto fvk = sk.expsk.full_viewing_key();
@@ -606,10 +606,10 @@ double benchmark_listunspent()
 
 double benchmark_create_sapling_spend()
 {
-    auto sk = libzcash::SaplingSpendingKey::random();
+    auto sk = libcrypticcoin::SaplingSpendingKey::random();
     auto expsk = sk.expanded_spending_key();
     auto address = sk.default_address();
-    SaplingNote note(address, GetRand(MAX_MONEY), libzcash::Zip212Enabled::BeforeZip212);
+    SaplingNote note(address, GetRand(MAX_MONEY), libcrypticcoin::Zip212Enabled::BeforeZip212);
     SaplingMerkleTree tree;
     auto maybe_cmu = note.cmu();
     tree.append(maybe_cmu.value());
@@ -658,13 +658,13 @@ double benchmark_create_sapling_spend()
 
 double benchmark_create_sapling_output()
 {
-    auto sk = libzcash::SaplingSpendingKey::random();
+    auto sk = libcrypticcoin::SaplingSpendingKey::random();
     auto address = sk.default_address();
 
     std::array<unsigned char, ZC_MEMO_SIZE> memo;
-    SaplingNote note(address, GetRand(MAX_MONEY),  libzcash::Zip212Enabled::BeforeZip212);
+    SaplingNote note(address, GetRand(MAX_MONEY),  libcrypticcoin::Zip212Enabled::BeforeZip212);
 
-    libzcash::SaplingNotePlaintext notePlaintext(note, memo);
+    libcrypticcoin::SaplingNotePlaintext notePlaintext(note, memo);
     auto res = notePlaintext.encrypt(note.pk_d);
     if (!res) {
         throw JSONRPCError(RPC_INTERNAL_ERROR, "SaplingNotePlaintext::encrypt() failed");

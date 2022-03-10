@@ -1,6 +1,6 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin Core developers
-// Copyright (c) 2015-2020 The Zcash Developers
+// Copyright (c) 2015-2020 The Crypticcoin Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -53,7 +53,7 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
  * database (and is in any case of zero value).
  *
  * >>> from hashlib import blake2s
- * >>> 'Zcash' + blake2s(b'The Economist 2016-10-29 Known unknown: Another crypto-currency is born. BTC#436254 0000000000000000044f321997f336d2908cf8c8d6893e88dbf067e2d949487d ETH#2521903 483039a6b6bd8bd05f0584f9a078d075e454925eb71c1f13eaff59b405a721bb DJIA close on 27 Oct 2016: 18,169.68').hexdigest()
+ * >>> 'Crypticcoin' + blake2s(b'The Economist 2016-10-29 Known unknown: Another crypto-currency is born. BTC#436254 0000000000000000044f321997f336d2908cf8c8d6893e88dbf067e2d949487d ETH#2521903 483039a6b6bd8bd05f0584f9a078d075e454925eb71c1f13eaff59b405a721bb DJIA close on 27 Oct 2016: 18,169.68').hexdigest()
  *
  * CBlock(hash=00040fe8, ver=4, hashPrevBlock=00000000000000, hashMerkleRoot=c4eaa5, nTime=1477641360, nBits=1f07ffff, nNonce=4695, vtx=1)
  *   CTransaction(hash=c4eaa5, ver=1, vin.size=1, vout.size=1, nLockTime=0)
@@ -63,7 +63,7 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
  */
 static CBlock CreateGenesisBlock(uint32_t nTime, const uint256& nNonce, const std::vector<unsigned char>& nSolution, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
-    const char* pszTimestamp = "Zcash0b9c4eef8b7cc417ee5001e3500984b6fea35683a7cac141a043c42064835d34";
+    const char* pszTimestamp = "Crypticcoin0b9c4eef8b7cc417ee5001e3500984b6fea35683a7cac141a043c42064835d34";
     const CScript genesisOutputScript = CScript() << ParseHex("04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f") << OP_CHECKSIG;
     return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nSolution, nBits, nVersion, genesisReward);
 }
@@ -85,7 +85,7 @@ class CMainParams : public CChainParams {
 public:
     CMainParams() {
         keyConstants.strNetworkID = "main";
-        strCurrencyUnits = "ZEC";
+        strCurrencyUnits = "CRYP";
         keyConstants.bip44CoinType = 133; // As registered in https://github.com/satoshilabs/slips/blob/master/slip-0044.md
         consensus.fCoinbaseMustBeShielded = true;
         consensus.nSubsidySlowStartInterval = 20000;
@@ -263,9 +263,9 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-        vSeeds.push_back(CDNSSeedData("z.cash", "dnsseed.z.cash")); // Zcash
+        vSeeds.push_back(CDNSSeedData("z.cash", "dnsseed.z.cash")); // Crypticcoin
         vSeeds.push_back(CDNSSeedData("str4d.xyz", "dnsseed.str4d.xyz")); // @str4d
-        vSeeds.push_back(CDNSSeedData("zfnd.org", "mainnet.seeder.zfnd.org")); // Zcash Foundation
+        vSeeds.push_back(CDNSSeedData("zfnd.org", "mainnet.seeder.zfnd.org")); // Crypticcoin Foundation
         vSeeds.push_back(CDNSSeedData("yolo.money", "mainnet.is.yolo.money")); // gtank
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_main, pnSeed6_main + ARRAYLEN(pnSeed6_main));
@@ -563,8 +563,8 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-        vSeeds.push_back(CDNSSeedData("z.cash", "dnsseed.testnet.z.cash")); // Zcash
-        vSeeds.push_back(CDNSSeedData("zfnd.org", "testnet.seeder.zfnd.org")); // Zcash Foundation
+        vSeeds.push_back(CDNSSeedData("z.cash", "dnsseed.testnet.z.cash")); // Crypticcoin
+        vSeeds.push_back(CDNSSeedData("zfnd.org", "testnet.seeder.zfnd.org")); // Crypticcoin Foundation
         vSeeds.push_back(CDNSSeedData("yolo.money", "testnet.is.yolo.money")); // gtank
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_test, pnSeed6_test + ARRAYLEN(pnSeed6_test));

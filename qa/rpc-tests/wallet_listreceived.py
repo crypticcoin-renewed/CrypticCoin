@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The Zcash developers
+# Copyright (c) 2018 The Crypticcoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -53,7 +53,7 @@ class ListReceivedTest (BitcoinTestFramework):
 
         zaddr1 = self.nodes[1].z_getnewaddress('sprout')
 
-        # Send 10 ZEC each zaddr1 and zaddrExt via z_shieldcoinbase
+        # Send 10 CRYP each zaddr1 and zaddrExt via z_shieldcoinbase
         result = self.nodes[0].z_shieldcoinbase(get_coinbase_address(self.nodes[0]), zaddr1, 0, 1)
         txid_shielding1 = wait_and_assert_operationid_status(self.nodes[0], result['opid'])
 
@@ -121,7 +121,7 @@ class ListReceivedTest (BitcoinTestFramework):
         c = self.nodes[1].z_getnotescount(0)
         assert_equal(1, c['sprout'], "Count of unconfirmed notes should be 1")
 
-        # Confirm transaction (10 ZEC shielded)
+        # Confirm transaction (10 CRYP shielded)
         self.generate_and_sync(height+3)
 
         # Require one confirmation, note should be present
@@ -211,7 +211,7 @@ class ListReceivedTest (BitcoinTestFramework):
         txid_taddr = self.nodes[0].sendtoaddress(taddr, 4.0)
         self.generate_and_sync(height+2)
 
-        # Send 1 ZEC to zaddr1
+        # Send 1 CRYP to zaddr1
         opid = self.nodes[1].z_sendmany(taddr, [
             {'address': zaddr1, 'amount': 1, 'memo': my_memo},
             {'address': zaddrExt, 'amount': 2},
@@ -266,7 +266,7 @@ class ListReceivedTest (BitcoinTestFramework):
         c = self.nodes[1].z_getnotescount(0)
         assert_equal(1, c['sapling'], "Count of unconfirmed notes should be 1")
 
-        # Confirm transaction (1 ZEC from taddr to zaddr1)
+        # Confirm transaction (1 CRYP from taddr to zaddr1)
         self.generate_and_sync(height+3)
 
         # adjust confirmations

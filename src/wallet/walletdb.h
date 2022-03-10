@@ -10,7 +10,7 @@
 #include "wallet/db.h"
 #include "key.h"
 #include "keystore.h"
-#include "zcash/Address.hpp"
+#include "crypticcoin/Address.hpp"
 
 #include <list>
 #include <stdint.h>
@@ -180,24 +180,24 @@ public:
     }
 };
 
-class ZcashdUnifiedAccountMetadata {
+class CrypticcoindUnifiedAccountMetadata {
 private:
-    libzcash::SeedFingerprint seedFp;
+    libcrypticcoin::SeedFingerprint seedFp;
     uint32_t bip44CoinType;
-    libzcash::AccountId accountId;
-    libzcash::UFVKId ufvkId;
+    libcrypticcoin::AccountId accountId;
+    libcrypticcoin::UFVKId ufvkId;
 
-    ZcashdUnifiedAccountMetadata() {}
+    CrypticcoindUnifiedAccountMetadata() {}
 public:
-    ZcashdUnifiedAccountMetadata(
-            libzcash::SeedFingerprint seedFp,
+    CrypticcoindUnifiedAccountMetadata(
+            libcrypticcoin::SeedFingerprint seedFp,
             uint32_t bip44CoinType,
-            libzcash::AccountId accountId,
-            libzcash::UFVKId ufvkId):
+            libcrypticcoin::AccountId accountId,
+            libcrypticcoin::UFVKId ufvkId):
             seedFp(seedFp), bip44CoinType(bip44CoinType), accountId(accountId), ufvkId(ufvkId) {}
 
     /** Returns the fingerprint of the HD seed used to generate this key. */
-    const libzcash::SeedFingerprint& GetSeedFingerprint() const {
+    const libcrypticcoin::SeedFingerprint& GetSeedFingerprint() const {
         return seedFp;
     }
     /** Returns the ZIP 32 account id for which this key was generated. */
@@ -205,11 +205,11 @@ public:
         return bip44CoinType;
     }
     /** Returns the ZIP 32 account id for which this key was generated. */
-    libzcash::AccountId GetAccountId() const {
+    libcrypticcoin::AccountId GetAccountId() const {
         return accountId;
     }
     /** Returns the fingerprint of the ufvk this key was generated. */
-    const libzcash::UFVKId& GetKeyID() const {
+    const libcrypticcoin::UFVKId& GetKeyID() const {
         return ufvkId;
     }
 
@@ -224,25 +224,25 @@ public:
     }
 
     template <typename Stream>
-    static ZcashdUnifiedAccountMetadata Read(Stream& stream) {
-        ZcashdUnifiedAccountMetadata meta;
+    static CrypticcoindUnifiedAccountMetadata Read(Stream& stream) {
+        CrypticcoindUnifiedAccountMetadata meta;
         stream >> meta;
         return meta;
     }
 };
 
-class ZcashdUnifiedAddressMetadata;
+class CrypticcoindUnifiedAddressMetadata;
 
 // Serialization wrapper for reading and writing ReceiverType
 // in CompactSize format.
 class ReceiverTypeSer {
 private:
-    libzcash::ReceiverType t;
+    libcrypticcoin::ReceiverType t;
 
-    friend class ZcashdUnifiedAddressMetadata;
+    friend class CrypticcoindUnifiedAddressMetadata;
 public:
     ReceiverTypeSer() {} // for serialization only
-    ReceiverTypeSer(libzcash::ReceiverType t): t(t) {}
+    ReceiverTypeSer(libcrypticcoin::ReceiverType t): t(t) {}
 
     template<typename Stream>
     void Serialize(Stream &s) const {
@@ -251,31 +251,31 @@ public:
 
     template<typename Stream>
     void Unserialize(Stream& s) {
-        t = (libzcash::ReceiverType) ReadCompactSize<Stream>(s);
+        t = (libcrypticcoin::ReceiverType) ReadCompactSize<Stream>(s);
     }
 };
 
-class ZcashdUnifiedAddressMetadata {
+class CrypticcoindUnifiedAddressMetadata {
 private:
-    libzcash::UFVKId ufvkId;
-    libzcash::diversifier_index_t diversifierIndex;
-    std::set<libzcash::ReceiverType> receiverTypes;
+    libcrypticcoin::UFVKId ufvkId;
+    libcrypticcoin::diversifier_index_t diversifierIndex;
+    std::set<libcrypticcoin::ReceiverType> receiverTypes;
 
-    ZcashdUnifiedAddressMetadata() {}
+    CrypticcoindUnifiedAddressMetadata() {}
 public:
-    ZcashdUnifiedAddressMetadata(
-            libzcash::UFVKId ufvkId,
-            libzcash::diversifier_index_t diversifierIndex,
-            std::set<libzcash::ReceiverType> receiverTypes):
+    CrypticcoindUnifiedAddressMetadata(
+            libcrypticcoin::UFVKId ufvkId,
+            libcrypticcoin::diversifier_index_t diversifierIndex,
+            std::set<libcrypticcoin::ReceiverType> receiverTypes):
             ufvkId(ufvkId), diversifierIndex(diversifierIndex), receiverTypes(receiverTypes) {}
 
-    libzcash::UFVKId GetKeyID() const {
+    libcrypticcoin::UFVKId GetKeyID() const {
         return ufvkId;
     }
-    libzcash::diversifier_index_t GetDiversifierIndex() const {
+    libcrypticcoin::diversifier_index_t GetDiversifierIndex() const {
         return diversifierIndex;
     }
-    const std::set<libzcash::ReceiverType>& GetReceiverTypes() const {
+    const std::set<libcrypticcoin::ReceiverType>& GetReceiverTypes() const {
         return receiverTypes;
     }
 
@@ -293,20 +293,20 @@ public:
                 receiverTypes.insert(r.t);
         } else {
             std::vector<ReceiverTypeSer> serReceiverTypes;
-            for (libzcash::ReceiverType r : receiverTypes)
+            for (libcrypticcoin::ReceiverType r : receiverTypes)
                 serReceiverTypes.push_back(ReceiverTypeSer(r));
             READWRITE(serReceiverTypes);
         }
     }
 
     template <typename Stream>
-    static ZcashdUnifiedAddressMetadata Read(Stream& stream) {
-        ZcashdUnifiedAddressMetadata meta;
+    static CrypticcoindUnifiedAddressMetadata Read(Stream& stream) {
+        CrypticcoindUnifiedAddressMetadata meta;
         stream >> meta;
         return meta;
     }
 
-    friend inline bool operator==(const ZcashdUnifiedAddressMetadata& a, const ZcashdUnifiedAddressMetadata& b) {
+    friend inline bool operator==(const CrypticcoindUnifiedAddressMetadata& a, const CrypticcoindUnifiedAddressMetadata& b) {
         return
             a.ufvkId == b.ufvkId &&
             a.diversifierIndex == b.diversifierIndex &&
@@ -318,26 +318,26 @@ public:
 // as a pair of typecode and address bytes, similar to how unified address
 // receivers are written (but excluding the unknown receiver case)
 class CSerializeRecipientAddress {
-    libzcash::RecipientAddress recipient;
-    libzcash::ReceiverType typecode;
+    libcrypticcoin::RecipientAddress recipient;
+    libcrypticcoin::ReceiverType typecode;
     CSerializeRecipientAddress() {} // for serialization only
 
     public:
-        CSerializeRecipientAddress(libzcash::RecipientAddress recipient): recipient(recipient) {}
+        CSerializeRecipientAddress(libcrypticcoin::RecipientAddress recipient): recipient(recipient) {}
 
         template<typename Stream>
         void Serialize(Stream& s) const {
             std::visit(match {
                 [&](const CKeyID& keyId) {
-                    ReceiverTypeSer(libzcash::ReceiverType::P2PKH).Serialize(s);
+                    ReceiverTypeSer(libcrypticcoin::ReceiverType::P2PKH).Serialize(s);
                     s << keyId;
                 },
                 [&](const CScriptID& scriptId) {
-                    ReceiverTypeSer(libzcash::ReceiverType::P2SH).Serialize(s);
+                    ReceiverTypeSer(libcrypticcoin::ReceiverType::P2SH).Serialize(s);
                     s << scriptId;
                 },
-                [&](const libzcash::SaplingPaymentAddress& saplingAddr) {
-                    ReceiverTypeSer(libzcash::ReceiverType::Sapling).Serialize(s);
+                [&](const libcrypticcoin::SaplingPaymentAddress& saplingAddr) {
+                    ReceiverTypeSer(libcrypticcoin::ReceiverType::Sapling).Serialize(s);
                     s << saplingAddr;
                 }
             }, recipient);
@@ -347,22 +347,22 @@ class CSerializeRecipientAddress {
         void Unserialize(Stream& s) {
             // This cast is fine because ZIP 316 uses CompactSize serialization including the
             // size limit, which means it is at most a uint32_t.
-            typecode = (libzcash::ReceiverType) ReadCompactSize(s);
+            typecode = (libcrypticcoin::ReceiverType) ReadCompactSize(s);
             switch (typecode) {
-                case libzcash::ReceiverType::P2PKH: {
+                case libcrypticcoin::ReceiverType::P2PKH: {
                     CKeyID key;
                     s >> key;
                     recipient = key;
                     break;
                 }
-                case libzcash::ReceiverType::P2SH: {
+                case libcrypticcoin::ReceiverType::P2SH: {
                     CScriptID script;
                     s >> script;
                     recipient = script;
                     break;
                 }
-                case libzcash::ReceiverType::Sapling: {
-                    libzcash::SaplingPaymentAddress saplingAddr;
+                case libcrypticcoin::ReceiverType::Sapling: {
+                    libcrypticcoin::SaplingPaymentAddress saplingAddr;
                     s >> saplingAddr;
                     recipient = saplingAddr;
                     break;
@@ -371,7 +371,7 @@ class CSerializeRecipientAddress {
         }
 
         template <typename Stream>
-        static libzcash::RecipientAddress Read(Stream& stream) {
+        static libcrypticcoin::RecipientAddress Read(Stream& stream) {
             CSerializeRecipientAddress csr;
             stream >> csr;
             return csr.recipient;
@@ -419,7 +419,7 @@ public:
 
     bool WriteMinVersion(int nVersion);
 
-    bool WriteRecipientMapping(const uint256& txid, const libzcash::RecipientAddress& address, const libzcash::UnifiedAddress& ua);
+    bool WriteRecipientMapping(const uint256& txid, const libcrypticcoin::RecipientAddress& address, const libcrypticcoin::UnifiedAddress& ua);
 
     /// Write destination data key,value tuple to database
     bool WriteDestData(const std::string &address, const std::string &key, const std::string &value);
@@ -438,30 +438,30 @@ public:
     bool WriteMnemonicHDChain(const CHDChain& chain);
 
     /// Write spending key to wallet database, where key is payment address and value is spending key.
-    bool WriteZKey(const libzcash::SproutPaymentAddress& addr, const libzcash::SproutSpendingKey& key, const CKeyMetadata &keyMeta);
-    bool WriteSaplingZKey(const libzcash::SaplingIncomingViewingKey &ivk,
-                          const libzcash::SaplingExtendedSpendingKey &key,
+    bool WriteZKey(const libcrypticcoin::SproutPaymentAddress& addr, const libcrypticcoin::SproutSpendingKey& key, const CKeyMetadata &keyMeta);
+    bool WriteSaplingZKey(const libcrypticcoin::SaplingIncomingViewingKey &ivk,
+                          const libcrypticcoin::SaplingExtendedSpendingKey &key,
                           const CKeyMetadata  &keyMeta);
-    bool WriteSaplingPaymentAddress(const libzcash::SaplingPaymentAddress &addr,
-                                    const libzcash::SaplingIncomingViewingKey &ivk);
-    bool WriteCryptedZKey(const libzcash::SproutPaymentAddress & addr,
-                          const libzcash::ReceivingKey & rk,
+    bool WriteSaplingPaymentAddress(const libcrypticcoin::SaplingPaymentAddress &addr,
+                                    const libcrypticcoin::SaplingIncomingViewingKey &ivk);
+    bool WriteCryptedZKey(const libcrypticcoin::SproutPaymentAddress & addr,
+                          const libcrypticcoin::ReceivingKey & rk,
                           const std::vector<unsigned char>& vchCryptedSecret,
                           const CKeyMetadata &keyMeta);
-    bool WriteCryptedSaplingZKey(const libzcash::SaplingExtendedFullViewingKey &extfvk,
+    bool WriteCryptedSaplingZKey(const libcrypticcoin::SaplingExtendedFullViewingKey &extfvk,
                           const std::vector<unsigned char>& vchCryptedSecret,
                           const CKeyMetadata &keyMeta);
 
-    bool WriteSproutViewingKey(const libzcash::SproutViewingKey &vk);
-    bool EraseSproutViewingKey(const libzcash::SproutViewingKey &vk);
-    bool WriteSaplingExtendedFullViewingKey(const libzcash::SaplingExtendedFullViewingKey &extfvk);
-    bool EraseSaplingExtendedFullViewingKey(const libzcash::SaplingExtendedFullViewingKey &extfvk);
+    bool WriteSproutViewingKey(const libcrypticcoin::SproutViewingKey &vk);
+    bool EraseSproutViewingKey(const libcrypticcoin::SproutViewingKey &vk);
+    bool WriteSaplingExtendedFullViewingKey(const libcrypticcoin::SaplingExtendedFullViewingKey &extfvk);
+    bool EraseSaplingExtendedFullViewingKey(const libcrypticcoin::SaplingExtendedFullViewingKey &extfvk);
 
     /// Unified key support.
 
-    bool WriteUnifiedAccountMetadata(const ZcashdUnifiedAccountMetadata& keymeta);
-    bool WriteUnifiedFullViewingKey(const libzcash::UnifiedFullViewingKey& ufvk);
-    bool WriteUnifiedAddressMetadata(const ZcashdUnifiedAddressMetadata& addrmeta);
+    bool WriteUnifiedAccountMetadata(const CrypticcoindUnifiedAccountMetadata& keymeta);
+    bool WriteUnifiedFullViewingKey(const libcrypticcoin::UnifiedFullViewingKey& ufvk);
+    bool WriteUnifiedAddressMetadata(const CrypticcoindUnifiedAddressMetadata& addrmeta);
 
     static void IncrementUpdateCounter();
     static unsigned int GetUpdateCounter();

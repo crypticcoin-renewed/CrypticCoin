@@ -2,10 +2,10 @@
 version: '3'
 
 services:
-  zcashd:
+  crypticcoind:
     build: .
     env_file:
       - .env
     volumes:
-      - ./zcash-params-dir:/srv/zcashd/.zcash-params
-      - ./zcash-data-dir:/srv/zcashd/.zcash
+      - ./crypticcoin-params-dir:/srv/crypticcoind/.crypticcoin-params
+      - ./crypticcoin-data-dir:/srv/crypticcoind/.crypticcoin

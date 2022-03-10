@@ -71,7 +71,7 @@ public:
     std::string NetworkIDString() const {
         return keyConstants.NetworkIDString();
     }
-    /** Return the BIP44 coin type for addresses created by the zcashd embedded wallet. */
+    /** Return the BIP44 coin type for addresses created by the crypticcoind embedded wallet. */
     uint32_t BIP44CoinType() const {
         return keyConstants.BIP44CoinType();
     }

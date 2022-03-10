@@ -10,7 +10,7 @@
 #include "main.h"
 #include "wallet/wallet.h"
 
-#include "zcash/Address.hpp"
+#include "crypticcoin/Address.hpp"
 
 #include "asyncrpcqueue.h"
 #include "asyncrpcoperation.h"
@@ -81,7 +81,7 @@ static SaplingPaymentAddress DefaultSaplingAddress(CWallet* pwallet) {
     return usk.value()
         .ToFullViewingKey()
         .GetSaplingKey().value()
-        .FindAddress(libzcash::diversifier_index_t(0)).first;
+        .FindAddress(libcrypticcoin::diversifier_index_t(0)).first;
 }
 
 BOOST_FIXTURE_TEST_SUITE(rpc_wallet_tests, WalletTestingSetup)
@@ -315,7 +315,7 @@ BOOST_AUTO_TEST_CASE(rpc_wallet)
     BOOST_CHECK_EQUAL(find_value(obj, "miner").get_real(), canopyEnabled ? 2.5 : 3.125);
     BOOST_CHECK_EQUAL(find_value(obj, "founders").get_real(), 0.0);
     if (canopyEnabled) {
-        check_funding_streams(obj, {"Electric Coin Company", "Zcash Foundation", "Major Grants" },
+        check_funding_streams(obj, {"Electric Coin Company", "Crypticcoin Foundation", "Major Grants" },
                                    { 0.21875,                 0.15625,            0.25          },
                                    {
                                        "t3LmX1cxWPPPqL4TZHx42HU3U5ghbFjRiif",
@@ -329,7 +329,7 @@ BOOST_AUTO_TEST_CASE(rpc_wallet)
     BOOST_CHECK_EQUAL(find_value(obj, "miner").get_real(), canopyEnabled ? 2.5 : 3.125);
     BOOST_CHECK_EQUAL(find_value(obj, "founders").get_real(), 0.0);
     if (canopyEnabled) {
-        check_funding_streams(obj, {"Electric Coin Company", "Zcash Foundation", "Major Grants" },
+        check_funding_streams(obj, {"Electric Coin Company", "Crypticcoin Foundation", "Major Grants" },
                                    { 0.21875,                 0.15625,            0.25          },
                                    {
                                        "t3XHAGxRP2FNfhAjxGjxbrQPYtQQjc3RCQD",
@@ -418,7 +418,7 @@ BOOST_AUTO_TEST_CASE(rpc_wallet_z_validateaddress)
     BOOST_CHECK_THROW(CallRPC("z_validateaddress toomany args"), runtime_error);
 
     // Wallet should be empty
-    std::set<libzcash::SproutPaymentAddress> addrs;
+    std::set<libcrypticcoin::SproutPaymentAddress> addrs;
     pwalletMain->GetSproutPaymentAddresses(addrs);
     BOOST_CHECK(addrs.size()==0);
 
@@ -501,12 +501,12 @@ BOOST_AUTO_TEST_CASE(rpc_wallet_z_exportwallet)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     // wallet should be empty
-    std::set<libzcash::SproutPaymentAddress> addrs;
+    std::set<libcrypticcoin::SproutPaymentAddress> addrs;
     pwalletMain->GetSproutPaymentAddresses(addrs);
     BOOST_CHECK(addrs.size()==0);
 
     // wallet should have one key
-    libzcash::SproutPaymentAddress addr = pwalletMain->GenerateNewSproutZKey();
+    libcrypticcoin::SproutPaymentAddress addr = pwalletMain->GenerateNewSproutZKey();
     pwalletMain->GetSproutPaymentAddresses(addrs);
     BOOST_CHECK(addrs.size()==1);
 
@@ -531,7 +531,7 @@ BOOST_AUTO_TEST_CASE(rpc_wallet_z_exportwallet)
     BOOST_CHECK_NO_THROW(CallRPC(string("z_exportwallet ") + tmpfilename.string()));
 
 
-    libzcash::SproutSpendingKey key;
+    libcrypticcoin::SproutSpendingKey key;
     BOOST_CHECK(pwalletMain->GetSproutSpendingKey(addr, key));
 
     KeyIO keyIO(Params());
@@ -578,13 +578,13 @@ BOOST_AUTO_TEST_CASE(rpc_wallet_z_importwallet)
 
     KeyIO keyIO(Params());
     // create a random key locally
-    auto testSpendingKey = libzcash::SproutSpendingKey::random();
+    auto testSpendingKey = libcrypticcoin::SproutSpendingKey::random();
     auto testPaymentAddress = testSpendingKey.address();
     std::string testAddr = keyIO.EncodePaymentAddress(testPaymentAddress);
     std::string testKey = keyIO.EncodeSpendingKey(testSpendingKey);
 
     // create test data using the random key
-    std::string format_str = "# Wallet dump created by Zcash v0.11.2.0.z8-9155cc6-dirty (2016-08-11 11:37:00 -0700)\n"
+    std::string format_str = "# Wallet dump created by Crypticcoin v0.11.2.0.z8-9155cc6-dirty (2016-08-11 11:37:00 -0700)\n"
             "# * Created on 2016-08-12T21:55:36Z\n"
             "# * Best block at time of backup was 0 (0de0a3851fef2d433b9b4f51d4342bdd24c5ddd793eb8fba57189f07e9235d52),\n"
             "#   mined on 2009-01-03T18:15:05Z\n"
@@ -607,7 +607,7 @@ BOOST_AUTO_TEST_CASE(rpc_wallet_z_importwallet)
     file << std::flush;
 
     // wallet should currently be empty
-    std::set<libzcash::SproutPaymentAddress> addrs;
+    std::set<libcrypticcoin::SproutPaymentAddress> addrs;
     pwalletMain->GetSproutPaymentAddresses(addrs);
     BOOST_CHECK(addrs.size()==0);
 
@@ -621,13 +621,13 @@ BOOST_AUTO_TEST_CASE(rpc_wallet_z_importwallet)
     // check that we have the spending key for the address
     auto decoded = keyIO.DecodePaymentAddress(testAddr);
     BOOST_CHECK(decoded.has_value());
-    libzcash::PaymentAddress address(decoded.value());
-    BOOST_ASSERT(std::holds_alternative<libzcash::SproutPaymentAddress>(address));
-    auto sprout_addr = std::get<libzcash::SproutPaymentAddress>(address);
+    libcrypticcoin::PaymentAddress address(decoded.value());
+    BOOST_ASSERT(std::holds_alternative<libcrypticcoin::SproutPaymentAddress>(address));
+    auto sprout_addr = std::get<libcrypticcoin::SproutPaymentAddress>(address);
     BOOST_CHECK(pwalletMain->HaveSproutSpendingKey(sprout_addr));
 
     // Verify the spending key is the same as the test data
-    libzcash::SproutSpendingKey k;
+    libcrypticcoin::SproutSpendingKey k;
     BOOST_CHECK(pwalletMain->GetSproutSpendingKey(sprout_addr, k));
     BOOST_CHECK_EQUAL(testKey, keyIO.EncodeSpendingKey(k));
 }
@@ -653,7 +653,7 @@ BOOST_AUTO_TEST_CASE(rpc_wallet_z_importexport)
 
     // error if invalid args
     KeyIO keyIO(Params());
-    auto sk = libzcash::SproutSpendingKey::random();
+    auto sk = libcrypticcoin::SproutSpendingKey::random();
     std::string prefix = std::string("z_importkey ") + keyIO.EncodeSpendingKey(sk) + " yes ";
     BOOST_CHECK_THROW(CallRPC(prefix + "-1"), runtime_error);
     BOOST_CHECK_THROW(CallRPC(prefix + "2147483647"), runtime_error); // allowed, but > height of active chain tip
@@ -661,10 +661,10 @@ BOOST_AUTO_TEST_CASE(rpc_wallet_z_importexport)
     BOOST_CHECK_THROW(CallRPC(prefix + "100badchars"), runtime_error);
 
     // wallet should currently be empty
-    std::set<libzcash::SproutPaymentAddress> sproutAddrs;
+    std::set<libcrypticcoin::SproutPaymentAddress> sproutAddrs;
     pwalletMain->GetSproutPaymentAddresses(sproutAddrs);
     BOOST_CHECK(sproutAddrs.size()==0);
-    std::set<libzcash::SaplingPaymentAddress> saplingAddrs;
+    std::set<libcrypticcoin::SaplingPaymentAddress> saplingAddrs;
     pwalletMain->GetSaplingPaymentAddresses(saplingAddrs);
     BOOST_CHECK(saplingAddrs.empty());
 
@@ -673,7 +673,7 @@ BOOST_AUTO_TEST_CASE(rpc_wallet_z_importexport)
     // verify import and export key
     for (int i = 0; i < n1; i++) {
         // create a random Sprout key locally
-        auto testSpendingKey = libzcash::SproutSpendingKey::random();
+        auto testSpendingKey = libcrypticcoin::SproutSpendingKey::random();
         auto testPaymentAddress = testSpendingKey.address();
         std::string testAddr = keyIO.EncodePaymentAddress(testPaymentAddress);
         std::string testKey = keyIO.EncodeSpendingKey(testSpendingKey);
@@ -794,7 +794,7 @@ BOOST_AUTO_TEST_CASE(rpc_wallet_z_importexport)
 
 // Check if address is of given type and spendable from our wallet.
 template <typename ADDR_TYPE>
-void CheckHaveAddr(const std::optional<libzcash::PaymentAddress>& addr) {
+void CheckHaveAddr(const std::optional<libcrypticcoin::PaymentAddress>& addr) {
     BOOST_CHECK(addr.has_value());
     auto addr_of_type = std::get_if<ADDR_TYPE>(&(addr.value()));
     BOOST_ASSERT(addr_of_type != nullptr);
@@ -803,7 +803,7 @@ void CheckHaveAddr(const std::optional<libzcash::PaymentAddress>& addr) {
 }
 
 BOOST_AUTO_TEST_CASE(rpc_wallet_z_getnewaddress) {
-    using namespace libzcash;
+    using namespace libcrypticcoin;
 
     UniValue addr;
 
@@ -1426,7 +1426,7 @@ BOOST_AUTO_TEST_CASE(rpc_wallet_encrypted_wallet_zkeys)
     int n = 100;
 
     // wallet should currently be empty
-    std::set<libzcash::SproutPaymentAddress> addrs;
+    std::set<libcrypticcoin::SproutPaymentAddress> addrs;
     pwalletMain->GetSproutPaymentAddresses(addrs);
     BOOST_CHECK(addrs.size()==0);
 
@@ -1488,7 +1488,7 @@ BOOST_AUTO_TEST_CASE(rpc_wallet_encrypted_wallet_sapzkeys)
     }
 
     // wallet should currently be empty
-    std::set<libzcash::SaplingPaymentAddress> addrs;
+    std::set<libcrypticcoin::SaplingPaymentAddress> addrs;
     pwalletMain->GetSaplingPaymentAddresses(addrs);
     BOOST_CHECK(addrs.size()==0);
 
@@ -1640,7 +1640,7 @@ BOOST_AUTO_TEST_CASE(rpc_z_shieldcoinbase_parameters)
 
     // Test constructor of AsyncRPCOperation_shieldcoinbase
     KeyIO keyIO(Params());
-    auto testnetzaddr = std::get<libzcash::SproutPaymentAddress>(keyIO.DecodePaymentAddress("ztjiDe569DPNbyTE6TSdJTaSDhoXEHLGvYoUnBU1wfVNU52TEyT6berYtySkd21njAeEoh8fFJUT42kua9r8EnhBaEKqCpP").value());
+    auto testnetzaddr = std::get<libcrypticcoin::SproutPaymentAddress>(keyIO.DecodePaymentAddress("ztjiDe569DPNbyTE6TSdJTaSDhoXEHLGvYoUnBU1wfVNU52TEyT6berYtySkd21njAeEoh8fFJUT42kua9r8EnhBaEKqCpP").value());
 
     try {
         std::shared_ptr<AsyncRPCOperation> operation(new AsyncRPCOperation_shieldcoinbase(TransactionBuilder(), mtx, {}, testnetzaddr, -1 ));

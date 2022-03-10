@@ -4,9 +4,9 @@ Notable changes
 Fixed bugs in the testnet Orchard circuit
 -----------------------------------------
 
-In the `zcashd v4.5.0` release notes we indicated that a testnet rollback might
+In the `crypticcoind v4.5.0` release notes we indicated that a testnet rollback might
 occur to update the consensus rules, if we needed to make backwards-incompatible
-changes. Shortly after `zcashd v4.5.0` was released, during another internal
+changes. Shortly after `crypticcoind v4.5.0` was released, during another internal
 review of the Orchard circuit, we identified two bugs that would affect the
 upcoming testnet activation of NU5:
 
@@ -28,21 +28,21 @@ upcoming testnet activation of NU5:
   checked by the circuit for efficiency; thus SinsemillaCommit needs to use
   complete addition.
 
-These bugs do not affect mainnet, as `zcashd v4.5.0` only set the activation
+These bugs do not affect mainnet, as `crypticcoind v4.5.0` only set the activation
 height for NU5 on testnet for testing purposes. Nevertheless, in the interest of
 keeping the testnet environment as close to mainnet as possible, we are fixing
 these bugs immediately. This means a change to the NU5 consensus rules, and a
 new testnet activation height for NU5.
 
-To this end, the following changes are made in `zcashd v4.5.1`:
+To this end, the following changes are made in `crypticcoind v4.5.1`:
 
 - The consensus branch ID for NU5 is changed to `0x37519621`.
 - The protocol version indicating NU5-aware testnet nodes is set to `170015`.
 - The testnet activation height for NU5 is set to **1,599,200**.
 
-Testnet nodes that upgrade to `zcashd v4.5.1` prior to block height 1,590,000
+Testnet nodes that upgrade to `crypticcoind v4.5.1` prior to block height 1,590,000
 will follow the new testnet network upgrade. Testnet nodes that are running
-`zcashd v4.5.0` at that height will need to upgrade to `v4.5.1` and then run
+`crypticcoind v4.5.0` at that height will need to upgrade to `v4.5.1` and then run
 with `-reindex`.
 
 As always, it is possible that further backwards-incompatible changes might be
@@ -54,7 +54,7 @@ v5.0.0, and a new testnet activation will occur.
 Fixed regression in `getbalance` RPC method
 -------------------------------------------
 
-`zcashd v4.5.0` removed the account API from the wallet, following its
+`crypticcoind v4.5.0` removed the account API from the wallet, following its
 deprecation and removal in upstream Bitcoin Core. As part of the upstream
 changes, the `getbalance` RPC method was altered from using two custom balance
 computation methods, to instead relying on `CWallet::GetBalance`. This method
@@ -62,7 +62,7 @@ internally relies on `CWalletTx::IsFromMe` as part of identifying "trusted"
 zero-confirmation transactions to include in the balance calculation.
 
 There is an equivalent and closely-named `CWallet::IsFromMe` method, which is
-used throughout the wallet, and had been updated before Zcash launched to be
+used throughout the wallet, and had been updated before Crypticcoin launched to be
 aware of spent shielded notes. The change to `getbalance` exposed a bug:
 `CWalletTx::IsFromMe` had not been similarly updated, which caused `getbalance`
 to ignore wallet-internal (sent between two addresses in the node's wallet)

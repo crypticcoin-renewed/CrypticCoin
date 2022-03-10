@@ -34,7 +34,7 @@ def create_block(hashprev, coinbase, nTime=None, nBits=None, hashFinalSaplingRoo
 def derive_block_commitments_hash(chain_history_root, auth_data_root):
     digest = blake2b(
         digest_size=32,
-        person=b'ZcashBlockCommit')
+        person=b'CrypticcoinBlockCommit')
     digest.update(chain_history_root)
     digest.update(auth_data_root)
     digest.update(b'\x00' * 32)

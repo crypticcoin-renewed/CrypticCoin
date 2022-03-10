@@ -1,9 +1,9 @@
-// Copyright (c) 2016 The Zcash developers
+// Copyright (c) 2016 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_METRICS_H
-#define ZCASH_METRICS_H
+#ifndef CRYPTICCOIN_METRICS_H
+#define CRYPTICCOIN_METRICS_H
 
 #include "uint256.h"
 #include "consensus/params.h"
@@ -93,7 +93,7 @@ void ThreadShowMetricsScreen();
  * License: CC BY-SA 3.0
  *
  * Rendering options:
- * Zcash: img2txt -W 40 -H 20 -f utf8 -d none -g 0.7 Z-yellow.orange-logo.png
+ * Crypticcoin: img2txt -W 40 -H 20 -f utf8 -d none -g 0.7 Z-yellow.orange-logo.png
  * Heart: img2txt -W 40 -H 20 -f utf8 -d none 2000px-Heart_corazón.svg.png
  */
 const std::string METRICS_ART =
@@ -118,4 +118,4 @@ const std::string METRICS_ART =
 "         [0;34;40m                      [0m                                                 \n"
 "              [0;34;40m             [0m                                                     ";
 
-#endif // ZCASH_METRICS_H
+#endif // CRYPTICCOIN_METRICS_H

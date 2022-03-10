@@ -1,9 +1,9 @@
-// Copyright (c) 2020 The Zcash developers
+// Copyright (c) 2020 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_KEY_CONSTANTS_H
-#define ZCASH_KEY_CONSTANTS_H
+#ifndef CRYPTICCOIN_KEY_CONSTANTS_H
+#define CRYPTICCOIN_KEY_CONSTANTS_H
 
 #include <string>
 #include <vector>
@@ -54,4 +54,4 @@ public:
     const std::string& Bech32HRP(Bech32Type type) const { return bech32HRPs[type]; }
 };
 
-#endif // ZCASH_KEY_CONSTANTS_H
+#endif // CRYPTICCOIN_KEY_CONSTANTS_H

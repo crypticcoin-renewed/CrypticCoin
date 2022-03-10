@@ -11,14 +11,14 @@ from .util import (
 def H(msg: bytes, consensusBranchId: int) -> bytes:
     digest = blake2b(
         digest_size=32,
-        person=b'ZcashHistory' + struct.pack("<I", consensusBranchId))
+        person=b'CrypticcoinHistory' + struct.pack("<I", consensusBranchId))
     digest.update(msg)
     return digest.digest()
 
-class ZcashMMRNode():
+class CrypticcoinMMRNode():
     # leaf nodes have no children
-    left_child: Optional['ZcashMMRNode']
-    right_child: Optional['ZcashMMRNode']
+    left_child: Optional['CrypticcoinMMRNode']
+    right_child: Optional['CrypticcoinMMRNode']
 
     # commitments
     hashSubtreeCommitment: bytes
@@ -45,7 +45,7 @@ class ZcashMMRNode():
         sapling_root, sapling_tx_count,
         consensusBranchId,
         v2_data=None
-    ) -> 'ZcashMMRNode':
+    ) -> 'CrypticcoinMMRNode':
         '''Create a leaf node from a block'''
         if v2_data is not None:
             assert_equal(consensusBranchId, NU5_BRANCH_ID)
@@ -96,9 +96,9 @@ class ZcashMMRNode():
         return buf
 
 def make_parent(
-        left_child: ZcashMMRNode,
-        right_child: ZcashMMRNode) -> ZcashMMRNode:
-    parent = ZcashMMRNode()
+        left_child: CrypticcoinMMRNode,
+        right_child: CrypticcoinMMRNode) -> CrypticcoinMMRNode:
+    parent = CrypticcoinMMRNode()
     parent.left_child = left_child
     parent.right_child = right_child
     parent.hashSubtreeCommitment = H(
@@ -124,12 +124,12 @@ def make_parent(
     parent.consensusBranchId = left_child.consensusBranchId
     return parent
 
-def make_root_commitment(root: ZcashMMRNode) -> bytes:
+def make_root_commitment(root: CrypticcoinMMRNode) -> bytes:
     '''Makes the root commitment for a blockheader'''
     return H(root.serialize(), root.consensusBranchId)
 
-def get_peaks(node: ZcashMMRNode) -> List[ZcashMMRNode]:
-    peaks: List[ZcashMMRNode] = []
+def get_peaks(node: CrypticcoinMMRNode) -> List[CrypticcoinMMRNode]:
+    peaks: List[CrypticcoinMMRNode] = []
 
     # Get number of leaves.
     leaves = node.nLatestHeight - (node.nEarliestHeight - 1)
@@ -148,7 +148,7 @@ def get_peaks(node: ZcashMMRNode) -> List[ZcashMMRNode]:
     return peaks
 
 
-def bag_peaks(peaks: List[ZcashMMRNode]) -> ZcashMMRNode:
+def bag_peaks(peaks: List[CrypticcoinMMRNode]) -> CrypticcoinMMRNode:
     '''
     "Bag" a list of peaks, and return the final root
     '''
@@ -158,11 +158,11 @@ def bag_peaks(peaks: List[ZcashMMRNode]) -> ZcashMMRNode:
     return root
 
 
-def append(root: ZcashMMRNode, leaf: ZcashMMRNode) -> ZcashMMRNode:
+def append(root: CrypticcoinMMRNode, leaf: CrypticcoinMMRNode) -> CrypticcoinMMRNode:
     '''Append a leaf to an existing tree, return the new tree root'''
     # recursively find a list of peaks in the current tree
-    peaks: List[ZcashMMRNode] = get_peaks(root)
-    merged: List[ZcashMMRNode] = []
+    peaks: List[CrypticcoinMMRNode] = get_peaks(root)
+    merged: List[CrypticcoinMMRNode] = []
 
     # Merge peaks from right to left.
     # This will produce a list of peaks in reverse order
@@ -181,7 +181,7 @@ def append(root: ZcashMMRNode, leaf: ZcashMMRNode) -> ZcashMMRNode:
     # finally, bag the merged peaks
     return bag_peaks(merged[::-1])
 
-def delete(root: ZcashMMRNode) -> ZcashMMRNode:
+def delete(root: CrypticcoinMMRNode) -> CrypticcoinMMRNode:
     '''
     Delete the rightmost leaf node from an existing MMR
     Return the new tree root

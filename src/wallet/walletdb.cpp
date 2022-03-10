@@ -17,7 +17,7 @@
 #include "util.h"
 #include "utiltime.h"
 #include "wallet/wallet.h"
-#include "zcash/Proof.hpp"
+#include "crypticcoin/Proof.hpp"
 
 #include <rust/orchard.h>
 
@@ -112,8 +112,8 @@ bool CWalletDB::WriteCryptedKey(const CPubKey& vchPubKey,
     return true;
 }
 
-bool CWalletDB::WriteCryptedZKey(const libzcash::SproutPaymentAddress & addr,
-                                 const libzcash::ReceivingKey &rk,
+bool CWalletDB::WriteCryptedZKey(const libcrypticcoin::SproutPaymentAddress & addr,
+                                 const libcrypticcoin::ReceivingKey &rk,
                                  const std::vector<unsigned char>& vchCryptedSecret,
                                  const CKeyMetadata &keyMeta)
 {
@@ -133,7 +133,7 @@ bool CWalletDB::WriteCryptedZKey(const libzcash::SproutPaymentAddress & addr,
 }
 
 bool CWalletDB::WriteCryptedSaplingZKey(
-    const libzcash::SaplingExtendedFullViewingKey &extfvk,
+    const libcrypticcoin::SaplingExtendedFullViewingKey &extfvk,
     const std::vector<unsigned char>& vchCryptedSecret,
     const CKeyMetadata &keyMeta)
 {
@@ -160,7 +160,7 @@ bool CWalletDB::WriteMasterKey(unsigned int nID, const CMasterKey& kMasterKey)
     return Write(std::make_pair(std::string("mkey"), nID), kMasterKey, true);
 }
 
-bool CWalletDB::WriteZKey(const libzcash::SproutPaymentAddress& addr, const libzcash::SproutSpendingKey& key, const CKeyMetadata &keyMeta)
+bool CWalletDB::WriteZKey(const libcrypticcoin::SproutPaymentAddress& addr, const libcrypticcoin::SproutSpendingKey& key, const CKeyMetadata &keyMeta)
 {
     nWalletDBUpdateCounter++;
 
@@ -171,8 +171,8 @@ bool CWalletDB::WriteZKey(const libzcash::SproutPaymentAddress& addr, const libz
     return Write(std::make_pair(std::string("zkey"), addr), key, false);
 }
 
-bool CWalletDB::WriteSaplingZKey(const libzcash::SaplingIncomingViewingKey &ivk,
-                const libzcash::SaplingExtendedSpendingKey &key,
+bool CWalletDB::WriteSaplingZKey(const libcrypticcoin::SaplingIncomingViewingKey &ivk,
+                const libcrypticcoin::SaplingExtendedSpendingKey &key,
                 const CKeyMetadata &keyMeta)
 {
     nWalletDBUpdateCounter++;
@@ -184,35 +184,35 @@ bool CWalletDB::WriteSaplingZKey(const libzcash::SaplingIncomingViewingKey &ivk,
 }
 
 bool CWalletDB::WriteSaplingPaymentAddress(
-    const libzcash::SaplingPaymentAddress &addr,
-    const libzcash::SaplingIncomingViewingKey &ivk)
+    const libcrypticcoin::SaplingPaymentAddress &addr,
+    const libcrypticcoin::SaplingIncomingViewingKey &ivk)
 {
     nWalletDBUpdateCounter++;
 
     return Write(std::make_pair(std::string("sapzaddr"), addr), ivk, false);
 }
 
-bool CWalletDB::WriteSproutViewingKey(const libzcash::SproutViewingKey &vk)
+bool CWalletDB::WriteSproutViewingKey(const libcrypticcoin::SproutViewingKey &vk)
 {
     nWalletDBUpdateCounter++;
     return Write(std::make_pair(std::string("vkey"), vk), '1');
 }
 
-bool CWalletDB::EraseSproutViewingKey(const libzcash::SproutViewingKey &vk)
+bool CWalletDB::EraseSproutViewingKey(const libcrypticcoin::SproutViewingKey &vk)
 {
     nWalletDBUpdateCounter++;
     return Erase(std::make_pair(std::string("vkey"), vk));
 }
 
 bool CWalletDB::WriteSaplingExtendedFullViewingKey(
-    const libzcash::SaplingExtendedFullViewingKey &extfvk)
+    const libcrypticcoin::SaplingExtendedFullViewingKey &extfvk)
 {
     nWalletDBUpdateCounter++;
     return Write(std::make_pair(std::string("sapextfvk"), extfvk), '1');
 }
 
 bool CWalletDB::EraseSaplingExtendedFullViewingKey(
-    const libzcash::SaplingExtendedFullViewingKey &extfvk)
+    const libcrypticcoin::SaplingExtendedFullViewingKey &extfvk)
 {
     nWalletDBUpdateCounter++;
     return Erase(std::make_pair(std::string("sapextfvk"), extfvk));
@@ -222,20 +222,20 @@ bool CWalletDB::EraseSaplingExtendedFullViewingKey(
 // Unified address & key storage
 //
 
-bool CWalletDB::WriteUnifiedAccountMetadata(const ZcashdUnifiedAccountMetadata& keymeta)
+bool CWalletDB::WriteUnifiedAccountMetadata(const CrypticcoindUnifiedAccountMetadata& keymeta)
 {
     nWalletDBUpdateCounter++;
     return Write(std::make_pair(std::string("unifiedaccount"), keymeta), 0x00);
 }
 
-bool CWalletDB::WriteUnifiedFullViewingKey(const libzcash::UnifiedFullViewingKey& ufvk)
+bool CWalletDB::WriteUnifiedFullViewingKey(const libcrypticcoin::UnifiedFullViewingKey& ufvk)
 {
     nWalletDBUpdateCounter++;
     auto ufvkId = ufvk.GetKeyID(Params());
     return Write(std::make_pair(std::string("unifiedfvk"), ufvkId), ufvk.Encode(Params()));
 }
 
-bool CWalletDB::WriteUnifiedAddressMetadata(const ZcashdUnifiedAddressMetadata& addrmeta)
+bool CWalletDB::WriteUnifiedAddressMetadata(const CrypticcoindUnifiedAddressMetadata& addrmeta)
 {
     nWalletDBUpdateCounter++;
     return Write(std::make_pair(std::string("unifiedaddrmeta"), addrmeta), 0x00);
@@ -314,9 +314,9 @@ bool CWalletDB::WriteMinVersion(int nVersion)
     return Write(std::string("minversion"), nVersion);
 }
 
-bool CWalletDB::WriteRecipientMapping(const uint256& txid, const libzcash::RecipientAddress& address, const libzcash::UnifiedAddress& ua)
+bool CWalletDB::WriteRecipientMapping(const uint256& txid, const libcrypticcoin::RecipientAddress& address, const libcrypticcoin::UnifiedAddress& ua)
 {
-    auto recipientReceiver = libzcash::RecipientAddressToReceiver(address);
+    auto recipientReceiver = libcrypticcoin::RecipientAddressToReceiver(address);
     // Check that recipient address exists in given UA.
     if (!ua.ContainsReceiver(recipientReceiver)) {
         return false;
@@ -430,7 +430,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "vkey")
         {
-            libzcash::SproutViewingKey vk;
+            libcrypticcoin::SproutViewingKey vk;
             ssKey >> vk;
             char fYes;
             ssValue >> fYes;
@@ -443,9 +443,9 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "zkey")
         {
-            libzcash::SproutPaymentAddress addr;
+            libcrypticcoin::SproutPaymentAddress addr;
             ssKey >> addr;
-            libzcash::SproutSpendingKey key;
+            libcrypticcoin::SproutSpendingKey key;
             ssValue >> key;
 
             if (!pwallet->LoadZKey(key))
@@ -458,9 +458,9 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "sapzkey")
         {
-            libzcash::SaplingIncomingViewingKey ivk;
+            libcrypticcoin::SaplingIncomingViewingKey ivk;
             ssKey >> ivk;
-            libzcash::SaplingExtendedSpendingKey key;
+            libcrypticcoin::SaplingExtendedSpendingKey key;
             ssValue >> key;
 
             if (!pwallet->LoadSaplingZKey(key))
@@ -474,7 +474,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "sapextfvk")
         {
-            libzcash::SaplingExtendedFullViewingKey extfvk;
+            libcrypticcoin::SaplingExtendedFullViewingKey extfvk;
             ssKey >> extfvk;
             char fYes;
             ssValue >> fYes;
@@ -583,12 +583,12 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "czkey")
         {
-            libzcash::SproutPaymentAddress addr;
+            libcrypticcoin::SproutPaymentAddress addr;
             ssKey >> addr;
             // Deserialization of a pair is just one item after another
             uint256 rkValue;
             ssValue >> rkValue;
-            libzcash::ReceivingKey rk(rkValue);
+            libcrypticcoin::ReceivingKey rk(rkValue);
             vector<unsigned char> vchCryptedSecret;
             ssValue >> vchCryptedSecret;
             wss.nCKeys++;
@@ -602,9 +602,9 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "csapzkey")
         {
-            libzcash::SaplingIncomingViewingKey ivk;
+            libcrypticcoin::SaplingIncomingViewingKey ivk;
             ssKey >> ivk;
-            libzcash::SaplingExtendedFullViewingKey extfvk;
+            libcrypticcoin::SaplingExtendedFullViewingKey extfvk;
             ssValue >> extfvk;
             vector<unsigned char> vchCryptedSecret;
             ssValue >> vchCryptedSecret;
@@ -634,7 +634,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "zkeymeta")
         {
-            libzcash::SproutPaymentAddress addr;
+            libcrypticcoin::SproutPaymentAddress addr;
             ssKey >> addr;
             CKeyMetadata keyMeta;
             ssValue >> keyMeta;
@@ -646,7 +646,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "sapzkeymeta")
         {
-            libzcash::SaplingIncomingViewingKey ivk;
+            libcrypticcoin::SaplingIncomingViewingKey ivk;
             ssKey >> ivk;
             CKeyMetadata keyMeta;
             ssValue >> keyMeta;
@@ -657,9 +657,9 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "sapzaddr")
         {
-            libzcash::SaplingPaymentAddress addr;
+            libcrypticcoin::SaplingPaymentAddress addr;
             ssKey >> addr;
-            libzcash::SaplingIncomingViewingKey ivk;
+            libcrypticcoin::SaplingIncomingViewingKey ivk;
             ssValue >> ivk;
 
             wss.nSapZAddrs++;
@@ -676,13 +676,13 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "unifiedfvk")
         {
-            libzcash::UFVKId fp;
+            libcrypticcoin::UFVKId fp;
             ssKey >> fp;
 
             std::string ufvkenc;
             ssValue >> ufvkenc;
 
-            auto ufvkopt = libzcash::UnifiedFullViewingKey::Decode(ufvkenc, Params());
+            auto ufvkopt = libcrypticcoin::UnifiedFullViewingKey::Decode(ufvkenc, Params());
             if (ufvkopt.has_value()) {
                 auto ufvk = ufvkopt.value();
                 if (fp != ufvk.GetKeyID(Params())) {
@@ -700,7 +700,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "unifiedaccount")
         {
-            auto acct = ZcashdUnifiedAccountMetadata::Read(ssKey);
+            auto acct = CrypticcoindUnifiedAccountMetadata::Read(ssKey);
 
             uint8_t value;
             ssValue >> value;
@@ -716,7 +716,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "unifiedaddrmeta")
         {
-            auto keymeta = ZcashdUnifiedAddressMetadata::Read(ssKey);
+            auto keymeta = CrypticcoindUnifiedAddressMetadata::Read(ssKey);
 
             uint8_t value;
             ssValue >> value;
@@ -869,13 +869,13 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
             auto recipient = CSerializeRecipientAddress::Read(ssKey);
             ssValue >> rawUa;
 
-            auto ua = libzcash::UnifiedAddress::Parse(Params(), rawUa);
+            auto ua = libcrypticcoin::UnifiedAddress::Parse(Params(), rawUa);
             if (!ua.has_value()) {
                 strErr = "Error in wallet database: non-UnifiedAddress in recipientmapping";
                 return false;
             }
 
-            auto recipientReceiver = libzcash::RecipientAddressToReceiver(recipient);
+            auto recipientReceiver = libcrypticcoin::RecipientAddressToReceiver(recipient);
 
             if (!ua.value().ContainsReceiver(recipientReceiver)) {
                 strErr = "Error in wallet database: recipientmapping UA does not contain recipient";
@@ -1107,7 +1107,7 @@ DBErrors CWalletDB::ZapWalletTx(CWallet* pwallet, vector<CWalletTx>& vWtx)
 void ThreadFlushWalletDB(const string& strFile)
 {
     // Make this thread recognisable as the wallet flushing thread
-    RenameThread("zcash-wallet");
+    RenameThread("crypticcoin-wallet");
 
     static bool fOneThread;
     if (fOneThread)

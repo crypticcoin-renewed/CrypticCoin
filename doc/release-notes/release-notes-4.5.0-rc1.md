@@ -39,7 +39,7 @@ Gregory Maxwell (4):
 Jack Grigg (109):
       Re-include reading blocks from disk in block connection benchmark
       cargo update
-      Migrate to latest zcash_* crates
+      Migrate to latest crypticcoin_* crates
       metrics 0.16 and metrics-exporter-prometheus 0.5
       Implement ZIP 216 consensus rules
       Extract SpendDescriptionV5 and OutputDescriptionV5 classes
@@ -90,8 +90,8 @@ Jack Grigg (109):
       test: Check for updated empty-tx reject messages in transaction tests
       test: Fix OverwinterExpiryHeight test after ZIP 203 contextual changes
       miner: Set coinbase expiry height to block height from NU5 activation
-      Introduce libzcash::RawAddress type
-      Use `libzcash::RawAddress` in `CWallet::GetFilteredNotes`
+      Introduce libcrypticcoin::RawAddress type
+      Use `libcrypticcoin::RawAddress` in `CWallet::GetFilteredNotes`
       Use a visitor for handling -mineraddress config option
       Add support for decoding and encoding Unified Addresses
       Pass network type through to UA address handling logic
@@ -141,7 +141,7 @@ Jack Grigg (109):
       Add named constants for legacy tx authDigest placeholder value
       qa: Boost 1.77.0
       cargo update
-      Migrate to latest revisions of Zcash Rust crates
+      Migrate to latest revisions of Crypticcoin Rust crates
       test: Set up mininodes at the start of feature_zip239
       net: Reject unknown CInv message types
       make-release.py: Versioning changes for 4.5.0-rc1.

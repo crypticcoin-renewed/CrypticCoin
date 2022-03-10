@@ -220,7 +220,7 @@ TEST(Validation, ContextualCheckInputsDetectsOldBranchId) {
 TEST(Validation, ReceivedBlockTransactions) {
     SelectParams(CBaseChainParams::REGTEST);
     auto chainParams = Params();
-    auto sk = libzcash::SproutSpendingKey::random();
+    auto sk = libcrypticcoin::SproutSpendingKey::random();
 
     // Create a fake genesis block
     CBlock block1;

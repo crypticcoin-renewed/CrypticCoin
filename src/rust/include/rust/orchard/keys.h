@@ -1,9 +1,9 @@
-// Copyright (c) 2021 The Zcash developers
+// Copyright (c) 2021 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_RUST_INCLUDE_RUST_ORCHARD_KEYS_H
-#define ZCASH_RUST_INCLUDE_RUST_ORCHARD_KEYS_H
+#ifndef CRYPTICCOIN_RUST_INCLUDE_RUST_ORCHARD_KEYS_H
+#define CRYPTICCOIN_RUST_INCLUDE_RUST_ORCHARD_KEYS_H
 
 #include "rust/streams.h"
 
@@ -200,4 +200,4 @@ OrchardFullViewingKeyPtr* orchard_spending_key_to_full_viewing_key(
 }
 #endif
 
-#endif // ZCASH_RUST_INCLUDE_RUST_ORCHARD_KEYS_H
+#endif // CRYPTICCOIN_RUST_INCLUDE_RUST_ORCHARD_KEYS_H

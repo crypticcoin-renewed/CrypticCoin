@@ -1,16 +1,16 @@
 Format: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?rev=174
-Upstream-Name: Zcash
+Upstream-Name: Crypticcoin
 Upstream-Contact: Electric Coin Company <team@electriccoin.co>
-Source: https://github.com/zcash/zcash
+Source: https://github.com/crypticcoin/crypticcoin
 
 Files: *
-Copyright: 2016-2021, The Zcash developers
+Copyright: 2016-2021, The Crypticcoin developers
  2009-2021, Bitcoin Core developers
  2009-2021, Bitcoin Developers
 License: Expat
 Comment: The Bitcoin Core developers encompasses the current developers listed on
  bitcoin.org, as well as the numerous contributors to the project.
- The Zcash developers are listed at https://z.cash/team.html and in doc/authors.md.
+ The Crypticcoin developers are listed at https://z.cash/team.html and in doc/authors.md.
  This copyright entry excludes files explicitly listed below.
 
 Files: build-aux/m4/ax_boost_base.m4
@@ -78,7 +78,7 @@ Copyright: 2008, Steven G. Johnson <stevenj@alum.mit.edu>
  2011, Daniel Richard G. <skunk@iSKUNK.ORG>
 License: GPL-3+ with Autoconf exception
 
-Files: qa/zcash/checksec.sh
+Files: qa/crypticcoin/checksec.sh
 Copyright: 2014-2015, Brian Davis
  2013, Robin David
  2009-2011, Tobias Klein
@@ -141,7 +141,7 @@ License: Boost-Software-License-1.0
 Files: depends/*/vendored-sources/halo2/*
  depends/*/vendored-sources/orchard/*
 Copyright: 2020-2021 The Electric Coin Company
-License: BOSL-1+ with Zcash exception
+License: BOSL-1+ with Crypticcoin exception
 
 Files: src/crypto/ctaes/*
 Copyright: Copyright (c) 2016 Pieter Wuille
@@ -1202,7 +1202,7 @@ License: Expat-with-advertising-clause
  promote the sale, use or other dealings in this Software without
  prior written authorization from the authors.
 
-License: BOSL-1+ with Zcash exception
+License: BOSL-1+ with Crypticcoin exception
  This package ("Original Work") is licensed under the terms of the Bootstrap Open
  Source License, version 1.0, or at your option, any later version ("BOSL"). See
  the file ./LICENSE-BOSL for the terms of the Bootstrap Open Source Licence,
@@ -1211,8 +1211,8 @@ License: BOSL-1+ with Zcash exception
  Only if this Original Work is included as part of the distribution of one of the
  following projects ("the Project"):
  .
- - The Zcash projects published by the Electric Coin Company,
- - The Zebra project published by the Zcash Foundation,
+ - The Crypticcoin projects published by the Electric Coin Company,
+ - The Zebra project published by the Crypticcoin Foundation,
  .
  then License is granted to use this package under the BOSL as modified by the
  following clarification and special exception. This exception applies only to

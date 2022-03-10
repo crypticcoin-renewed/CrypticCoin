@@ -1,9 +1,9 @@
-// Copyright (c) 2017 The Zcash developers
+// Copyright (c) 2017 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_WALLET_ASYNCRPCOPERATION_MERGETOADDRESS_H
-#define ZCASH_WALLET_ASYNCRPCOPERATION_MERGETOADDRESS_H
+#ifndef CRYPTICCOIN_WALLET_ASYNCRPCOPERATION_MERGETOADDRESS_H
+#define CRYPTICCOIN_WALLET_ASYNCRPCOPERATION_MERGETOADDRESS_H
 
 #include "amount.h"
 #include "asyncrpcoperation.h"
@@ -11,8 +11,8 @@
 #include "transaction_builder.h"
 #include "wallet.h"
 #include "wallet/paymentdisclosure.h"
-#include "zcash/Address.hpp"
-#include "zcash/JoinSplit.hpp"
+#include "crypticcoin/Address.hpp"
+#include "crypticcoin/JoinSplit.hpp"
 
 #include <array>
 #include <optional>
@@ -23,7 +23,7 @@
 
 #include <rust/ed25519/types.h>
 
-using namespace libzcash;
+using namespace libcrypticcoin;
 
 // Input UTXO is a tuple of txid, vout, amount, script
 typedef std::tuple<COutPoint, CAmount, CScript> MergeToAddressInputUTXO;
@@ -34,7 +34,7 @@ typedef std::tuple<JSOutPoint, SproutNote, CAmount, SproutSpendingKey> MergeToAd
 typedef std::tuple<SaplingOutPoint, SaplingNote, CAmount, SaplingExpandedSpendingKey> MergeToAddressInputSaplingNote;
 
 // A recipient is a tuple of address, memo (optional if zaddr)
-typedef std::pair<libzcash::PaymentAddress, std::string> MergeToAddressRecipient;
+typedef std::pair<libcrypticcoin::PaymentAddress, std::string> MergeToAddressRecipient;
 
 // Package of info which is passed to perform_joinsplit methods.
 struct MergeToAddressJSInfo {
@@ -191,4 +191,4 @@ public:
 };
 
 
-#endif // ZCASH_WALLET_ASYNCRPCOPERATION_MERGETOADDRESS_H
+#endif // CRYPTICCOIN_WALLET_ASYNCRPCOPERATION_MERGETOADDRESS_H

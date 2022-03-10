@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2016-2018 The Zcash developers
+// Copyright (c) 2016-2018 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -11,7 +11,7 @@
 #include <key.h>
 #include <pubkey.h>
 #include <script/standard.h>
-#include <zcash/Address.hpp>
+#include <crypticcoin/Address.hpp>
 
 #include <vector>
 #include <string>
@@ -36,15 +36,15 @@ public:
 
     bool IsValidDestinationString(const std::string& str) const;
 
-    std::string EncodePaymentAddress(const libzcash::PaymentAddress& zaddr) const;
-    std::optional<libzcash::PaymentAddress> DecodePaymentAddress(const std::string& str) const;
+    std::string EncodePaymentAddress(const libcrypticcoin::PaymentAddress& zaddr) const;
+    std::optional<libcrypticcoin::PaymentAddress> DecodePaymentAddress(const std::string& str) const;
     bool IsValidPaymentAddressString(const std::string& str) const;
 
-    std::string EncodeViewingKey(const libzcash::ViewingKey& vk) const;
-    std::optional<libzcash::ViewingKey> DecodeViewingKey(const std::string& str) const;
+    std::string EncodeViewingKey(const libcrypticcoin::ViewingKey& vk) const;
+    std::optional<libcrypticcoin::ViewingKey> DecodeViewingKey(const std::string& str) const;
 
-    std::string EncodeSpendingKey(const libzcash::SpendingKey& zkey) const;
-    std::optional<libzcash::SpendingKey> DecodeSpendingKey(const std::string& str) const;
+    std::string EncodeSpendingKey(const libcrypticcoin::SpendingKey& zkey) const;
+    std::optional<libcrypticcoin::SpendingKey> DecodeSpendingKey(const std::string& str) const;
 };
 
 #endif // BITCOIN_KEY_IO_H

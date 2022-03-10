@@ -1,10 +1,10 @@
 # librustzcash
 
-`librustzcash` is an FFI library crate that exposes the Zcash Rust components to
-the `zcashd` full node.
+`librustzcash` is an FFI library crate that exposes the Crypticcoin Rust components to
+the `crypticcoind` full node.
 
 The FFI API does not have any stability guarantees, and will change as required
-by `zcashd`.
+by `crypticcoind`.
 
 ## License
 

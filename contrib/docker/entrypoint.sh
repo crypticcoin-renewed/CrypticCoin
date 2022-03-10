@@ -4,53 +4,53 @@ export LC_ALL=C
 set -eo pipefail
 
 if [[ ${1} == "--version" ]];then
-  zcashd --version
+  crypticcoind --version
   exit 0
 fi
 
-env | sort | grep ZCASHD || true
-export ZCASHD_CMD='zcashd -printtoconsole'
+env | sort | grep CRYPTICCOIND || true
+export CRYPTICCOIND_CMD='crypticcoind -printtoconsole'
 
-if [[ ! -n ${ZCASHD_NETWORK} ]];then
-  export ZCASHD_NETWORK=mainnet
+if [[ ! -n ${CRYPTICCOIND_NETWORK} ]];then
+  export CRYPTICCOIND_NETWORK=mainnet
 fi
 
-case ${ZCASHD_NETWORK} in
+case ${CRYPTICCOIND_NETWORK} in
   testnet)
-    ZCASHD_CMD+=" -testnet -addnode=testnet.z.cash "
+    CRYPTICCOIND_CMD+=" -testnet -addnode=testnet.z.cash "
     ;;
   mainnet)
-    ZCASHD_CMD+=" -addnode=mainnet.z.cash "
+    CRYPTICCOIND_CMD+=" -addnode=mainnet.z.cash "
     ;;
   *)
-    echo "Error, unknown network: ${ZCASHD_NETWORK}"
+    echo "Error, unknown network: ${CRYPTICCOIND_NETWORK}"
     exit 1
     ;;
 esac
 
-if [[ -n "${ZCASHD_SHOWMETRICS}" ]];then ZCASHD_CMD+=" -showmetrics=${ZCASHD_SHOWMETRICS}";fi
-if [[ -n "${ZCASHD_LOGIPS}" ]];then ZCASHD_CMD+=" -logips=${ZCASHD_LOGIPS}";fi
-if [[ -n "${ZCASHD_EXPERIMENTALFEATURES}" ]];then ZCASHD_CMD+=" -experimentalfeatures=${ZCASHD_EXPERIMENTALFEATURES}";fi
-if [[ -n "${ZCASHD_GEN}" ]];then ZCASHD_CMD+=" -gen=${ZCASHD_GEN}";fi
-if [[ -n "${ZCASHD_ZSHIELDCOINBASE}" ]];then ZCASHD_CMD+=" -zshieldcoinbase=${ZCASHD_ZSHIELDCOINBASE}";fi
-if [[ -n "${ZCASHD_RPCUSER}" ]];then ZCASHD_CMD+=" -rpcuser=${ZCASHD_RPCUSER}";fi
-if [[ -n "${ZCASHD_RPCPASSWORD}" ]];then ZCASHD_CMD+=" -rpcpassword=${ZCASHD_RPCPASSWORD}";fi
-if [[ -n "${ZCASHD_RPCBIND}" ]];then ZCASHD_CMD+=" -rpcbind=${ZCASHD_RPCBIND}";fi
-if [[ -n "${ZCASHD_RPCPORT}" ]];then ZCASHD_CMD+=" -rpcport=${ZCASHD_RPCPORT}";fi
-if [[ -n "${ZCASHD_ALLOWIP}" ]];then ZCASHD_CMD+=" -rpcallowip=${ZCASHD_ALLOWIP}";fi
-if [[ -n "${ZCASHD_TXINDEX}" ]];then ZCASHD_CMD+=" -txindex";fi
-if [[ -n "${ZCASHD_INSIGHTEXPLORER}" ]];then ZCASHD_CMD+=" -insightexplorer";fi
-if [[ -n "${ZCASHD_PROMETHEUSPORT}" ]];then ZCASHD_CMD+=" -prometheusport=${ZCASHD_PROMETHEUSPORT}";fi
-if [[ -n "${ZCASHD_METRICSIP}" ]];then ZCASHD_CMD+=" -metricsallowip=${ZCASHD_METRICSIP}";fi
-if [[ -n "${ZCASHD_ZMQPORT}" && -n "${ZCASHD_ZMQBIND}" ]];then
-  ZCASHD_CMD+=" -zmqpubhashblock=tcp://${ZCASHD_ZMQBIND}:${ZCASHD_ZMQPORT}"
-  ZCASHD_CMD+=" -zmqpubhashtx=tcp://${ZCASHD_ZMQBIND}:${ZCASHD_ZMQPORT}"
-  ZCASHD_CMD+=" -zmqpubrawblock=tcp://${ZCASHD_ZMQBIND}:${ZCASHD_ZMQPORT}"
-  ZCASHD_CMD+=" -zmqpubrawtx=tcp://${ZCASHD_ZMQBIND}:${ZCASHD_ZMQPORT}"
-  ZCASHD_CMD+=" -zmqpubhashblock=tcp://${ZCASHD_ZMQBIND}:${ZCASHD_ZMQPORT}"
+if [[ -n "${CRYPTICCOIND_SHOWMETRICS}" ]];then CRYPTICCOIND_CMD+=" -showmetrics=${CRYPTICCOIND_SHOWMETRICS}";fi
+if [[ -n "${CRYPTICCOIND_LOGIPS}" ]];then CRYPTICCOIND_CMD+=" -logips=${CRYPTICCOIND_LOGIPS}";fi
+if [[ -n "${CRYPTICCOIND_EXPERIMENTALFEATURES}" ]];then CRYPTICCOIND_CMD+=" -experimentalfeatures=${CRYPTICCOIND_EXPERIMENTALFEATURES}";fi
+if [[ -n "${CRYPTICCOIND_GEN}" ]];then CRYPTICCOIND_CMD+=" -gen=${CRYPTICCOIND_GEN}";fi
+if [[ -n "${CRYPTICCOIND_ZSHIELDCOINBASE}" ]];then CRYPTICCOIND_CMD+=" -zshieldcoinbase=${CRYPTICCOIND_ZSHIELDCOINBASE}";fi
+if [[ -n "${CRYPTICCOIND_RPCUSER}" ]];then CRYPTICCOIND_CMD+=" -rpcuser=${CRYPTICCOIND_RPCUSER}";fi
+if [[ -n "${CRYPTICCOIND_RPCPASSWORD}" ]];then CRYPTICCOIND_CMD+=" -rpcpassword=${CRYPTICCOIND_RPCPASSWORD}";fi
+if [[ -n "${CRYPTICCOIND_RPCBIND}" ]];then CRYPTICCOIND_CMD+=" -rpcbind=${CRYPTICCOIND_RPCBIND}";fi
+if [[ -n "${CRYPTICCOIND_RPCPORT}" ]];then CRYPTICCOIND_CMD+=" -rpcport=${CRYPTICCOIND_RPCPORT}";fi
+if [[ -n "${CRYPTICCOIND_ALLOWIP}" ]];then CRYPTICCOIND_CMD+=" -rpcallowip=${CRYPTICCOIND_ALLOWIP}";fi
+if [[ -n "${CRYPTICCOIND_TXINDEX}" ]];then CRYPTICCOIND_CMD+=" -txindex";fi
+if [[ -n "${CRYPTICCOIND_INSIGHTEXPLORER}" ]];then CRYPTICCOIND_CMD+=" -insightexplorer";fi
+if [[ -n "${CRYPTICCOIND_PROMETHEUSPORT}" ]];then CRYPTICCOIND_CMD+=" -prometheusport=${CRYPTICCOIND_PROMETHEUSPORT}";fi
+if [[ -n "${CRYPTICCOIND_METRICSIP}" ]];then CRYPTICCOIND_CMD+=" -metricsallowip=${CRYPTICCOIND_METRICSIP}";fi
+if [[ -n "${CRYPTICCOIND_ZMQPORT}" && -n "${CRYPTICCOIND_ZMQBIND}" ]];then
+  CRYPTICCOIND_CMD+=" -zmqpubhashblock=tcp://${CRYPTICCOIND_ZMQBIND}:${CRYPTICCOIND_ZMQPORT}"
+  CRYPTICCOIND_CMD+=" -zmqpubhashtx=tcp://${CRYPTICCOIND_ZMQBIND}:${CRYPTICCOIND_ZMQPORT}"
+  CRYPTICCOIND_CMD+=" -zmqpubrawblock=tcp://${CRYPTICCOIND_ZMQBIND}:${CRYPTICCOIND_ZMQPORT}"
+  CRYPTICCOIND_CMD+=" -zmqpubrawtx=tcp://${CRYPTICCOIND_ZMQBIND}:${CRYPTICCOIND_ZMQPORT}"
+  CRYPTICCOIND_CMD+=" -zmqpubhashblock=tcp://${CRYPTICCOIND_ZMQBIND}:${CRYPTICCOIND_ZMQPORT}"
 fi
 
-zcash-fetch-params
-touch .zcash/zcash.conf
-echo "Starting: ${ZCASHD_CMD}"
-eval exec "${ZCASHD_CMD}" "${@}"
+crypticcoin-fetch-params
+touch .crypticcoin/crypticcoin.conf
+echo "Starting: ${CRYPTICCOIND_CMD}"
+eval exec "${CRYPTICCOIND_CMD}" "${@}"

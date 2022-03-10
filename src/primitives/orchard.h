@@ -1,4 +1,4 @@
-// Copyright (c) 2021 The Zcash Developers
+// Copyright (c) 2021 The Crypticcoin Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 

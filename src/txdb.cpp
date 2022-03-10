@@ -10,7 +10,7 @@
 #include "main.h"
 #include "pow.h"
 #include "uint256.h"
-#include "zcash/History.hpp"
+#include "crypticcoin/History.hpp"
 
 #include <stdint.h>
 
@@ -167,8 +167,8 @@ HistoryNode CCoinsViewDB::GetHistoryAt(uint32_t epochId, HistoryIndex index) con
         throw runtime_error("History data inconsistent - reindex?");
     }
 
-    if (libzcash::IsV1HistoryTree(epochId)) {
-        // History nodes serialized by `zcashd` versions that were unaware of NU5, used
+    if (libcrypticcoin::IsV1HistoryTree(epochId)) {
+        // History nodes serialized by `crypticcoind` versions that were unaware of NU5, used
         // the previous shorter maximum serialized length. Because we stored this as an
         // array, we can't just read the current (longer) maximum serialized length, as
         // it will result in an exception for those older nodes.

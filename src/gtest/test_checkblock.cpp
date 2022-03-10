@@ -5,7 +5,7 @@
 #include "main.h"
 #include "proof_verifier.h"
 #include "utiltest.h"
-#include "zcash/Proof.hpp"
+#include "crypticcoin/Proof.hpp"
 
 #include <rust/orchard.h>
 

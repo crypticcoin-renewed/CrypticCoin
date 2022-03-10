@@ -1,9 +1,9 @@
-// Copyright (c) 2020 The Zcash developers
+// Copyright (c) 2020 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_RUST_INCLUDE_RUST_ORCHARD_H
-#define ZCASH_RUST_INCLUDE_RUST_ORCHARD_H
+#ifndef CRYPTICCOIN_RUST_INCLUDE_RUST_ORCHARD_H
+#define CRYPTICCOIN_RUST_INCLUDE_RUST_ORCHARD_H
 
 #include "rust/streams.h"
 
@@ -186,4 +186,4 @@ public:
 } // namespace orchard
 #endif
 
-#endif // ZCASH_RUST_INCLUDE_RUST_ORCHARD_H
+#endif // CRYPTICCOIN_RUST_INCLUDE_RUST_ORCHARD_H

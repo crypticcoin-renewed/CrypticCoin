@@ -117,7 +117,7 @@ on all categories (and give you a very large debug.log file).
 
 **testnet and regtest modes**
 
-Run with the -testnet option to run with "play zcash" on the test network, if you
+Run with the -testnet option to run with "play crypticcoin" on the test network, if you
 are testing multi-machine code that needs to operate across the internet.
 
 If you are testing something that can run on one machine, run with the -regtest option.
@@ -126,7 +126,7 @@ that run in -regtest mode.
 
 **DEBUG_LOCKORDER**
 
-Zcash is a multithreaded application, and deadlocks or other multithreading bugs
+Crypticcoin is a multithreaded application, and deadlocks or other multithreading bugs
 can be very difficult to track down. Compiling with -DDEBUG_LOCKORDER (configure
 CXXFLAGS="-DDEBUG_LOCKORDER -g") inserts run-time checks to keep track of which locks
 are held, and adds warnings to the debug.log file if inconsistencies are detected.
@@ -226,7 +226,7 @@ Threads
 
 - ThreadRPCServer : Remote procedure call handler, listens on port 8232 for connections and services them.
 
-- ZcashMiner : Generates zcash (if wallet is enabled).
+- CrypticcoinMiner : Generates crypticcoin (if wallet is enabled).
 
 - Shutdown : Does an orderly shutdown of everything.
 
@@ -243,7 +243,7 @@ ACK -  A loose ACK can be confusing. It's best to avoid them unless it's a docum
 
 NACK - Disagree with the code changes/concept. Should be accompanied by an explanation.
 
-See the [Development Guidelines](https://zcash.readthedocs.io/en/latest/rtd_pages/development_guidelines.html) documentation for preferred workflows, information on continuous integration and release versioning.
+See the [Development Guidelines](https://crypticcoin.readthedocs.io/en/latest/rtd_pages/development_guidelines.html) documentation for preferred workflows, information on continuous integration and release versioning.
 
 Strings and formatting
 ------------------------
@@ -305,13 +305,13 @@ Source code organization
 --------------------------
 
 - Use include guards to avoid the problem of double inclusion. The header file
-  `foo/bar.h` should use the include guard identifier `ZCASH_FOO_BAR_H`, e.g.
+  `foo/bar.h` should use the include guard identifier `CRYPTICCOIN_FOO_BAR_H`, e.g.
 
 ```c++
-#ifndef ZCASH_FOO_BAR_H
-#define ZCASH_FOO_BAR_H
+#ifndef CRYPTICCOIN_FOO_BAR_H
+#define CRYPTICCOIN_FOO_BAR_H
 ...
-#endif // ZCASH_FOO_BAR_H
+#endif // CRYPTICCOIN_FOO_BAR_H
 ```
 
 Subtrees
@@ -319,12 +319,12 @@ Subtrees
 
 Several parts of the repository are subtrees of software maintained elsewhere.
 
-Some of these are maintained by active developers of Zcash or Bitcoin Core, in which case changes should probably go
+Some of these are maintained by active developers of Crypticcoin or Bitcoin Core, in which case changes should probably go
 directly upstream without being PRed directly against the project. They will be merged back in the next
 subtree merge.
 
 Others are external projects without a tight relationship with our project. Changes to these should also
-be sent upstream, but bugfixes may also be prudent to PR against Zcash and/or Bitcoin Core so that they can be integrated
+be sent upstream, but bugfixes may also be prudent to PR against Crypticcoin and/or Bitcoin Core so that they can be integrated
 quickly. Cosmetic changes should be purely taken upstream.
 
 There is a tool in `test/lint/git-subtree-check.sh` ([instructions](../test/lint#git-subtree-checksh)) to check a subtree directory for consistency with

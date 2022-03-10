@@ -1,4 +1,4 @@
-// Copyright (c) 2016 The Zcash developers
+// Copyright (c) 2016 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -440,7 +440,7 @@ int printMiningStatus(bool mining)
         lines++;
     } else if (Params().NetworkIDString() != "main") {
         std::cout << _("You are currently not mining.") << std::endl;
-        std::cout << _("To enable mining, add 'gen=1' to your zcash.conf and restart.") << std::endl;
+        std::cout << _("To enable mining, add 'gen=1' to your crypticcoin.conf and restart.") << std::endl;
         lines += 2;
     }
     std::cout << std::endl;
@@ -602,7 +602,7 @@ bool enableVTMode()
 void ThreadShowMetricsScreen()
 {
     // Make this thread recognisable as the metrics screen thread
-    RenameThread("zcash-metrics-screen");
+    RenameThread("crypticcoin-metrics-screen");
 
     // Determine whether we should render a persistent UI or rolling metrics
     bool isTTY = isatty(STDOUT_FILENO);
@@ -622,7 +622,7 @@ void ThreadShowMetricsScreen()
         std::cout << std::endl;
 
         // Thank you text
-        std::cout << strprintf(_("Thank you for running a %s zcashd v%s node!"), WhichNetwork(), FormatVersion(CLIENT_VERSION)) << std::endl;
+        std::cout << strprintf(_("Thank you for running a %s crypticcoind v%s node!"), WhichNetwork(), FormatVersion(CLIENT_VERSION)) << std::endl;
         std::cout << _("You're helping to strengthen the network and contributing to a social good :)") << std::endl;
 
         // Privacy notice text
@@ -681,7 +681,7 @@ void ThreadShowMetricsScreen()
             // Explain how to exit
             std::cout << "[";
 #ifdef WIN32
-            std::cout << _("'zcash-cli.exe stop' to exit");
+            std::cout << _("'crypticcoin-cli.exe stop' to exit");
 #else
             std::cout << _("Press Ctrl+C to exit");
 #endif

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 The Zcash developers
+# Copyright (c) 2021 The Crypticcoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -79,7 +79,7 @@ class WalletIsFromMe(BitcoinTestFramework):
         self.sync_all()
 
         # At this point we have created the conditions for the bug in
-        # https://github.com/zcash/zcash/issues/5325.
+        # https://github.com/crypticcoin/crypticcoin/issues/5325.
 
         # listunspent should show the coinbase output, and optionally the
         # newly-received unshielding output.

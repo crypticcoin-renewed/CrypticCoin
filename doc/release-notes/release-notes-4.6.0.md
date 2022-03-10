@@ -4,17 +4,17 @@ Notable changes
 Wallet
 ------
 
-From this release, newly-created wallets will save the chain name ("Zcash") and
+From this release, newly-created wallets will save the chain name ("Crypticcoin") and
 network identifier (e.g. "main") to the `wallet.dat` file. This will enable the
-`zcashd` node to check on subsequent starts that the `wallet.dat` file matches
+`crypticcoind` node to check on subsequent starts that the `wallet.dat` file matches
 the node's configuration. Existing wallets will start saving this information in
 a later release.
 
-`libzcash_script`
+`libcrypticcoin_script`
 -----------------
 
-Two new APIs have been added to this library (`zcash_script_legacy_sigop_count`
-and `zcash_script_legacy_sigop_count_precomputed`), for counting the number of
+Two new APIs have been added to this library (`crypticcoin_script_legacy_sigop_count`
+and `crypticcoin_script_legacy_sigop_count_precomputed`), for counting the number of
 signature operations in the transparent inputs and outputs of a transaction.
 The presence of these APIs is indicated by a library API version of 2.
 
@@ -68,7 +68,7 @@ Jack Grigg (23):
       qa: Postpone recent CCache releases
       Revert "lint: Fix false positive"
       rust: Remove misleading log message
-      Migrate to latest revisions of Zcash Rust crates
+      Migrate to latest revisions of Crypticcoin Rust crates
       Update release notes
       make-release.py: Versioning changes for 4.6.0-rc1.
       make-release.py: Updated manpages for 4.6.0-rc1.
@@ -116,8 +116,8 @@ Jack Grigg (1):
       contrib: Add space between URL and period
 
 teor (7):
-      Add sigop count functions to zcash_script library
-      Increment the zcash_script API version
+      Add sigop count functions to crypticcoin_script library
+      Increment the crypticcoin_script API version
       Remove an unused header
       Use correct copyright header
       Remove redundant variable

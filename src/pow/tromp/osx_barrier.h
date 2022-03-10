@@ -1,5 +1,5 @@
-#ifndef ZCASH_POW_TROMP_OSX_BARRIER_H
-#define ZCASH_POW_TROMP_OSX_BARRIER_H
+#ifndef CRYPTICCOIN_POW_TROMP_OSX_BARRIER_H
+#define CRYPTICCOIN_POW_TROMP_OSX_BARRIER_H
 
 #ifdef __APPLE__
 
@@ -72,4 +72,4 @@ int pthread_barrier_wait(pthread_barrier_t *barrier)
 #endif // PTHREAD_BARRIER_H_
 #endif // __APPLE__
 
-#endif // ZCASH_POW_TROMP_OSX_BARRIER_H
+#endif // CRYPTICCOIN_POW_TROMP_OSX_BARRIER_H

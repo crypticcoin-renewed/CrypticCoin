@@ -143,7 +143,7 @@ uint256 CMutableTransaction::GetHash() const
     CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
     ss << *this;
     uint256 hash;
-    if (!zcash_transaction_digests(
+    if (!crypticcoin_transaction_digests(
         reinterpret_cast<const unsigned char*>(ss.data()),
         ss.size(),
         hash.begin(),
@@ -159,7 +159,7 @@ uint256 CMutableTransaction::GetAuthDigest() const
     CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
     ss << *this;
     uint256 authDigest;
-    if (!zcash_transaction_digests(
+    if (!crypticcoin_transaction_digests(
         reinterpret_cast<const unsigned char*>(ss.data()),
         ss.size(),
         nullptr,
@@ -174,7 +174,7 @@ void CTransaction::UpdateHash() const
 {
     CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
     ss << *this;
-    if (!zcash_transaction_digests(
+    if (!crypticcoin_transaction_digests(
         reinterpret_cast<const unsigned char*>(ss.data()),
         ss.size(),
         const_cast<uint256*>(&wtxid.hash)->begin(),

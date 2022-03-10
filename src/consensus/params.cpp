@@ -1,4 +1,4 @@
-// Copyright (c) 2019 The Zcash developers
+// Copyright (c) 2019 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -177,7 +177,7 @@ namespace Consensus {
                 [&](const CScriptID& scriptId) {
                     addresses.push_back(GetScriptForDestination(scriptId));
                 },
-                [&](const libzcash::SaplingPaymentAddress& zaddr) {
+                [&](const libcrypticcoin::SaplingPaymentAddress& zaddr) {
                     addresses.push_back(zaddr);
                 },
                 [&](const auto& zaddr) {

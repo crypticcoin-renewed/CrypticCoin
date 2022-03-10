@@ -1,5 +1,5 @@
 // Copyright (c) 2014-2016 The Bitcoin Core developers
-// Copyright (c) 2016-2018 The Zcash developers
+// Copyright (c) 2016-2018 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -49,24 +49,24 @@ static uint32_t GetTypecode(const void* ua, size_t index)
 {
     return std::visit(
         TypecodeForReceiver(),
-        reinterpret_cast<const libzcash::UnifiedAddress*>(ua)->GetReceiversAsParsed()[index]);
+        reinterpret_cast<const libcrypticcoin::UnifiedAddress*>(ua)->GetReceiversAsParsed()[index]);
 }
 
 class DataLenForReceiver {
 public:
     DataLenForReceiver() {}
 
-    size_t operator()(const libzcash::SaplingPaymentAddress &zaddr) const { return 43; }
+    size_t operator()(const libcrypticcoin::SaplingPaymentAddress &zaddr) const { return 43; }
     size_t operator()(const CScriptID &p2sh) const { return 20; }
     size_t operator()(const CKeyID &p2pkh) const { return 20; }
-    size_t operator()(const libzcash::UnknownReceiver &unknown) const { return unknown.data.size(); }
+    size_t operator()(const libcrypticcoin::UnknownReceiver &unknown) const { return unknown.data.size(); }
 };
 
 static size_t GetReceiverLen(const void* ua, size_t index)
 {
     return std::visit(
         DataLenForReceiver(),
-        reinterpret_cast<const libzcash::UnifiedAddress*>(ua)->GetReceiversAsParsed()[index]);
+        reinterpret_cast<const libcrypticcoin::UnifiedAddress*>(ua)->GetReceiversAsParsed()[index]);
 }
 
 class CopyDataForReceiver {
@@ -76,7 +76,7 @@ class CopyDataForReceiver {
 public:
     CopyDataForReceiver(unsigned char* data, size_t length) : data(data), length(length) {}
 
-    void operator()(const libzcash::SaplingPaymentAddress &zaddr) const {
+    void operator()(const libcrypticcoin::SaplingPaymentAddress &zaddr) const {
         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
         ss << zaddr;
         assert(length == ss.size());
@@ -91,7 +91,7 @@ public:
         memcpy(data, p2pkh.begin(), p2pkh.size());
     }
 
-    void operator()(const libzcash::UnknownReceiver &unknown) const {
+    void operator()(const libcrypticcoin::UnknownReceiver &unknown) const {
         memcpy(data, unknown.data.data(), unknown.data.size());
     }
 };
@@ -103,7 +103,7 @@ static void GetReceiver(const void* ua, size_t index, unsigned char* data, size_
 {
     std::visit(
         CopyDataForReceiver(data, length),
-        reinterpret_cast<const libzcash::UnifiedAddress*>(ua)->GetReceiversAsParsed()[index]);
+        reinterpret_cast<const libcrypticcoin::UnifiedAddress*>(ua)->GetReceiversAsParsed()[index]);
 }
 
 class PaymentAddressEncoder
@@ -122,7 +122,7 @@ public:
     {
         return DestinationEncoder(keyConstants)(id);
     }
-    std::string operator()(const libzcash::SproutPaymentAddress& zaddr) const
+    std::string operator()(const libcrypticcoin::SproutPaymentAddress& zaddr) const
     {
         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
         ss << zaddr;
@@ -131,7 +131,7 @@ public:
         return EncodeBase58Check(data);
     }
 
-    std::string operator()(const libzcash::SaplingPaymentAddress& zaddr) const
+    std::string operator()(const libcrypticcoin::SaplingPaymentAddress& zaddr) const
     {
         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
         ss << zaddr;
@@ -144,7 +144,7 @@ public:
         return bech32::Encode(keyConstants.Bech32HRP(KeyConstants::SAPLING_PAYMENT_ADDRESS), data);
     }
 
-    std::string operator()(const libzcash::UnifiedAddress& uaddr) const
+    std::string operator()(const libcrypticcoin::UnifiedAddress& uaddr) const
     {
         // Serialize the UA to a C-string.
         auto encoded = zcash_address_serialize_unified(
@@ -170,7 +170,7 @@ private:
 public:
     ViewingKeyEncoder(const KeyConstants& keyConstants) : keyConstants(keyConstants) {}
 
-    std::string operator()(const libzcash::SproutViewingKey& vk) const
+    std::string operator()(const libcrypticcoin::SproutViewingKey& vk) const
     {
         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
         ss << vk;
@@ -181,7 +181,7 @@ public:
         return ret;
     }
 
-    std::string operator()(const libzcash::SaplingExtendedFullViewingKey& extfvk) const
+    std::string operator()(const libcrypticcoin::SaplingExtendedFullViewingKey& extfvk) const
     {
         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
         ss << extfvk;
@@ -197,7 +197,7 @@ public:
         return ret;
     }
 
-    std::string operator()(const libzcash::UnifiedFullViewingKey& ufvk) const {
+    std::string operator()(const libcrypticcoin::UnifiedFullViewingKey& ufvk) const {
         return ufvk.Encode(keyConstants);
     }
 };
@@ -210,7 +210,7 @@ private:
 public:
     SpendingKeyEncoder(const KeyConstants& keyConstants) : keyConstants(keyConstants) {}
 
-    std::string operator()(const libzcash::SproutSpendingKey& zkey) const
+    std::string operator()(const libcrypticcoin::SproutSpendingKey& zkey) const
     {
         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
         ss << zkey;
@@ -221,7 +221,7 @@ public:
         return ret;
     }
 
-    std::string operator()(const libzcash::SaplingExtendedSpendingKey& zkey) const
+    std::string operator()(const libcrypticcoin::SaplingExtendedSpendingKey& zkey) const
     {
         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
         ss << zkey;
@@ -357,7 +357,7 @@ bool KeyIO::IsValidDestinationString(const std::string& str) const
     return IsValidDestination(DecodeDestination(str));
 }
 
-std::string KeyIO::EncodePaymentAddress(const libzcash::PaymentAddress& zaddr) const
+std::string KeyIO::EncodePaymentAddress(const libcrypticcoin::PaymentAddress& zaddr) const
 {
     return std::visit(PaymentAddressEncoder(keyConstants), zaddr);
 }
@@ -433,16 +433,16 @@ std::optional<T1> DecodeAny(
     return std::nullopt;
 }
 
-std::optional<libzcash::PaymentAddress> KeyIO::DecodePaymentAddress(const std::string& str) const
+std::optional<libcrypticcoin::PaymentAddress> KeyIO::DecodePaymentAddress(const std::string& str) const
 {
     // Try parsing as a Unified Address.
-    auto ua = libzcash::UnifiedAddress::Parse(keyConstants, str);
+    auto ua = libcrypticcoin::UnifiedAddress::Parse(keyConstants, str);
     if (ua.has_value()) {
         return ua.value();
     }
 
     // Try parsing as a Sapling address
-    auto sapling = DecodeSapling<libzcash::SaplingPaymentAddress, libzcash::SaplingPaymentAddress>(
+    auto sapling = DecodeSapling<libcrypticcoin::SaplingPaymentAddress, libcrypticcoin::SaplingPaymentAddress>(
             keyConstants,
             str,
             std::make_pair(KeyConstants::SAPLING_PAYMENT_ADDRESS, ConvertedSaplingPaymentAddressSize));
@@ -451,10 +451,10 @@ std::optional<libzcash::PaymentAddress> KeyIO::DecodePaymentAddress(const std::s
     }
 
     // Try parsing as a Sprout address
-    auto sprout = DecodeSprout<libzcash::SproutPaymentAddress, libzcash::SproutPaymentAddress>(
+    auto sprout = DecodeSprout<libcrypticcoin::SproutPaymentAddress, libcrypticcoin::SproutPaymentAddress>(
             keyConstants,
             str,
-            std::make_pair(KeyConstants::ZCPAYMENT_ADDRESS, libzcash::SerializedSproutPaymentAddressSize));
+            std::make_pair(KeyConstants::ZCPAYMENT_ADDRESS, libcrypticcoin::SerializedSproutPaymentAddressSize));
     if (sprout.has_value()) {
         return sprout.value();
     }
@@ -462,15 +462,15 @@ std::optional<libzcash::PaymentAddress> KeyIO::DecodePaymentAddress(const std::s
     // Finally, try parsing as transparent
     return std::visit(match {
         [](const CKeyID& keyIdIn) {
-            std::optional<libzcash::PaymentAddress> keyId = keyIdIn;
+            std::optional<libcrypticcoin::PaymentAddress> keyId = keyIdIn;
             return keyId;
         },
         [](const CScriptID& scriptIdIn) {
-            std::optional<libzcash::PaymentAddress> scriptId = scriptIdIn;
+            std::optional<libcrypticcoin::PaymentAddress> scriptId = scriptIdIn;
             return scriptId;
         },
         [](const CNoDestination& d) {
-            std::optional<libzcash::PaymentAddress> result = std::nullopt;
+            std::optional<libcrypticcoin::PaymentAddress> result = std::nullopt;
             return result;
         }
     }, DecodeDestination(str));
@@ -481,44 +481,44 @@ bool KeyIO::IsValidPaymentAddressString(const std::string& str) const
     return DecodePaymentAddress(str).has_value();
 }
 
-std::string KeyIO::EncodeViewingKey(const libzcash::ViewingKey& vk) const
+std::string KeyIO::EncodeViewingKey(const libcrypticcoin::ViewingKey& vk) const
 {
     return std::visit(ViewingKeyEncoder(keyConstants), vk);
 }
 
-std::optional<libzcash::ViewingKey> KeyIO::DecodeViewingKey(const std::string& str) const
+std::optional<libcrypticcoin::ViewingKey> KeyIO::DecodeViewingKey(const std::string& str) const
 {
     // Try parsing as a Unified full viewing key
-    auto ufvk = libzcash::UnifiedFullViewingKey::Decode(str, keyConstants);
+    auto ufvk = libcrypticcoin::UnifiedFullViewingKey::Decode(str, keyConstants);
     if (ufvk.has_value()) {
         return ufvk.value();
     }
 
     // Fall back on trying Sprout or Sapling.
-    return DecodeAny<libzcash::ViewingKey,
-        libzcash::SproutViewingKey,
-        libzcash::SaplingExtendedFullViewingKey>(
+    return DecodeAny<libcrypticcoin::ViewingKey,
+        libcrypticcoin::SproutViewingKey,
+        libcrypticcoin::SaplingExtendedFullViewingKey>(
             keyConstants,
             str,
-            std::make_pair(KeyConstants::ZCVIEWING_KEY, libzcash::SerializedSproutViewingKeySize),
+            std::make_pair(KeyConstants::ZCVIEWING_KEY, libcrypticcoin::SerializedSproutViewingKeySize),
             std::make_pair(KeyConstants::SAPLING_EXTENDED_FVK, ConvertedSaplingExtendedFullViewingKeySize)
         );
 }
 
-std::string KeyIO::EncodeSpendingKey(const libzcash::SpendingKey& zkey) const
+std::string KeyIO::EncodeSpendingKey(const libcrypticcoin::SpendingKey& zkey) const
 {
     return std::visit(SpendingKeyEncoder(keyConstants), zkey);
 }
 
-std::optional<libzcash::SpendingKey> KeyIO::DecodeSpendingKey(const std::string& str) const
+std::optional<libcrypticcoin::SpendingKey> KeyIO::DecodeSpendingKey(const std::string& str) const
 {
 
-    return DecodeAny<libzcash::SpendingKey,
-        libzcash::SproutSpendingKey,
-        libzcash::SaplingExtendedSpendingKey>(
+    return DecodeAny<libcrypticcoin::SpendingKey,
+        libcrypticcoin::SproutSpendingKey,
+        libcrypticcoin::SaplingExtendedSpendingKey>(
             keyConstants,
             str,
-            std::make_pair(KeyConstants::ZCSPENDING_KEY, libzcash::SerializedSproutSpendingKeySize),
+            std::make_pair(KeyConstants::ZCSPENDING_KEY, libcrypticcoin::SerializedSproutSpendingKeySize),
             std::make_pair(KeyConstants::SAPLING_EXTENDED_SPEND_KEY, ConvertedSaplingExtendedSpendingKeySize)
         );
 }

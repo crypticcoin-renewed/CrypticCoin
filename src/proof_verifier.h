@@ -1,9 +1,9 @@
-// Copyright (c) 2016-2020 The Zcash developers
+// Copyright (c) 2016-2020 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_PROOF_VERIFIER_H
-#define ZCASH_PROOF_VERIFIER_H
+#ifndef CRYPTICCOIN_PROOF_VERIFIER_H
+#define CRYPTICCOIN_PROOF_VERIFIER_H
 
 #include <primitives/transaction.h>
 #include <uint256.h>
@@ -39,4 +39,4 @@ public:
     );
 };
 
-#endif // ZCASH_PROOF_VERIFIER_H
+#endif // CRYPTICCOIN_PROOF_VERIFIER_H

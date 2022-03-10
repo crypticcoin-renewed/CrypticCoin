@@ -13,13 +13,13 @@
 #include "undo.h"
 #include "primitives/transaction.h"
 #include "pubkey.h"
-#include "zcash/Note.hpp"
+#include "crypticcoin/Note.hpp"
 
 #include <vector>
 #include <map>
 
 #include <boost/test/unit_test.hpp>
-#include "zcash/IncrementalMerkleTree.hpp"
+#include "crypticcoin/IncrementalMerkleTree.hpp"
 
 namespace
 {
@@ -292,10 +292,10 @@ public:
 
 uint256 appendRandomSproutCommitment(SproutMerkleTree &tree)
 {
-    libzcash::SproutSpendingKey k = libzcash::SproutSpendingKey::random();
-    libzcash::SproutPaymentAddress addr = k.address();
+    libcrypticcoin::SproutSpendingKey k = libcrypticcoin::SproutSpendingKey::random();
+    libcrypticcoin::SproutPaymentAddress addr = k.address();
 
-    libzcash::SproutNote note(addr.a_pk, 0, uint256(), uint256());
+    libcrypticcoin::SproutNote note(addr.a_pk, 0, uint256(), uint256());
 
     auto cm = note.cm();
     tree.append(cm);

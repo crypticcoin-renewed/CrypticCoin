@@ -9,7 +9,7 @@
 #include "proof_verifier.h"
 #include "test/test_bitcoin.h"
 #include "utiltime.h"
-#include "zcash/Proof.hpp"
+#include "crypticcoin/Proof.hpp"
 
 #include <rust/orchard.h>
 

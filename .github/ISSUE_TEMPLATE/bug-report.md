@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report about a bug in zcashd.
+about: Create a report about a bug in crypticcoind.
 title: ''
 labels: 'bug'
 assignees: ''
@@ -8,10 +8,10 @@ assignees: ''
 ---
 
 <!--
-This issue tracker is only for technical issues related to zcashd.
+This issue tracker is only for technical issues related to crypticcoind.
 
-General Zcash questions and/or support requests and are best directed to the
-Zcash Forum: https://forum.zcashcommunity.com/
+General Crypticcoin questions and/or support requests and are best directed to the
+Crypticcoin Forum: https://forum.crypticcoincommunity.com/
 
 For reporting security vulnerabilities or for sensitive discussions with our
 security team, please email security@z.cash . You can use this GPG key to send
@@ -39,8 +39,8 @@ Tell us what should happen
 Tell us what happens instead including any noticeable error output (any messages
 displayed on-screen when e.g. a crash occurred)
 
-### The version of Zcash you were using:
-Run `zcashd --version` to find out
+### The version of Crypticcoin you were using:
+Run `crypticcoind --version` to find out
 
 ### Machine specs:
 - OS name + version:
@@ -54,12 +54,12 @@ Run `zcashd --version` to find out
 - Assembler version (as --version):
 
 ### Any extra information that might be useful in the debugging process.
-This includes the relevant contents of `~/.zcash/debug.log`. You can paste raw
+This includes the relevant contents of `~/.crypticcoin/debug.log`. You can paste raw
 text, attach the file directly in the issue or link to the text via a pastebin
 type site. Please also include any non-standard things you did during
 compilation (extra flags, dependency version changes etc.) if applicable.
 
-### Do you have a backup of `~/.zcash` directory and/or take a VM snapshot?
-- Backing up / making a copy of the `~/.zcash` directory might help make the
+### Do you have a backup of `~/.crypticcoin` directory and/or take a VM snapshot?
+- Backing up / making a copy of the `~/.crypticcoin` directory might help make the
   problem reproducible. Please redact appropriately.
 - Taking a VM snapshot is really helpful for interactively testing fixes

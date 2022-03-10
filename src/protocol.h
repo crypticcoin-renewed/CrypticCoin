@@ -69,7 +69,7 @@ enum {
     // network services but don't provide them.
     NODE_NETWORK = (1 << 0),
     // NODE_BLOOM means the node is capable and willing to handle bloom-filtered connections.
-    // Zcash nodes used to support this by default, without advertising this bit,
+    // Crypticcoin nodes used to support this by default, without advertising this bit,
     // but no longer do as of protocol version 170004 (= NO_BLOOM_VERSION)
     NODE_BLOOM = (1 << 2),
 
@@ -147,7 +147,7 @@ public:
         READWRITE(type);
 
         // The implicit P2P network protocol inherited from Bitcoin Core has
-        // zcashd nodes sort-of ignoring unknown CInv message types in inv
+        // crypticcoind nodes sort-of ignoring unknown CInv message types in inv
         // messages: they are added to the known transaction inventory, but
         // AlreadyHave returns true, so we do nothing with them. Meanwhile for
         // getdata messages, ProcessGetData ignores unknown message types

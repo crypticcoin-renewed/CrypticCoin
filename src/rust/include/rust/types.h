@@ -1,9 +1,9 @@
-// Copyright (c) 2020 The Zcash developers
+// Copyright (c) 2020 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_RUST_INCLUDE_RUST_TYPES_H
-#define ZCASH_RUST_INCLUDE_RUST_TYPES_H
+#ifndef CRYPTICCOIN_RUST_INCLUDE_RUST_TYPES_H
+#define CRYPTICCOIN_RUST_INCLUDE_RUST_TYPES_H
 
 #include <stdint.h>
 
@@ -13,4 +13,4 @@ typedef uint16_t codeunit;
 typedef uint8_t codeunit;
 #endif
 
-#endif // ZCASH_RUST_INCLUDE_RUST_TYPES_H
+#endif // CRYPTICCOIN_RUST_INCLUDE_RUST_TYPES_H

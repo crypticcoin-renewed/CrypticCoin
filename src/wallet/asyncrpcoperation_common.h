@@ -1,9 +1,9 @@
-// Copyright (c) 2019 The Zcash developers
+// Copyright (c) 2019 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_WALLET_ASYNCRPCOPERATION_COMMON_H
-#define ZCASH_WALLET_ASYNCRPCOPERATION_COMMON_H
+#ifndef CRYPTICCOIN_WALLET_ASYNCRPCOPERATION_COMMON_H
+#define CRYPTICCOIN_WALLET_ASYNCRPCOPERATION_COMMON_H
 
 #include "core_io.h"
 #include "primitives/transaction.h"
@@ -61,4 +61,4 @@ UniValue SendTransaction(
  */
 std::pair<CTransaction, UniValue> SignSendRawTransaction(UniValue obj, std::optional<std::reference_wrapper<CReserveKey>> reservekey, bool testmode);
 
-#endif // ZCASH_WALLET_ASYNCRPCOPERATION_COMMON_H
+#endif // CRYPTICCOIN_WALLET_ASYNCRPCOPERATION_COMMON_H

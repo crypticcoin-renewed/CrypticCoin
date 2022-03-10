@@ -1,14 +1,14 @@
-# Copyright (c) 2016-2020 The Zcash developers
+# Copyright (c) 2016-2020 The Crypticcoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-TESTS += zcash-gtest
-noinst_PROGRAMS += zcash-gtest
+TESTS += crypticcoin-gtest
+noinst_PROGRAMS += crypticcoin-gtest
 
 # tool for generating our public parameters.
 # test_checktransaction.cpp MUST be before
 # any test that calls SelectParams().
-zcash_gtest_SOURCES = \
+crypticcoin_gtest_SOURCES = \
 	gtest/main.cpp \
 	gtest/utils.cpp \
 	gtest/utils.h \
@@ -20,11 +20,11 @@ zcash_gtest_SOURCES = \
 # These tests are order-dependent, because they
 # depend on global state (see #1539)
 if ENABLE_WALLET
-zcash_gtest_SOURCES += \
+crypticcoin_gtest_SOURCES += \
 	wallet/gtest/test_wallet_zkeys.cpp \
 	wallet/gtest/test_orchard_zkeys.cpp
 endif
-zcash_gtest_SOURCES += \
+crypticcoin_gtest_SOURCES += \
 	test/data/merkle_roots_orchard.h \
 	gtest/test_tautology.cpp \
 	gtest/test_allocator.cpp \
@@ -38,7 +38,7 @@ zcash_gtest_SOURCES += \
 	gtest/test_joinsplit.cpp \
 	gtest/test_keys.cpp \
 	gtest/test_keystore.cpp \
-	gtest/test_libzcash_utils.cpp \
+	gtest/test_libcrypticcoin_utils.cpp \
 	gtest/test_noteencryption.cpp \
 	gtest/test_mempool.cpp \
 	gtest/test_mempoollimit.cpp \
@@ -58,15 +58,15 @@ zcash_gtest_SOURCES += \
 	gtest/test_validation.cpp \
 	gtest/test_zip32.cpp
 if ENABLE_WALLET
-zcash_gtest_SOURCES += \
+crypticcoin_gtest_SOURCES += \
 	wallet/gtest/test_paymentdisclosure.cpp \
 	wallet/gtest/test_wallet.cpp
 endif
 
-zcash_gtest_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-zcash_gtest_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+crypticcoin_gtest_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+crypticcoin_gtest_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 
-zcash_gtest_LDADD = \
+crypticcoin_gtest_LDADD = \
   -lgtest -lgmock \
   $(LIBBITCOIN_SERVER) \
   $(LIBBITCOIN_CLI) \
@@ -82,22 +82,22 @@ zcash_gtest_LDADD = \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-zcash_gtest_LDADD += \
-  $(LIBZCASH_SCRIPT) \
+crypticcoin_gtest_LDADD += \
+  $(LIBCRYPTICCOIN_SCRIPT) \
   $(BOOST_LIBS) \
   $(BOOST_UNIT_TEST_FRAMEWORK_LIB) \
   $(BDB_LIBS) \
   $(EVENT_PTHREADS_LIBS) \
   $(EVENT_LIBS) \
   $(ZMQ_LIBS) \
-  $(LIBZCASH) \
+  $(LIBCRYPTICCOIN) \
   $(LIBRUSTZCASH) \
-  $(LIBZCASH_LIBS)
+  $(LIBCRYPTICCOIN_LIBS)
 
-zcash_gtest_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) -static
+crypticcoin_gtest_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) -static
 
-zcash-gtest_check: zcash-gtest FORCE
-	./zcash-gtest
+crypticcoin-gtest_check: crypticcoin-gtest FORCE
+	./crypticcoin-gtest
 
-zcash-gtest-expected-failures: zcash-gtest FORCE
-	./zcash-gtest --gtest_filter=*DISABLED_* --gtest_also_run_disabled_tests
+crypticcoin-gtest-expected-failures: crypticcoin-gtest FORCE
+	./crypticcoin-gtest --gtest_filter=*DISABLED_* --gtest_also_run_disabled_tests

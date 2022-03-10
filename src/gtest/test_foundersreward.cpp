@@ -7,7 +7,7 @@
 #include "fs.h"
 #include "key_io.h"
 #include "utilstrencodings.h"
-#include "zcash/Address.hpp"
+#include "crypticcoin/Address.hpp"
 #include "wallet/wallet.h"
 #include "amount.h"
 #include <memory>
@@ -18,12 +18,12 @@
 #include "utiltest.h"
 
 // To run tests:
-// ./zcash-gtest --gtest_filter="FoundersRewardTest.*"
+// ./crypticcoin-gtest --gtest_filter="FoundersRewardTest.*"
 
 //
 // Enable this test to generate and print 48 testnet 2-of-3 multisig addresses.
 // The output can be copied into chainparams.cpp.
-// The temporary wallet file can be renamed as wallet.dat and used for testing with zcashd.
+// The temporary wallet file can be renamed as wallet.dat and used for testing with crypticcoind.
 //
 #if 0
 TEST(FoundersRewardTest, create_testnet_2of3multisig) {
@@ -182,7 +182,7 @@ TEST(FoundersRewardTest, Regtest) {
 
 
 // Test that 10% founders reward is fully rewarded after the first halving and slow start shift.
-// On Mainnet, this would be 2,100,000 ZEC after 850,000 blocks (840,000 + 10,000).
+// On Mainnet, this would be 2,100,000 CRYP after 850,000 blocks (840,000 + 10,000).
 TEST(FoundersRewardTest, SlowStartSubsidy) {
     SelectParams(CBaseChainParams::MAIN);
     CChainParams params = Params();
@@ -238,7 +238,7 @@ TEST(FundingStreamsRewardTest, Zip207Distribution) {
     int minHeight = GetLastFoundersRewardHeight(consensus) + 1;
 
     KeyIO keyIO(Params());
-    auto sk = libzcash::SaplingSpendingKey(uint256());
+    auto sk = libcrypticcoin::SaplingSpendingKey(uint256());
     for (int idx = Consensus::FIRST_FUNDING_STREAM; idx < Consensus::MAX_FUNDING_STREAMS; idx++) {
         // we can just use the same addresses for all streams, all we're trying to do here
         // is validate that the streams add up to the 20% of block reward.
@@ -280,7 +280,7 @@ TEST(FundingStreamsRewardTest, ParseFundingStream) {
     int minHeight = GetLastFoundersRewardHeight(consensus) + 1;
 
     KeyIO keyIO(Params());
-    auto sk = libzcash::SaplingSpendingKey(uint256());
+    auto sk = libcrypticcoin::SaplingSpendingKey(uint256());
     auto shieldedAddr = keyIO.EncodePaymentAddress(sk.default_address());
     ASSERT_THROW(
         Consensus::FundingStream::ParseFundingStream(

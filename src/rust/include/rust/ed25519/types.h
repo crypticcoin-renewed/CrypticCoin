@@ -1,9 +1,9 @@
-// Copyright (c) 2020 The Zcash developers
+// Copyright (c) 2020 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_RUST_INCLUDE_RUST_ED25519_TYPES_H
-#define ZCASH_RUST_INCLUDE_RUST_ED25519_TYPES_H
+#ifndef CRYPTICCOIN_RUST_INCLUDE_RUST_ED25519_TYPES_H
+#define CRYPTICCOIN_RUST_INCLUDE_RUST_ED25519_TYPES_H
 
 #ifndef __cplusplus
 #include <assert.h>
@@ -53,4 +53,4 @@ static_assert(
     alignof(Ed25519Signature) == 1,
     "Ed25519Signature struct alignment is not 1");
 
-#endif // ZCASH_RUST_INCLUDE_RUST_ED25519_TYPES_H
+#endif // CRYPTICCOIN_RUST_INCLUDE_RUST_ED25519_TYPES_H

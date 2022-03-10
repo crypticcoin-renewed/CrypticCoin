@@ -10,7 +10,7 @@ setting the config option `-nooptimize-getheaders`.
 
 It turns out that these redundant requests were masking an unrelated bug in the
 chain-rewinding logic that is used when the node detects a change to the
-consensus rules (for example, if a user forgets to upgrade their `zcashd` node
+consensus rules (for example, if a user forgets to upgrade their `crypticcoind` node
 before a network upgrade activates, and temporarily follows an un-upgraded chain
 before restarting with the latest version).
 

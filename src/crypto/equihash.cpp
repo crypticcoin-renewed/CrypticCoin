@@ -1,5 +1,5 @@
 // Copyright (c) 2016 Jack Grigg
-// Copyright (c) 2016 The Zcash developers
+// Copyright (c) 2016 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -160,7 +160,7 @@ void Equihash<N,K>::InitialiseState(eh_HashState& base_state)
     uint32_t le_N = htole32(N);
     uint32_t le_K = htole32(K);
     unsigned char personalization[BLAKE2bPersonalBytes] = {};
-    memcpy(personalization, "ZcashPoW", 8);
+    memcpy(personalization, "CrypticcoinPoW", 8);
     memcpy(personalization+8,  &le_N, 4);
     memcpy(personalization+12, &le_K, 4);
     base_state = eh_HashState((512/N)*N/8, personalization);

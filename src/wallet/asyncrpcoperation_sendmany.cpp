@@ -1,4 +1,4 @@
-// Copyright (c) 2016 The Zcash developers
+// Copyright (c) 2016 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -27,7 +27,7 @@
 #include "walletdb.h"
 #include "script/interpreter.h"
 #include "utiltime.h"
-#include "zcash/IncrementalMerkleTree.hpp"
+#include "crypticcoin/IncrementalMerkleTree.hpp"
 #include "miner.h"
 #include "wallet/paymentdisclosuredb.h"
 
@@ -41,7 +41,7 @@
 
 #include <rust/ed25519.h>
 
-using namespace libzcash;
+using namespace libcrypticcoin;
 
 AsyncRPCOperation_sendmany::AsyncRPCOperation_sendmany(
         TransactionBuilder builder,
@@ -60,11 +60,11 @@ AsyncRPCOperation_sendmany::AsyncRPCOperation_sendmany(
     assert(!recipients_.empty());
     assert(ztxoSelector.RequireSpendingKeys());
 
-    sendFromAccount_ = pwalletMain->FindAccountForSelector(ztxoSelector_).value_or(ZCASH_LEGACY_ACCOUNT);
+    sendFromAccount_ = pwalletMain->FindAccountForSelector(ztxoSelector_).value_or(CRYPTICCOIN_LEGACY_ACCOUNT);
 
     // we always allow shielded change when not sending from the legacy account
-    if (sendFromAccount_ != ZCASH_LEGACY_ACCOUNT) {
-        allowedChangeTypes_.insert(libzcash::ChangeType::Sapling);
+    if (sendFromAccount_ != CRYPTICCOIN_LEGACY_ACCOUNT) {
+        allowedChangeTypes_.insert(libcrypticcoin::ChangeType::Sapling);
     }
 
     // calculate the target totals
@@ -73,14 +73,14 @@ AsyncRPCOperation_sendmany::AsyncRPCOperation_sendmany(
             [&](const CKeyID& addr) {
                 transparentRecipients_ += 1;
                 txOutputAmounts_.t_outputs_total += recipient.amount;
-                allowedChangeTypes_.insert(libzcash::ChangeType::Transparent);
+                allowedChangeTypes_.insert(libcrypticcoin::ChangeType::Transparent);
             },
             [&](const CScriptID& addr) {
                 transparentRecipients_ += 1;
                 txOutputAmounts_.t_outputs_total += recipient.amount;
-                allowedChangeTypes_.insert(libzcash::ChangeType::Transparent);
+                allowedChangeTypes_.insert(libcrypticcoin::ChangeType::Transparent);
             },
-            [&](const libzcash::SaplingPaymentAddress& addr) {
+            [&](const libcrypticcoin::SaplingPaymentAddress& addr) {
                 txOutputAmounts_.sapling_outputs_total += recipient.amount;
                 if (ztxoSelector_.SelectsSprout() && !allowRevealedAmounts_) {
                     throw JSONRPCError(
@@ -273,32 +273,32 @@ uint256 AsyncRPCOperation_sendmany::main_impl() {
     auto ovks = this->SelectOVKs(spendable);
     std::visit(match {
         [&](const CKeyID& keyId) {
-            allowedChangeTypes_.insert(libzcash::ChangeType::Transparent);
+            allowedChangeTypes_.insert(libcrypticcoin::ChangeType::Transparent);
             auto changeAddr = pwalletMain->GenerateChangeAddressForAccount(
                     sendFromAccount_, allowedChangeTypes_);
             assert(changeAddr.has_value());
             builder_.SendChangeTo(changeAddr.value(), ovks.first);
         },
         [&](const CScriptID& scriptId) {
-            allowedChangeTypes_.insert(libzcash::ChangeType::Transparent);
+            allowedChangeTypes_.insert(libcrypticcoin::ChangeType::Transparent);
             auto changeAddr = pwalletMain->GenerateChangeAddressForAccount(
                     sendFromAccount_, allowedChangeTypes_);
             assert(changeAddr.has_value());
             builder_.SendChangeTo(changeAddr.value(), ovks.first);
         },
-        [&](const libzcash::SproutPaymentAddress& addr) {
+        [&](const libcrypticcoin::SproutPaymentAddress& addr) {
             // for Sprout, we return change to the originating address.
             builder_.SendChangeToSprout(addr);
         },
-        [&](const libzcash::SproutViewingKey& vk) {
+        [&](const libcrypticcoin::SproutViewingKey& vk) {
             // for Sprout, we return change to the originating address.
             builder_.SendChangeToSprout(vk.address());
         },
-        [&](const libzcash::SaplingPaymentAddress& addr) {
+        [&](const libcrypticcoin::SaplingPaymentAddress& addr) {
             // for Sapling, if using a legacy address, return change to the
             // originating address; otherwise return it to the Sapling internal
             // address corresponding to the UFVK.
-            if (sendFromAccount_ == ZCASH_LEGACY_ACCOUNT) {
+            if (sendFromAccount_ == CRYPTICCOIN_LEGACY_ACCOUNT) {
                 builder_.SendChangeTo(addr, ovks.first);
             } else {
                 auto changeAddr = pwalletMain->GenerateChangeAddressForAccount(
@@ -307,11 +307,11 @@ uint256 AsyncRPCOperation_sendmany::main_impl() {
                 builder_.SendChangeTo(changeAddr.value(), ovks.first);
             }
         },
-        [&](const libzcash::SaplingExtendedFullViewingKey& fvk) {
+        [&](const libcrypticcoin::SaplingExtendedFullViewingKey& fvk) {
             // for Sapling, if using a legacy address, return change to the
             // originating address; otherwise return it to the Sapling internal
             // address corresponding to the UFVK.
-            if (sendFromAccount_ == ZCASH_LEGACY_ACCOUNT) {
+            if (sendFromAccount_ == CRYPTICCOIN_LEGACY_ACCOUNT) {
                 builder_.SendChangeTo(fvk.DefaultAddress(), ovks.first);
             } else {
                 auto changeAddr = pwalletMain->GenerateChangeAddressForAccount(
@@ -320,8 +320,8 @@ uint256 AsyncRPCOperation_sendmany::main_impl() {
                 builder_.SendChangeTo(changeAddr.value(), ovks.first);
             }
         },
-        [&](const libzcash::UnifiedFullViewingKey& fvk) {
-            auto zufvk = ZcashdUnifiedFullViewingKey::FromUnifiedFullViewingKey(Params(), fvk);
+        [&](const libcrypticcoin::UnifiedFullViewingKey& fvk) {
+            auto zufvk = CrypticcoindUnifiedFullViewingKey::FromUnifiedFullViewingKey(Params(), fvk);
             auto changeAddr = zufvk.GetChangeAddress();
             if (!changeAddr.has_value()) {
                 throw JSONRPCError(
@@ -335,10 +335,10 @@ uint256 AsyncRPCOperation_sendmany::main_impl() {
                 switch (rtype) {
                     case ReceiverType::P2PKH:
                     case ReceiverType::P2SH:
-                        allowedChangeTypes_.insert(libzcash::ChangeType::Transparent);
+                        allowedChangeTypes_.insert(libcrypticcoin::ChangeType::Transparent);
                         break;
                     case ReceiverType::Sapling:
-                        allowedChangeTypes_.insert(libzcash::ChangeType::Sapling);
+                        allowedChangeTypes_.insert(libcrypticcoin::ChangeType::Sapling);
                         break;
                 }
             }
@@ -365,7 +365,7 @@ uint256 AsyncRPCOperation_sendmany::main_impl() {
         saplingOutPoints.push_back(t.op);
         saplingNotes.push_back(t.note);
 
-        libzcash::SaplingExtendedSpendingKey saplingKey;
+        libcrypticcoin::SaplingExtendedSpendingKey saplingKey;
         assert(pwalletMain->GetSaplingExtendedSpendingKey(t.address, saplingKey));
         saplingKeys.push_back(saplingKey);
 
@@ -406,7 +406,7 @@ uint256 AsyncRPCOperation_sendmany::main_impl() {
             [&](const CScriptID& scriptId) {
                 builder_.AddTransparentOutput(scriptId, r.amount);
             },
-            [&](const libzcash::SaplingPaymentAddress& addr) {
+            [&](const libcrypticcoin::SaplingPaymentAddress& addr) {
                 auto value = r.amount;
                 auto memo = get_memo_from_hex_string(r.memo.has_value() ? r.memo.value() : "");
 
@@ -451,7 +451,7 @@ uint256 AsyncRPCOperation_sendmany::main_impl() {
     // Add Sprout spends
     for (int i = 0; i < spendable.sproutNoteEntries.size(); i++) {
         const auto& t = spendable.sproutNoteEntries[i];
-        libzcash::SproutSpendingKey sk;
+        libcrypticcoin::SproutSpendingKey sk;
         assert(pwalletMain->GetSproutSpendingKey(t.address, sk));
 
         builder_.AddSproutInput(sk, t.note, vSproutWitnesses[i].value());
@@ -478,8 +478,8 @@ std::pair<uint256, uint256> AsyncRPCOperation_sendmany::SelectOVKs(const Spendab
     if (!spendable.saplingNoteEntries.empty()) {
         std::optional<SaplingDiversifiableFullViewingKey> dfvk;
         std::visit(match {
-            [&](const libzcash::SaplingPaymentAddress& addr) {
-                libzcash::SaplingExtendedSpendingKey extsk;
+            [&](const libcrypticcoin::SaplingPaymentAddress& addr) {
+                libcrypticcoin::SaplingExtendedSpendingKey extsk;
                 assert(pwalletMain->GetSaplingExtendedSpendingKey(addr, extsk));
                 dfvk = extsk.ToXFVK();
             },
@@ -506,7 +506,7 @@ std::pair<uint256, uint256> AsyncRPCOperation_sendmany::SelectOVKs(const Spendab
                 tfvk = pwalletMain->GetLegacyAccountKey().ToAccountPubKey();
             },
             [&](const AccountZTXOPattern& acct) {
-                if (acct.GetAccountId() == ZCASH_LEGACY_ACCOUNT) {
+                if (acct.GetAccountId() == CRYPTICCOIN_LEGACY_ACCOUNT) {
                     tfvk = pwalletMain->GetLegacyAccountKey().ToAccountPubKey();
                 } else {
                     auto ufvk = pwalletMain->GetUnifiedFullViewingKeyByAccount(acct.GetAccountId()).value();

@@ -1,9 +1,9 @@
-// Copyright (c) 2019 The Zcash developers
+// Copyright (c) 2019 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_MEMPOOL_LIMIT_H
-#define ZCASH_MEMPOOL_LIMIT_H
+#ifndef CRYPTICCOIN_MEMPOOL_LIMIT_H
+#define CRYPTICCOIN_MEMPOOL_LIMIT_H
 
 #include <deque>
 #include <map>
@@ -128,4 +128,4 @@ public:
 };
 
 
-#endif // ZCASH_MEMPOOL_LIMIT_H
+#endif // CRYPTICCOIN_MEMPOOL_LIMIT_H

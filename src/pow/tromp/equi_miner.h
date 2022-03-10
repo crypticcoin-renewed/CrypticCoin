@@ -1,5 +1,5 @@
 // Equihash solver
-// Copyright (c) 2016 John Tromp, The Zcash developers
+// Copyright (c) 2016 John Tromp, The Crypticcoin developers
 
 // Fix N, K, such that n = N/(k+1) is integer
 // Fix M = 2^{n+1} hashes each of length N bits,
@@ -18,8 +18,8 @@
 // the i*n 0s, each bucket having 4 * 2^RESTBITS slots,
 // twice the number of subtrees expected to land there.
 
-#ifndef ZCASH_POW_TROMP_EQUI_MINER_H
-#define ZCASH_POW_TROMP_EQUI_MINER_H
+#ifndef CRYPTICCOIN_POW_TROMP_EQUI_MINER_H
+#define CRYPTICCOIN_POW_TROMP_EQUI_MINER_H
 
 #include "pow/tromp/equi.h"
 #include <stdio.h>
@@ -648,4 +648,4 @@ void *worker(void *vp) {
   return 0;
 }
 
-#endif // ZCASH_POW_TROMP_EQUI_MINER_H
+#endif // CRYPTICCOIN_POW_TROMP_EQUI_MINER_H

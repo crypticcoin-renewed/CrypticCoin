@@ -1,5 +1,5 @@
-#ifndef ZCASH_GTEST_JSON_TEST_VECTORS_H
-#define ZCASH_GTEST_JSON_TEST_VECTORS_H
+#ifndef CRYPTICCOIN_GTEST_JSON_TEST_VECTORS_H
+#define CRYPTICCOIN_GTEST_JSON_TEST_VECTORS_H
 
 #include <gtest/gtest.h>
 
@@ -53,4 +53,4 @@ void expect_test_vector(T& v, const U& expected)
     #endif
 }
 
-#endif // ZCASH_GTEST_JSON_TEST_VECTORS_H
+#endif // CRYPTICCOIN_GTEST_JSON_TEST_VECTORS_H

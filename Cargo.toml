@@ -1,6 +1,6 @@
 [package]
 name = "librustzcash"
-description = "Rust FFI used by the zcashd binary. Not an official API."
+description = "Rust FFI used by the crypticcoind binary. Not an official API."
 version = "0.2.0"
 authors = [
     "Sean Bowe <sean@electriccoin.co>",
@@ -13,8 +13,8 @@ authors = [
     "Larry Ruane <larry@electriccoin.co>",
     "Steven Smith <steven@electriccoin.co>"
 ]
-homepage = "https://github.com/zcash/zcash"
-repository = "https://github.com/zcash/zcash"
+homepage = "https://github.com/crypticcoin/crypticcoin"
+repository = "https://github.com/crypticcoin/crypticcoin"
 readme = "README.md"
 license = "MIT OR Apache-2.0"
 edition = "2018"

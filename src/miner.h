@@ -24,7 +24,7 @@ static const int DEFAULT_GENERATE_THREADS = 1;
 static const bool DEFAULT_PRINTPRIORITY = false;
 
 typedef std::variant<
-    libzcash::SaplingPaymentAddress,
+    libcrypticcoin::SaplingPaymentAddress,
     boost::shared_ptr<CReserveScript>> MinerAddress;
 
 class ExtractMinerAddress
@@ -34,9 +34,9 @@ public:
 
     std::optional<MinerAddress> operator()(const CKeyID &keyID) const;
     std::optional<MinerAddress> operator()(const CScriptID &addr) const;
-    std::optional<MinerAddress> operator()(const libzcash::SproutPaymentAddress &addr) const;
-    std::optional<MinerAddress> operator()(const libzcash::SaplingPaymentAddress &addr) const;
-    std::optional<MinerAddress> operator()(const libzcash::UnifiedAddress &addr) const;
+    std::optional<MinerAddress> operator()(const libcrypticcoin::SproutPaymentAddress &addr) const;
+    std::optional<MinerAddress> operator()(const libcrypticcoin::SaplingPaymentAddress &addr) const;
+    std::optional<MinerAddress> operator()(const libcrypticcoin::UnifiedAddress &addr) const;
 };
 
 class KeepMinerAddress
@@ -44,7 +44,7 @@ class KeepMinerAddress
 public:
     KeepMinerAddress() {}
 
-    void operator()(const libzcash::SaplingPaymentAddress &pa) const {}
+    void operator()(const libcrypticcoin::SaplingPaymentAddress &pa) const {}
     void operator()(const boost::shared_ptr<CReserveScript> &coinbaseScript) const {
         coinbaseScript->KeepScript();
     }
@@ -57,7 +57,7 @@ class IsValidMinerAddress
 public:
     IsValidMinerAddress() {}
 
-    bool operator()(const libzcash::SaplingPaymentAddress &pa) const {
+    bool operator()(const libcrypticcoin::SaplingPaymentAddress &pa) const {
         return true;
     }
     bool operator()(const boost::shared_ptr<CReserveScript> &coinbaseScript) const {

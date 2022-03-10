@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 The Zcash developers
+# Copyright (c) 2021 The Crypticcoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -69,7 +69,7 @@ class Zip239Test(BitcoinTestFramework):
         # Make sure we are synced before sending the mempool message
         testnode.sync_with_ping()
 
-        # Send p2p message "mempool" to receive contents from zcashd node in "inv" message
+        # Send p2p message "mempool" to receive contents from crypticcoind node in "inv" message
         with mininode_lock:
             testnode.last_inv = None
             testnode.send_message(msg_mempool())

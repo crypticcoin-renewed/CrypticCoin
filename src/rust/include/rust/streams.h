@@ -1,9 +1,9 @@
-// Copyright (c) 2020 The Zcash developers
+// Copyright (c) 2020 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_RUST_INCLUDE_RUST_STREAMS_H
-#define ZCASH_RUST_INCLUDE_RUST_STREAMS_H
+#ifndef CRYPTICCOIN_RUST_INCLUDE_RUST_STREAMS_H
+#define CRYPTICCOIN_RUST_INCLUDE_RUST_STREAMS_H
 
 #include <stddef.h>
 
@@ -20,4 +20,4 @@ typedef long (*write_callback_t)(void* context, const unsigned char* pch, size_t
 }
 #endif
 
-#endif // ZCASH_RUST_INCLUDE_RUST_STREAMS_H
+#endif // CRYPTICCOIN_RUST_INCLUDE_RUST_STREAMS_H

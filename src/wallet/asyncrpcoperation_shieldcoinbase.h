@@ -1,16 +1,16 @@
-// Copyright (c) 2017 The Zcash developers
+// Copyright (c) 2017 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_WALLET_ASYNCRPCOPERATION_SHIELDCOINBASE_H
-#define ZCASH_WALLET_ASYNCRPCOPERATION_SHIELDCOINBASE_H
+#ifndef CRYPTICCOIN_WALLET_ASYNCRPCOPERATION_SHIELDCOINBASE_H
+#define CRYPTICCOIN_WALLET_ASYNCRPCOPERATION_SHIELDCOINBASE_H
 
 #include "asyncrpcoperation.h"
 #include "amount.h"
 #include "primitives/transaction.h"
 #include "transaction_builder.h"
-#include "zcash/JoinSplit.hpp"
-#include "zcash/Address.hpp"
+#include "crypticcoin/JoinSplit.hpp"
+#include "crypticcoin/Address.hpp"
 #include "wallet.h"
 #include "wallet/paymentdisclosure.h"
 
@@ -21,7 +21,7 @@
 
 #include <rust/ed25519/types.h>
 
-using namespace libzcash;
+using namespace libcrypticcoin;
 
 struct ShieldCoinbaseUTXO {
     uint256 txid;
@@ -100,16 +100,16 @@ private:
     AsyncRPCOperation_shieldcoinbase *m_op;
     CAmount sendAmount;
 
-    static void shieldToAddress(const libzcash::RecipientAddress& recipient, AsyncRPCOperation_shieldcoinbase *m_op);
+    static void shieldToAddress(const libcrypticcoin::RecipientAddress& recipient, AsyncRPCOperation_shieldcoinbase *m_op);
 public:
     ShieldToAddress(AsyncRPCOperation_shieldcoinbase *op, CAmount sendAmount) :
         m_op(op), sendAmount(sendAmount) {}
 
     bool operator()(const CKeyID &zaddr) const;
     bool operator()(const CScriptID &zaddr) const;
-    bool operator()(const libzcash::SproutPaymentAddress &zaddr) const;
-    bool operator()(const libzcash::SaplingPaymentAddress &zaddr) const;
-    bool operator()(const libzcash::UnifiedAddress &uaddr) const;
+    bool operator()(const libcrypticcoin::SproutPaymentAddress &zaddr) const;
+    bool operator()(const libcrypticcoin::SaplingPaymentAddress &zaddr) const;
+    bool operator()(const libcrypticcoin::UnifiedAddress &uaddr) const;
 };
 
 
@@ -144,5 +144,5 @@ public:
 };
 
 
-#endif // ZCASH_WALLET_ASYNCRPCOPERATION_SHIELDCOINBASE_H
+#endif // CRYPTICCOIN_WALLET_ASYNCRPCOPERATION_SHIELDCOINBASE_H
 

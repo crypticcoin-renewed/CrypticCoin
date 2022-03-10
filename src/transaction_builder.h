@@ -1,9 +1,9 @@
-// Copyright (c) 2018 The Zcash developers
+// Copyright (c) 2018 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_TRANSACTION_BUILDER_H
-#define ZCASH_TRANSACTION_BUILDER_H
+#ifndef CRYPTICCOIN_TRANSACTION_BUILDER_H
+#define CRYPTICCOIN_TRANSACTION_BUILDER_H
 
 #include "coins.h"
 #include "consensus/params.h"
@@ -13,38 +13,38 @@
 #include "script/script.h"
 #include "script/standard.h"
 #include "uint256.h"
-#include "zcash/Address.hpp"
-#include "zcash/IncrementalMerkleTree.hpp"
-#include "zcash/JoinSplit.hpp"
-#include "zcash/Note.hpp"
-#include "zcash/NoteEncryption.hpp"
+#include "crypticcoin/Address.hpp"
+#include "crypticcoin/IncrementalMerkleTree.hpp"
+#include "crypticcoin/JoinSplit.hpp"
+#include "crypticcoin/Note.hpp"
+#include "crypticcoin/NoteEncryption.hpp"
 
 #include <optional>
 
 #define NO_MEMO {{0xF6}}
 
 struct SpendDescriptionInfo {
-    libzcash::SaplingExpandedSpendingKey expsk;
-    libzcash::SaplingNote note;
+    libcrypticcoin::SaplingExpandedSpendingKey expsk;
+    libcrypticcoin::SaplingNote note;
     uint256 alpha;
     uint256 anchor;
     SaplingWitness witness;
 
     SpendDescriptionInfo(
-        libzcash::SaplingExpandedSpendingKey expsk,
-        libzcash::SaplingNote note,
+        libcrypticcoin::SaplingExpandedSpendingKey expsk,
+        libcrypticcoin::SaplingNote note,
         uint256 anchor,
         SaplingWitness witness);
 };
 
 struct OutputDescriptionInfo {
     uint256 ovk;
-    libzcash::SaplingNote note;
+    libcrypticcoin::SaplingNote note;
     std::array<unsigned char, ZC_MEMO_SIZE> memo;
 
     OutputDescriptionInfo(
         uint256 ovk,
-        libzcash::SaplingNote note,
+        libcrypticcoin::SaplingNote note,
         std::array<unsigned char, ZC_MEMO_SIZE> memo) : ovk(ovk), note(note), memo(memo) {}
 
     std::optional<OutputDescription> Build(void* ctx);
@@ -54,16 +54,16 @@ struct JSDescriptionInfo {
     Ed25519VerificationKey joinSplitPubKey;
     uint256 anchor;
     // We store references to these so they are correctly randomised for the caller.
-    std::array<libzcash::JSInput, ZC_NUM_JS_INPUTS>& inputs;
-    std::array<libzcash::JSOutput, ZC_NUM_JS_OUTPUTS>& outputs;
+    std::array<libcrypticcoin::JSInput, ZC_NUM_JS_INPUTS>& inputs;
+    std::array<libcrypticcoin::JSOutput, ZC_NUM_JS_OUTPUTS>& outputs;
     CAmount vpub_old;
     CAmount vpub_new;
 
     JSDescriptionInfo(
         Ed25519VerificationKey joinSplitPubKey,
         uint256 anchor,
-        std::array<libzcash::JSInput, ZC_NUM_JS_INPUTS>& inputs,
-        std::array<libzcash::JSOutput, ZC_NUM_JS_OUTPUTS>& outputs,
+        std::array<libcrypticcoin::JSInput, ZC_NUM_JS_INPUTS>& inputs,
+        std::array<libcrypticcoin::JSOutput, ZC_NUM_JS_OUTPUTS>& outputs,
         CAmount vpub_old,
         CAmount vpub_new) : joinSplitPubKey(joinSplitPubKey), anchor(anchor), inputs(inputs), outputs(outputs), vpub_old(vpub_old), vpub_new(vpub_new) {}
 
@@ -118,12 +118,12 @@ private:
 
     std::vector<SpendDescriptionInfo> spends;
     std::vector<OutputDescriptionInfo> outputs;
-    std::vector<libzcash::JSInput> jsInputs;
-    std::vector<libzcash::JSOutput> jsOutputs;
+    std::vector<libcrypticcoin::JSInput> jsInputs;
+    std::vector<libcrypticcoin::JSOutput> jsOutputs;
     std::vector<TransparentInputInfo> tIns;
 
-    std::optional<std::pair<uint256, libzcash::SaplingPaymentAddress>> saplingChangeAddr;
-    std::optional<libzcash::SproutPaymentAddress> sproutChangeAddr;
+    std::optional<std::pair<uint256, libcrypticcoin::SaplingPaymentAddress>> saplingChangeAddr;
+    std::optional<libcrypticcoin::SproutPaymentAddress> sproutChangeAddr;
     std::optional<CTxDestination> tChangeAddr;
 
 public:
@@ -142,26 +142,26 @@ public:
     // Throws if the anchor does not match the anchor used by
     // previously-added Sapling spends.
     void AddSaplingSpend(
-        libzcash::SaplingExpandedSpendingKey expsk,
-        libzcash::SaplingNote note,
+        libcrypticcoin::SaplingExpandedSpendingKey expsk,
+        libcrypticcoin::SaplingNote note,
         uint256 anchor,
         SaplingWitness witness);
 
     void AddSaplingOutput(
         uint256 ovk,
-        libzcash::SaplingPaymentAddress to,
+        libcrypticcoin::SaplingPaymentAddress to,
         CAmount value,
         std::array<unsigned char, ZC_MEMO_SIZE> memo = NO_MEMO);
 
     // Throws if the anchor does not match the anchor used by
     // previously-added Sprout inputs.
     void AddSproutInput(
-        libzcash::SproutSpendingKey sk,
-        libzcash::SproutNote note,
+        libcrypticcoin::SproutSpendingKey sk,
+        libcrypticcoin::SproutNote note,
         SproutWitness witness);
 
     void AddSproutOutput(
-        libzcash::SproutPaymentAddress to,
+        libcrypticcoin::SproutPaymentAddress to,
         CAmount value,
         std::array<unsigned char, ZC_MEMO_SIZE> memo = NO_MEMO);
 
@@ -170,8 +170,8 @@ public:
 
     void AddTransparentOutput(const CTxDestination& to, CAmount value);
 
-    void SendChangeTo(const libzcash::RecipientAddress& changeAddr, const uint256& ovk);
-    void SendChangeToSprout(const libzcash::SproutPaymentAddress& changeAddr);
+    void SendChangeTo(const libcrypticcoin::RecipientAddress& changeAddr, const uint256& ovk);
+    void SendChangeToSprout(const libcrypticcoin::SproutPaymentAddress& changeAddr);
 
     TransactionBuilderResult Build();
 
@@ -183,10 +183,10 @@ private:
     void CreateJSDescription(
         uint64_t vpub_old,
         uint64_t vpub_new,
-        std::array<libzcash::JSInput, ZC_NUM_JS_INPUTS> vjsin,
-        std::array<libzcash::JSOutput, ZC_NUM_JS_OUTPUTS> vjsout,
+        std::array<libcrypticcoin::JSInput, ZC_NUM_JS_INPUTS> vjsin,
+        std::array<libcrypticcoin::JSOutput, ZC_NUM_JS_OUTPUTS> vjsout,
         std::array<size_t, ZC_NUM_JS_INPUTS>& inputMap,
         std::array<size_t, ZC_NUM_JS_OUTPUTS>& outputMap);
 };
 
-#endif // ZCASH_TRANSACTION_BUILDER_H
+#endif // CRYPTICCOIN_TRANSACTION_BUILDER_H

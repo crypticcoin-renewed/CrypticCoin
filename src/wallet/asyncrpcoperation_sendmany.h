@@ -1,16 +1,16 @@
-// Copyright (c) 2016 The Zcash developers
+// Copyright (c) 2016 The Crypticcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
-#ifndef ZCASH_WALLET_ASYNCRPCOPERATION_SENDMANY_H
-#define ZCASH_WALLET_ASYNCRPCOPERATION_SENDMANY_H
+#ifndef CRYPTICCOIN_WALLET_ASYNCRPCOPERATION_SENDMANY_H
+#define CRYPTICCOIN_WALLET_ASYNCRPCOPERATION_SENDMANY_H
 
 #include "asyncrpcoperation.h"
 #include "amount.h"
 #include "primitives/transaction.h"
 #include "transaction_builder.h"
-#include "zcash/JoinSplit.hpp"
-#include "zcash/Address.hpp"
+#include "crypticcoin/JoinSplit.hpp"
+#include "crypticcoin/Address.hpp"
 #include "wallet.h"
 #include "wallet/paymentdisclosure.h"
 
@@ -23,14 +23,14 @@
 
 #include <rust/ed25519/types.h>
 
-using namespace libzcash;
+using namespace libcrypticcoin;
 
 class SendManyRecipient : public RecipientMapping {
 public:
     CAmount amount;
     std::optional<std::string> memo;
 
-    SendManyRecipient(std::optional<libzcash::UnifiedAddress> ua_, libzcash::RecipientAddress address_, CAmount amount_, std::optional<std::string> memo_) :
+    SendManyRecipient(std::optional<libcrypticcoin::UnifiedAddress> ua_, libcrypticcoin::RecipientAddress address_, CAmount amount_, std::optional<std::string> memo_) :
         RecipientMapping(ua_, address_), amount(amount_), memo(memo_) {}
 };
 
@@ -79,7 +79,7 @@ private:
     bool allowRevealedAmounts_{false};
     uint32_t transparentRecipients_{0};
     AccountId sendFromAccount_;
-    std::set<libzcash::ChangeType> allowedChangeTypes_;
+    std::set<libcrypticcoin::ChangeType> allowedChangeTypes_;
     TxOutputAmounts txOutputAmounts_;
 
     /**
@@ -116,4 +116,4 @@ public:
 };
 
 
-#endif // ZCASH_WALLET_ASYNCRPCOPERATION_SENDMANY_H
+#endif // CRYPTICCOIN_WALLET_ASYNCRPCOPERATION_SENDMANY_H

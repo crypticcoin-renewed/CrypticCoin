@@ -7,19 +7,19 @@ Notable changes
 Mnemonic Recovery Phrases
 -------------------------
 
-The zcashd wallet has been modified to support BIP 39, which describes how to
+The crypticcoind wallet has been modified to support BIP 39, which describes how to
 derive the wallet's HD seed from a mnemonic phrase.  The mnemonic phrase will
 be generated on load of the wallet, or the first time the wallet is unlocked,
 and is available via the `z_exportwallet` RPC call. All new addresses produced
 by the wallet are now derived from this seed using the HD wallet functionality
-described in ZIP 32 and ZIP 316. For users upgrading an existing Zcashd wallet,
+described in ZIP 32 and ZIP 316. For users upgrading an existing Crypticcoind wallet,
 it is recommended that the wallet be backed up prior to upgrading to the 4.5.2
-Zcashd release.
+Crypticcoind release.
 
-Following the upgrade to 4.5.2, Zcashd will require that the user confirm that
+Following the upgrade to 4.5.2, Crypticcoind will require that the user confirm that
 they have backed up their new emergency recovery phrase, which may be obtained
 from the output of the `z_exportwallet` RPC call. This confirmation can be
-performed manually using the `zcashd-wallet-tool` utility that is supplied with
+performed manually using the `crypticcoind-wallet-tool` utility that is supplied with
 this release.  The wallet will not allow the generation of new addresses until
 this confirmation has been performed. It is recommended that after this
 upgrade, that funds tied to preexisting addresses be migrated to newly
@@ -37,15 +37,15 @@ New RPC Methods
 - 'walletconfirmbackup' This newly created API checks a provided emergency
   recovery phrase against the wallet's emergency recovery phrase; if the phrases
   match then it updates the wallet state to allow the generation of new addresses.
-  This backup confirmation workflow can be disabled by starting zcashd with 
+  This backup confirmation workflow can be disabled by starting crypticcoind with 
   `-requirewalletbackup=false` but this is not recommended unless you know what
   you're doing (and have otherwise backed up the wallet's recovery phrase anyway).
-  For security reasons, this RPC method is not intended for use via zcash-cli 
-  but is provided to enable `zcashd-wallet-tool` and other third-party wallet 
+  For security reasons, this RPC method is not intended for use via crypticcoin-cli 
+  but is provided to enable `crypticcoind-wallet-tool` and other third-party wallet 
   interfaces to satisfy the backup confirmation requirement. Use of the 
-  `walletconfirmbackup` API via zcash-cli would risk that the recovery phrase 
+  `walletconfirmbackup` API via crypticcoin-cli would risk that the recovery phrase 
   being confirmed might be leaked via the user's shell history or the system
-  process table; `zcashd-wallet-tool` is specifically provided to avoid this
+  process table; `crypticcoind-wallet-tool` is specifically provided to avoid this
   problem.
 - 'z_getbalanceforviewingkey' This newly created API allows a user to obtain
   balance information for funds visible to a Sapling or Unified full
@@ -73,7 +73,7 @@ Wallet
 - The 'z_sendmany' RPC call no longer permits Sprout recipients in the 
   list of recipient addresses. Transactions spending Sprout funds will
   still result in change being sent back into the Sprout pool, but no
-  other `Sprout->Sprout` transactions will be constructed by the Zcashd
+  other `Sprout->Sprout` transactions will be constructed by the Crypticcoind
   wallet. 
 
 - The restriction that prohibited `Sprout->Sapling` transactions has been 
@@ -84,7 +84,7 @@ Wallet
 - A new boolean parameter, `allowRevealedAmounts`, has been added to the
   list of arguments accepted by 'z_sendmany'. This parameter defaults to
   `false` and is only required when the transaction being constructed 
-  would reveal transaction amounts as a consequence of ZEC value crossing
+  would reveal transaction amounts as a consequence of CRYP value crossing
   shielded pool boundaries via the turnstile.
 
 - Since Sprout outputs are no longer created (with the exception of change)

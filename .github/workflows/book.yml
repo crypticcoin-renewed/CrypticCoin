@@ -1,4 +1,4 @@
-name: zcashd book
+name: crypticcoind book
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
           command: install
           args: mdbook-katex
 
-      - name: Build zcashd book
+      - name: Build crypticcoind book
         run: mdbook build doc/book/
 
       - name: Deploy to GitHub Pages

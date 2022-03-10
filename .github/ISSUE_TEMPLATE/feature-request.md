@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea for zcashd.
+about: Suggest an idea for crypticcoind.
 title: ''
 labels: 'use case'
 assignees: ''

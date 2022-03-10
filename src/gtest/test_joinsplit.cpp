@@ -3,7 +3,7 @@
 #include "utilstrencodings.h"
 
 
-#include "zcash/prf.h"
+#include "crypticcoin/prf.h"
 #include "util.h"
 #include "streams.h"
 #include "version.h"
@@ -11,16 +11,16 @@
 #include "primitives/transaction.h"
 #include "proof_verifier.h"
 #include "transaction_builder.h"
-#include "zcash/JoinSplit.hpp"
-#include "zcash/Note.hpp"
-#include "zcash/NoteEncryption.hpp"
-#include "zcash/IncrementalMerkleTree.hpp"
+#include "crypticcoin/JoinSplit.hpp"
+#include "crypticcoin/Note.hpp"
+#include "crypticcoin/NoteEncryption.hpp"
+#include "crypticcoin/IncrementalMerkleTree.hpp"
 
 #include <array>
 
 #include <rust/ed25519/types.h>
 
-using namespace libzcash;
+using namespace libcrypticcoin;
 
 // Make the Groth proof for a Sprout statement,
 // and store the result in a JSDescription object.
@@ -228,7 +228,7 @@ def hSig(randomSeed, nf1, nf2, joinSplitPubKey):
     return hashlib.blake2b(
         data=(randomSeed + nf1 + nf2 + joinSplitPubKey),
         digest_size=32,
-        person=b"ZcashComputehSig"
+        person=b"CrypticcoinComputehSig"
     ).digest()
 
 INCREASING = "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F"

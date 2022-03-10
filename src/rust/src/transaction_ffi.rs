@@ -21,7 +21,7 @@ use zcash_primitives::{
 ///
 /// Returns `false` if the transaction is invalid.
 #[no_mangle]
-pub extern "C" fn zcash_transaction_digests(
+pub extern "C" fn crypticcoin_transaction_digests(
     tx_bytes: *const c_uchar,
     tx_bytes_len: size_t,
     txid_ret: *mut [u8; 32],
@@ -64,7 +64,7 @@ pub struct PrecomputedTxParts {
 ///
 /// Returns `nullptr` if the transaction is invalid, or a v1-v4 transaction format.
 #[no_mangle]
-pub extern "C" fn zcash_transaction_precomputed_init(
+pub extern "C" fn crypticcoin_transaction_precomputed_init(
     tx_bytes: *const c_uchar,
     tx_bytes_len: size_t,
 ) -> *mut PrecomputedTxParts {
@@ -91,9 +91,9 @@ pub extern "C" fn zcash_transaction_precomputed_init(
     }
 }
 
-/// Frees a precomputed transaction from `zcash_transaction_precomputed_init`.
+/// Frees a precomputed transaction from `crypticcoin_transaction_precomputed_init`.
 #[no_mangle]
-pub extern "C" fn zcash_transaction_precomputed_free(precomputed_tx: *mut PrecomputedTxParts) {
+pub extern "C" fn crypticcoin_transaction_precomputed_free(precomputed_tx: *mut PrecomputedTxParts) {
     if !precomputed_tx.is_null() {
         drop(unsafe { Box::from_raw(precomputed_tx) });
     }
@@ -104,7 +104,7 @@ pub extern "C" fn zcash_transaction_precomputed_free(precomputed_tx: *mut Precom
 /// Returns `false` if any of the parameters are invalid; in this case, `sighash_ret`
 /// will be unaltered.
 #[no_mangle]
-pub extern "C" fn zcash_transaction_transparent_signature_digest(
+pub extern "C" fn crypticcoin_transaction_transparent_signature_digest(
     precomputed_tx: *const PrecomputedTxParts,
     hash_type: u32,
     index: size_t,

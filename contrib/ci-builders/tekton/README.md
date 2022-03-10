@@ -1,8 +1,8 @@
-# zcashd ci Docker images
+# crypticcoind ci Docker images
 
-These Dockerfiles can be used to build zcashd.
+These Dockerfiles can be used to build crypticcoind.
 
-The current objective is to build a base image for each distribution that includes the system packages to build zcashd. From `build` images, more targeted images are created.
+The current objective is to build a base image for each distribution that includes the system packages to build crypticcoind. From `build` images, more targeted images are created.
 
 The process is meant to be automated, but an example `docker-build.sh` script is included.
 
@@ -13,7 +13,7 @@ The process is meant to be automated, but an example `docker-build.sh` script is
 `Dockerfile-build.apt` uses that file, and some build time arguments, to build apt based build images.
 
 Currently available images are hosted at
-https://hub.docker.com/r/electriccoinco/zcashd-build/tags
+https://hub.docker.com/r/electriccoinco/crypticcoind-build/tags
 
 
 

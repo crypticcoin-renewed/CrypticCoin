@@ -191,14 +191,14 @@ static bool DecryptKey(const CKeyingMaterial& vMasterKey, const std::vector<unsi
 
 static bool DecryptSproutSpendingKey(const CKeyingMaterial& vMasterKey,
                                const std::vector<unsigned char>& vchCryptedSecret,
-                               const libzcash::SproutPaymentAddress& address,
-                               libzcash::SproutSpendingKey& sk)
+                               const libcrypticcoin::SproutPaymentAddress& address,
+                               libcrypticcoin::SproutSpendingKey& sk)
 {
     CKeyingMaterial vchSecret;
     if (!DecryptSecret(vMasterKey, vchCryptedSecret, address.GetHash(), vchSecret))
         return false;
 
-    if (vchSecret.size() != libzcash::SerializedSproutSpendingKeySize)
+    if (vchSecret.size() != libcrypticcoin::SerializedSproutSpendingKeySize)
         return false;
 
     CSecureDataStream ss(vchSecret, SER_NETWORK, PROTOCOL_VERSION);
@@ -208,8 +208,8 @@ static bool DecryptSproutSpendingKey(const CKeyingMaterial& vMasterKey,
 
 static bool DecryptSaplingSpendingKey(const CKeyingMaterial& vMasterKey,
                                const std::vector<unsigned char>& vchCryptedSecret,
-                               const libzcash::SaplingExtendedFullViewingKey& extfvk,
-                               libzcash::SaplingExtendedSpendingKey& sk)
+                               const libcrypticcoin::SaplingExtendedFullViewingKey& extfvk,
+                               libcrypticcoin::SaplingExtendedSpendingKey& sk)
 {
     CKeyingMaterial vchSecret;
     if (!DecryptSecret(vMasterKey, vchCryptedSecret, extfvk.fvk.GetFingerprint(), vchSecret))
@@ -294,9 +294,9 @@ bool CCryptoKeyStore::Unlock(const CKeyingMaterial& vMasterKeyIn)
         CryptedSproutSpendingKeyMap::const_iterator miSprout = mapCryptedSproutSpendingKeys.begin();
         for (; miSprout != mapCryptedSproutSpendingKeys.end(); ++miSprout)
         {
-            const libzcash::SproutPaymentAddress &address = (*miSprout).first;
+            const libcrypticcoin::SproutPaymentAddress &address = (*miSprout).first;
             const std::vector<unsigned char> &vchCryptedSecret = (*miSprout).second;
-            libzcash::SproutSpendingKey sk;
+            libcrypticcoin::SproutSpendingKey sk;
             if (!DecryptSproutSpendingKey(vMasterKeyIn, vchCryptedSecret, address, sk))
             {
                 keyFail = true;
@@ -309,9 +309,9 @@ bool CCryptoKeyStore::Unlock(const CKeyingMaterial& vMasterKeyIn)
         CryptedSaplingSpendingKeyMap::const_iterator miSapling = mapCryptedSaplingSpendingKeys.begin();
         for (; miSapling != mapCryptedSaplingSpendingKeys.end(); ++miSapling)
         {
-            const libzcash::SaplingExtendedFullViewingKey &extfvk = (*miSapling).first;
+            const libcrypticcoin::SaplingExtendedFullViewingKey &extfvk = (*miSapling).first;
             const std::vector<unsigned char> &vchCryptedSecret = (*miSapling).second;
-            libzcash::SaplingExtendedSpendingKey sk;
+            libcrypticcoin::SaplingExtendedSpendingKey sk;
             if (!DecryptSaplingSpendingKey(vMasterKeyIn, vchCryptedSecret, extfvk, sk))
             {
                 keyFail = true;
@@ -531,7 +531,7 @@ bool CCryptoKeyStore::GetPubKey(const CKeyID &address, CPubKey& vchPubKeyOut) co
 // Sprout & Sapling keys
 //
 
-bool CCryptoKeyStore::AddSproutSpendingKey(const libzcash::SproutSpendingKey &sk)
+bool CCryptoKeyStore::AddSproutSpendingKey(const libcrypticcoin::SproutSpendingKey &sk)
 {
     LOCK(cs_KeyStore);
     if (!fUseCrypto)
@@ -552,7 +552,7 @@ bool CCryptoKeyStore::AddSproutSpendingKey(const libzcash::SproutSpendingKey &sk
 }
 
 bool CCryptoKeyStore::AddSaplingSpendingKey(
-    const libzcash::SaplingExtendedSpendingKey &sk)
+    const libcrypticcoin::SaplingExtendedSpendingKey &sk)
 {
     LOCK(cs_KeyStore);
     if (!fUseCrypto) {
@@ -576,8 +576,8 @@ bool CCryptoKeyStore::AddSaplingSpendingKey(
 }
 
 bool CCryptoKeyStore::AddCryptedSproutSpendingKey(
-    const libzcash::SproutPaymentAddress &address,
-    const libzcash::ReceivingKey &rk,
+    const libcrypticcoin::SproutPaymentAddress &address,
+    const libcrypticcoin::ReceivingKey &rk,
     const std::vector<unsigned char> &vchCryptedSecret)
 {
     LOCK(cs_KeyStore);
@@ -590,7 +590,7 @@ bool CCryptoKeyStore::AddCryptedSproutSpendingKey(
 }
 
 bool CCryptoKeyStore::AddCryptedSaplingSpendingKey(
-    const libzcash::SaplingExtendedFullViewingKey &extfvk,
+    const libcrypticcoin::SaplingExtendedFullViewingKey &extfvk,
     const std::vector<unsigned char> &vchCryptedSecret)
 {
     LOCK(cs_KeyStore);
@@ -607,7 +607,7 @@ bool CCryptoKeyStore::AddCryptedSaplingSpendingKey(
     return true;
 }
 
-bool CCryptoKeyStore::GetSproutSpendingKey(const libzcash::SproutPaymentAddress &address, libzcash::SproutSpendingKey &skOut) const
+bool CCryptoKeyStore::GetSproutSpendingKey(const libcrypticcoin::SproutPaymentAddress &address, libcrypticcoin::SproutSpendingKey &skOut) const
 {
     LOCK(cs_KeyStore);
     if (!fUseCrypto)
@@ -623,8 +623,8 @@ bool CCryptoKeyStore::GetSproutSpendingKey(const libzcash::SproutPaymentAddress 
 }
 
 bool CCryptoKeyStore::GetSaplingSpendingKey(
-    const libzcash::SaplingExtendedFullViewingKey &extfvk,
-    libzcash::SaplingExtendedSpendingKey &skOut) const
+    const libcrypticcoin::SaplingExtendedFullViewingKey &extfvk,
+    libcrypticcoin::SaplingExtendedSpendingKey &skOut) const
 {
     LOCK(cs_KeyStore);
     if (!fUseCrypto)
@@ -696,11 +696,11 @@ bool CCryptoKeyStore::EncryptKeys(CKeyingMaterial& vMasterKeyIn)
         mapKeys.clear();
         for (SproutSpendingKeyMap::value_type& mSproutSpendingKey : mapSproutSpendingKeys)
         {
-            const libzcash::SproutSpendingKey &sk = mSproutSpendingKey.second;
+            const libcrypticcoin::SproutSpendingKey &sk = mSproutSpendingKey.second;
             CSecureDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
             ss << sk;
             CKeyingMaterial vchSecret(ss.begin(), ss.end());
-            libzcash::SproutPaymentAddress address = sk.address();
+            libcrypticcoin::SproutPaymentAddress address = sk.address();
             std::vector<unsigned char> vchCryptedSecret;
             if (!EncryptSecret(vMasterKeyIn, vchSecret, address.GetHash(), vchCryptedSecret)) {
                 return false;

@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include <zcash/address/zip32.h>
+#include <crypticcoin/address/zip32.h>
 
-// From https://github.com/zcash-hackworks/zcash-test-vectors/blob/master/sapling_zip32.py
+// From https://github.com/crypticcoin-hackworks/crypticcoin-test-vectors/blob/master/sapling_zip32.py
 // Sapling consistently uses little-endian encoding, but uint256S takes its input in
 // big-endian byte order, so the test vectors below are byte-reversed.
 TEST(ZIP32, TestVectors) {
@@ -12,7 +12,7 @@ TEST(ZIP32, TestVectors) {
         17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
     HDSeed seed(rawSeed);
 
-    auto m = libzcash::SaplingExtendedSpendingKey::Master(seed);
+    auto m = libcrypticcoin::SaplingExtendedSpendingKey::Master(seed);
     EXPECT_EQ(m.depth, 0);
     EXPECT_EQ(m.parentFVKTag, 0);
     EXPECT_EQ(m.childIndex, 0);
@@ -135,7 +135,7 @@ TEST(ZIP32, TestVectors) {
 
 TEST(ZIP32, ParseHDKeypathAccount) {
     auto expect_account = [](std::string sAccount, uint32_t coinType, long expected) {
-        auto result = libzcash::ParseHDKeypathAccount(32, coinType, sAccount);
+        auto result = libcrypticcoin::ParseHDKeypathAccount(32, coinType, sAccount);
         EXPECT_TRUE(result.has_value());
         EXPECT_EQ(result.value(), expected);
     };
@@ -155,21 +155,21 @@ TEST(ZIP32, ParseHDKeypathAccount) {
 
 TEST(ZIP32, diversifier_index_t_increment)
 {
-    libzcash::diversifier_index_t d_zero(0);
-    libzcash::diversifier_index_t d_one(1);
+    libcrypticcoin::diversifier_index_t d_zero(0);
+    libcrypticcoin::diversifier_index_t d_one(1);
     EXPECT_TRUE(d_zero.increment());
     EXPECT_EQ(d_zero, d_one);
 }
 
 TEST(ZIP32, diversifier_index_t_lt)
 {
-    EXPECT_TRUE(libzcash::diversifier_index_t(0) < libzcash::diversifier_index_t(1));
-    EXPECT_FALSE(libzcash::diversifier_index_t(1) < libzcash::diversifier_index_t(0));
-    EXPECT_FALSE(libzcash::diversifier_index_t(0) < libzcash::diversifier_index_t(0));
-    EXPECT_TRUE(libzcash::diversifier_index_t(0xfffffffe) < libzcash::diversifier_index_t(0xffffffff));
-    EXPECT_FALSE(libzcash::diversifier_index_t(0xffffffff) < libzcash::diversifier_index_t(0xfffffffe));
-    EXPECT_TRUE(libzcash::diversifier_index_t(0x01) < libzcash::diversifier_index_t(0xffffffff));
-    EXPECT_FALSE(libzcash::diversifier_index_t(0xffffffff) < libzcash::diversifier_index_t(0x01));
+    EXPECT_TRUE(libcrypticcoin::diversifier_index_t(0) < libcrypticcoin::diversifier_index_t(1));
+    EXPECT_FALSE(libcrypticcoin::diversifier_index_t(1) < libcrypticcoin::diversifier_index_t(0));
+    EXPECT_FALSE(libcrypticcoin::diversifier_index_t(0) < libcrypticcoin::diversifier_index_t(0));
+    EXPECT_TRUE(libcrypticcoin::diversifier_index_t(0xfffffffe) < libcrypticcoin::diversifier_index_t(0xffffffff));
+    EXPECT_FALSE(libcrypticcoin::diversifier_index_t(0xffffffff) < libcrypticcoin::diversifier_index_t(0xfffffffe));
+    EXPECT_TRUE(libcrypticcoin::diversifier_index_t(0x01) < libcrypticcoin::diversifier_index_t(0xffffffff));
+    EXPECT_FALSE(libcrypticcoin::diversifier_index_t(0xffffffff) < libcrypticcoin::diversifier_index_t(0x01));
 }
 
 TEST(ZIP32, DeriveChangeAddress)
@@ -179,7 +179,7 @@ TEST(ZIP32, DeriveChangeAddress)
         17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
     HDSeed seed(rawSeed);
 
-    auto accountSk = libzcash::SaplingExtendedSpendingKey::ForAccount(seed, 1, 0);
+    auto accountSk = libcrypticcoin::SaplingExtendedSpendingKey::ForAccount(seed, 1, 0);
     auto extfvk = accountSk.first.ToXFVK();
     auto changeSk = accountSk.first.DeriveInternalKey();
 

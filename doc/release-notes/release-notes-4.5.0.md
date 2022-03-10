@@ -17,8 +17,8 @@ NU5 will activate on testnet at height **1,590,000**, and can also be activated
 at a specific height in regtest mode by setting the config option
 `-nuparams=f919a198:HEIGHT`.
 
-The testnet activation of NU5, and `zcashd` v4.5.0 itself, is aimed at enabling
-existing Zcash users to test their software and make the necessary changes to be
+The testnet activation of NU5, and `crypticcoind` v4.5.0 itself, is aimed at enabling
+existing Crypticcoin users to test their software and make the necessary changes to be
 compatible with the new consensus rules. In particular:
 
 - Wallets should start adding support for v5 transactions.
@@ -28,7 +28,7 @@ compatible with the new consensus rules. In particular:
 
 A subsequent v4.5.1 release in the coming weeks will add support for generating
 and using Unified Addresses ([ZIP 316](https://zips.z.cash/zip-0316)), which
-will enable `zcashd` wallets to interact with the Orchard shielded pool.
+will enable `crypticcoind` wallets to interact with the Orchard shielded pool.
 
 As with previous network upgrades, it is possible that backwards-incompatible
 changes might be made to the consensus rules in this testing phase, prior to
@@ -41,9 +41,9 @@ deployment process for NU5.
 Rejecting unknown `CInv` message types
 --------------------------------------
 
-Previously, if `zcashd` received an `inv` or `getdata` message containing
+Previously, if `crypticcoind` received an `inv` or `getdata` message containing
 unknown `CInv` message types, it would ignore them and process the remainder of
-the message. Starting with v4.5.0, `zcashd` will instead drop the entire `inv`
+the message. Starting with v4.5.0, `crypticcoind` will instead drop the entire `inv`
 or `getdata` message and reply with a `reject` message. This will enable node
 operators to discover whether their nodes are sending unexpected `CInv` types;
 in particular, node operators should ensure their software does not produce the
@@ -55,8 +55,8 @@ Deprecated or removed RPCs
 --------------------------
 
 - The 'account' API inherited from Bitcoin Core has been disabled since the
-  launch of Zcash. Following its deprecation in Bitcoin Core v0.17 and removal
-  in Bitcoin Core v0.18, we have now removed the API from `zcashd`.
+  launch of Crypticcoin. Following its deprecation in Bitcoin Core v0.17 and removal
+  in Bitcoin Core v0.18, we have now removed the API from `crypticcoind`.
 
 
 Changelog
@@ -100,7 +100,7 @@ Gregory Maxwell (4):
 Jack Grigg (124):
       Re-include reading blocks from disk in block connection benchmark
       cargo update
-      Migrate to latest zcash_* crates
+      Migrate to latest crypticcoin_* crates
       metrics 0.16 and metrics-exporter-prometheus 0.5
       Implement ZIP 216 consensus rules
       Extract SpendDescriptionV5 and OutputDescriptionV5 classes
@@ -151,8 +151,8 @@ Jack Grigg (124):
       test: Check for updated empty-tx reject messages in transaction tests
       test: Fix OverwinterExpiryHeight test after ZIP 203 contextual changes
       miner: Set coinbase expiry height to block height from NU5 activation
-      Introduce libzcash::RawAddress type
-      Use `libzcash::RawAddress` in `CWallet::GetFilteredNotes`
+      Introduce libcrypticcoin::RawAddress type
+      Use `libcrypticcoin::RawAddress` in `CWallet::GetFilteredNotes`
       Use a visitor for handling -mineraddress config option
       Add support for decoding and encoding Unified Addresses
       Pass network type through to UA address handling logic
@@ -202,24 +202,24 @@ Jack Grigg (124):
       Add named constants for legacy tx authDigest placeholder value
       qa: Boost 1.77.0
       cargo update
-      Migrate to latest revisions of Zcash Rust crates
+      Migrate to latest revisions of Crypticcoin Rust crates
       test: Set up mininodes at the start of feature_zip239
       net: Reject unknown CInv message types
       make-release.py: Versioning changes for 4.5.0-rc1.
       make-release.py: Updated manpages for 4.5.0-rc1.
       make-release.py: Updated release notes and changelog for 4.5.0-rc1.
-      Migrate to latest revisions of orchard and the zcash_* crates
+      Migrate to latest revisions of orchard and the crypticcoin_* crates
       contrib: Add script for generating a graph of our Rust dependencies
       cargo update
       build: Add primitives/orchard.h to list of header files
       build: Ensure that cargo uses vendored dependencies for git repos
-      build: Add missing source file to zcash_gtest_SOURCES
+      build: Add missing source file to crypticcoin_gtest_SOURCES
       rust: Move Orchard batch logic into BatchValidator methods
       wallet: Batch-validate all Orchard signatures in the wallet on load
       rust: Skip running the Orchard batch validator on an empty batch
       bench: Add Orchard logic to zcbenchmarks
       cargo update
-      Update halo2 and orchard dependencies with BOSL Zcash exception
+      Update halo2 and orchard dependencies with BOSL Crypticcoin exception
       make-release.py: Versioning changes for 4.5.0.
       make-release.py: Updated manpages for 4.5.0.
 

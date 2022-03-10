@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 The Zcash developers
+# Copyright (c) 2021 The Crypticcoin developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://www.opensource.org/licenses/mit-license.php .
 
@@ -8,7 +8,7 @@
 #
 # Functionality to create txids, auth digests, and signature digests.
 #
-# This file is modified from zcash/zcash-test-vectors.
+# This file is modified from crypticcoin/crypticcoin-test-vectors.
 #
 
 import struct
@@ -197,7 +197,7 @@ def header_digest(tx):
 def txid_digest(tx):
     digest = blake2b(
         digest_size=32,
-        person=b'ZcashTxHash_' + struct.pack('<I', tx.nConsensusBranchId),
+        person=b'CrypticcoinTxHash_' + struct.pack('<I', tx.nConsensusBranchId),
     )
 
     digest.update(header_digest(tx))
@@ -226,7 +226,7 @@ def auth_digest(tx):
 def signature_digest(tx, nHashType, txin):
     digest = blake2b(
         digest_size=32,
-        person=b'ZcashTxHash_' + struct.pack('<I', tx.nConsensusBranchId),
+        person=b'CrypticcoinTxHash_' + struct.pack('<I', tx.nConsensusBranchId),
     )
 
     digest.update(header_digest(tx))
@@ -286,7 +286,7 @@ def outputs_sig_digest(tx, nHashType, txin):
         return blake2b(digest_size=32, person=b'ZTxIdOutputsHash').digest()
 
 def txin_sig_digest(tx, txin):
-    digest = blake2b(digest_size=32, person=b'Zcash___TxInHash')
+    digest = blake2b(digest_size=32, person=b'Crypticcoin___TxInHash')
     digest.update(bytes(tx.vin[txin.nIn].prevout))
     digest.update(ser_string(txin.scriptCode))
     digest.update(struct.pack('<Q', txin.amount))

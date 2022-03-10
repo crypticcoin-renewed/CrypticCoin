@@ -1,11 +1,11 @@
-# Rust in `zcashd`
+# Rust in `crypticcoind`
 
-`zcashd` is primarily a C++ codebase, but most new code is being written in Rust
+`crypticcoind` is primarily a C++ codebase, but most new code is being written in Rust
 where possible.
 
 ## Adding new dependencies in online-Rust mode
 
-The `zcashd` build system pins all dependencies, and in order to facilitate
+The `crypticcoind` build system pins all dependencies, and in order to facilitate
 deterministic builds, `cargo` is configured to run in offline mode with vendored
 crates. This means that if, for example, you add the `foobar` crate to
 `Cargo.toml`, you will likely see an error similar to this:
@@ -14,10 +14,10 @@ crates. This means that if, for example, you add the `foobar` crate to
 $ cargo check
 error: no matching package named `foobar` found
 location searched: registry `https://github.com/rust-lang/crates.io-index`
-required by package `librustzcash v0.2.0 (/path/to/zcash)`
+required by package `librustzcash v0.2.0 (/path/to/crypticcoin)`
 ```
 
-Instead, you first need to build `zcashd` in online-Rust mode:
+Instead, you first need to build `crypticcoind` in online-Rust mode:
 ```
 CONFIGURE_FLAGS=--enable-online-rust ./zcutil/build.sh
 ```
@@ -45,12 +45,12 @@ orchard = "0.0"
 
 [patch.crates-io]
 # Comment out any existing patch, if present.
-# orchard = { git = "https://github.com/zcash/orchard.git", rev = "..." }
+# orchard = { git = "https://github.com/crypticcoin/orchard.git", rev = "..." }
 
 # Add this patch (both relative and absolute paths work):
 orchard = { path = "../relative/path/to/orchard" }
 ```
 
 Usually you can apply a patch to use a locally checked out dependency without
-needing to build `zcashd` in online-Rust mode. However, if your local changes
+needing to build `crypticcoind` in online-Rust mode. However, if your local changes
 include a new dependency, you will need to ensure you are in online-Rust mode.
